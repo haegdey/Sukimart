@@ -26,8 +26,24 @@ namespace Sukimart
             {
                 return;
             }
+            UIHelper.InisialisasiForm(this);
+            Paint += (s, e) =>
+            {
+                using Pen pena = new Pen(UIHelper.WarnaGarisTepi);
+                e.Graphics.DrawRectangle(pena, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
+            };
             MuatData(kategoriAwal);
-            FontInter.Terapkan(this);
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                DialogResult = DialogResult.OK;
+                Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void BtnTutup_Click(object? sender, EventArgs e)
@@ -69,7 +85,7 @@ namespace Sukimart
             if (lstKategori.SelectedItem == null)
             {
                 txtNamaKategori.Clear();
-                lblInfo.Text = "Pilih kategori dari daftar di sebelah kiri untuk mengganti nama atau menghapusnya.";
+                lblInfo.Text = "Pilih kategori di daftar untuk mengganti nama atau menghapusnya.";
                 return;
             }
 
@@ -102,6 +118,16 @@ namespace Sukimart
             {
                 daftarKategori.Add(namaBaru);
                 PenyimpananData.SimpanKategori(daftarKategori);
+
+                try
+                {
+                    PenyimpananData.CatatAktivitas(
+                        Navigasi.PenggunaAktif,
+                        "Tambah Kategori",
+                        $"Menambahkan kategori baru '{namaBaru}'."
+                    );
+                }
+                catch { }
 
                 MessageBox.Show($"Kategori baru '{namaBaru}' berhasil ditambahkan!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MuatData(namaBaru);
@@ -177,6 +203,16 @@ namespace Sukimart
                     PenyimpananData.SimpanBarang(daftarBarang);
                 }
 
+                try
+                {
+                    PenyimpananData.CatatAktivitas(
+                        Navigasi.PenggunaAktif,
+                        "Ubah Kategori",
+                        $"Mengubah nama kategori dari '{namaLama}' menjadi '{namaBaru}' ({terpengaruh} barang diperbarui)."
+                    );
+                }
+                catch { }
+
                 MessageBox.Show(
                     $"Nama kategori berhasil diubah menjadi '{namaBaru}'!\nSebanyak {terpengaruh} barang di katalog telah disesuaikan.",
                     "Sukses",
@@ -239,6 +275,16 @@ namespace Sukimart
 
                 daftarKategori.RemoveAll(k => k.Equals(namaHapus, StringComparison.OrdinalIgnoreCase));
                 PenyimpananData.SimpanKategori(daftarKategori);
+
+                try
+                {
+                    PenyimpananData.CatatAktivitas(
+                        Navigasi.PenggunaAktif,
+                        "Hapus Kategori",
+                        $"Menghapus kategori '{namaHapus}' ({terpengaruh} barang dialihkan ke kategori 'Lainnya')."
+                    );
+                }
+                catch { }
 
                 MessageBox.Show($"Kategori '{namaHapus}' berhasil dihapus.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 MuatData();

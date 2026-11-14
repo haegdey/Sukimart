@@ -10,6 +10,8 @@ namespace Sukimart
 {
     public partial class FormLogin : Form
     {
+        private int jumlahSandiSalah;
+
         public FormLogin()
         {
             InitializeComponent();
@@ -42,13 +44,13 @@ namespace Sukimart
 
             if (string.IsNullOrEmpty(username))
             {
-                lblUsnSalah.Text = "Username wajib diisi";
+                lblUsnSalah.Text = "Nama pengguna wajib diisi";
                 adaError = true;
             }
 
             if (string.IsNullOrEmpty(password))
             {
-                lblPassSalah.Text = "Password wajib diisi";
+                lblPassSalah.Text = "Kata sandi wajib diisi";
                 adaError = true;
             }
 
@@ -57,27 +59,66 @@ namespace Sukimart
                 return;
             }
 
-            if (username == "admin" && password == "admin123")
+            Pengguna? akun;
+            try
             {
-                ResetErrorLabels();
-                Navigasi.MulaiSesi(this, username, "admin");
+                akun = PenyimpananData.BacaPengguna()
+                    .FirstOrDefault(p => string.Equals(p.NamaPengguna, username, StringComparison.OrdinalIgnoreCase));
             }
-            else if (username == "kasir" && password == "kasir123")
+            catch (Exception ex)
             {
-                ResetErrorLabels();
-                Navigasi.MulaiSesi(this, username, "kasir");
+                MessageBox.Show("Data pengguna tidak dapat dibaca: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else
+
+            if (akun == null)
             {
-                if (username != "admin" && username != "kasir")
+                lblUsnSalah.Text = "Nama pengguna tidak ditemukan";
+                try
                 {
-                    lblUsnSalah.Text = "Username tidak ditemukan";
+                    PenyimpananData.CatatAktivitas(username, "Login Gagal", $"Percobaan masuk gagal: Nama pengguna '{username}' tidak ditemukan.");
                 }
-                else
-                {
-                    lblPassSalah.Text = "Password salah";
-                }
+                catch { }
+                return;
             }
+
+            if (!akun.Aktif)
+            {
+                lblUsnSalah.Text = "Akun ini tidak aktif";
+                try
+                {
+                    PenyimpananData.CatatAktivitas(username, "Login Gagal", $"Percobaan masuk gagal: Akun '{username}' berstatus nonaktif.");
+                }
+                catch { }
+                return;
+            }
+
+            if (!KeamananSandi.Cocok(akun, password))
+            {
+                jumlahSandiSalah++;
+                lblPassSalah.Text = $"Kata sandi salah ({jumlahSandiSalah}/3)";
+                try
+                {
+                    PenyimpananData.CatatAktivitas(username, "Login Gagal", $"Percobaan masuk gagal: Kata sandi salah untuk pengguna '{username}' ({jumlahSandiSalah}/3).");
+                }
+                catch { }
+
+                if (jumlahSandiSalah >= 3)
+                {
+                    MessageBox.Show("Akses ditolak karena kata sandi salah tiga kali.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                }
+                return;
+            }
+
+            ResetErrorLabels();
+            jumlahSandiSalah = 0;
+            try
+            {
+                PenyimpananData.CatatAktivitas(akun.NamaPengguna, "Login", $"Pengguna '{akun.NamaPengguna}' ({akun.Peran}) berhasil masuk ke sistem.");
+            }
+            catch { }
+            Navigasi.MulaiSesi(this, akun.NamaPengguna, akun.Peran);
         }
 
         private void ResetErrorLabels()
@@ -91,6 +132,7 @@ namespace Sukimart
             txtPassword.Clear();
             txtUsername.Clear();
             ResetErrorLabels();
+            jumlahSandiSalah = 0;
             txtUsername.Focus();
         }
     }

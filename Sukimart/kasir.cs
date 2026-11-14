@@ -20,7 +20,7 @@ namespace Sukimart
             this.peran = string.IsNullOrEmpty(peran) ? Navigasi.PeranAktif : peran;
             InitializeComponent();
             UIHelper.InisialisasiForm(this);
-            MaximizeBox = false;
+            MaximizeBox = true;
             AturGridKeranjang();
             lblInfoKasir.Text = $"Kasir: {Navigasi.PenggunaAktif} · {DateTime.Now.ToString("dd/MM/yyyy", BudayaIndonesia)}";
             SesuaikanPeran();
@@ -35,12 +35,27 @@ namespace Sukimart
             {
                 btnGudang.Visible = false;
                 btnLaporan.Visible = false;
+                btnPengguna.Visible = false;
+                btnLogAktivitas.Visible = false;
+            }
+            else if (this.peran == "gudang")
+            {
+                btnKasir.Visible = false;
+                btnRiwayat.Visible = false;
+                btnLaporan.Visible = false;
+                btnPengguna.Visible = false;
+                btnGudang.Visible = true;
+                btnLogAktivitas.Visible = false;
             }
             else
             {
                 btnGudang.Visible = true;
                 btnLaporan.Visible = true;
+                btnPengguna.Visible = true;
+                btnLogAktivitas.Visible = true;
             }
+
+            UIHelper.SusunTombolSidebar(pnlKiri);
         }
 
         private void PasangEventHandlers()
@@ -51,6 +66,8 @@ namespace Sukimart
             btnRiwayat.Click += (s, e) => Navigasi.BukaRiwayat(this);
             btnGudang.Click += (s, e) => Navigasi.BukaGudang(this);
             btnLaporan.Click += (s, e) => Navigasi.BukaLaporan(this);
+            btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
+            btnLogAktivitas.Click += (s, e) => Navigasi.BukaLogAktivitas(this);
             btnKeluar.Click += (s, e) => Navigasi.KeluarKeLogin(this);
 
             btnTambahKeranjang.Click += BtnTambahKeranjang_Click;
@@ -73,8 +90,16 @@ namespace Sukimart
                 }
             };
             Shown += (s, e) => FokusPencarian();
-            btnUang50.Click += (s, e) => { nudBayar.Value = 50000; HitungKembalian(); };
-            btnUang100.Click += (s, e) => { nudBayar.Value = 100000; HitungKembalian(); };
+            btnUang10.Click += (s, e) => TambahUangDiterima(10000);
+            btnUang20.Click += (s, e) => TambahUangDiterima(20000);
+            btnUang50.Click += (s, e) => TambahUangDiterima(50000);
+            btnUang100.Click += (s, e) => TambahUangDiterima(100000);
+            btnNolkanBayar.Click += (s, e) =>
+            {
+                nudBayar.Value = 0;
+                bayarDiisiManual = true;
+                HitungKembalian();
+            };
             btnBatalKeranjang.Click += (s, e) => { keranjang.Clear(); PerbaruiTampilanKeranjang(); FokusPencarian(); };
             btnProsesBayar.Click += BtnProsesBayar_Click;
 
@@ -83,7 +108,8 @@ namespace Sukimart
                 int total = keranjang.Sum(k => k.Subtotal);
                 if (total > 0)
                 {
-                    nudBayar.Value = total;
+                    AturBayarOtomatis(total);
+                    bayarDiisiManual = false;
                     HitungKembalian();
                 }
             };
@@ -125,7 +151,7 @@ namespace Sukimart
                 cmbBarang.Items.Clear();
                 foreach (Barang b in daftarBarang.Where(b => b.Stok > 0))
                 {
-                    cmbBarang.Items.Add($"{b.Kode} - {b.Nama} (Rp {b.Harga:N0} | Stok: {b.Stok})");
+                    cmbBarang.Items.Add($"{b.Nama} [{b.Kode}] · Rp {b.Harga:N0} (Stok: {b.Stok})");
                 }
 
                 cmbBarang.SelectedIndex = -1;
@@ -357,15 +383,51 @@ namespace Sukimart
                 return null;
             }
 
-            string kode = teks.Split(new[] { " - " }, StringSplitOptions.None)[0].Trim();
-            Barang? barang = daftarBarang.FirstOrDefault(b => string.Equals(b.Kode, kode, StringComparison.OrdinalIgnoreCase));
+            // 1. Cek apakah teks adalah Kode Barang persis (misal scan barcode atau ketik kode MNM001)
+            Barang? barang = daftarBarang.FirstOrDefault(b => string.Equals(b.Kode, teks, StringComparison.OrdinalIgnoreCase));
             if (barang != null)
             {
                 return barang;
             }
 
+            // 2. Cek apakah item dipilih dari format baru "Nama [Kode] ..."
+            int kurungBuka = teks.IndexOf('[');
+            int kurungTutup = teks.IndexOf(']');
+            if (kurungBuka >= 0 && kurungTutup > kurungBuka)
+            {
+                string kodeDiKurung = teks.Substring(kurungBuka + 1, kurungTutup - kurungBuka - 1).Trim();
+                barang = daftarBarang.FirstOrDefault(b => string.Equals(b.Kode, kodeDiKurung, StringComparison.OrdinalIgnoreCase));
+                if (barang != null)
+                {
+                    return barang;
+                }
+            }
+
+            // 3. Dukung juga format lama "Kode - Nama ..."
+            if (teks.Contains(" - "))
+            {
+                string kodeLama = teks.Split(new[] { " - " }, StringSplitOptions.None)[0].Trim();
+                barang = daftarBarang.FirstOrDefault(b => string.Equals(b.Kode, kodeLama, StringComparison.OrdinalIgnoreCase));
+                if (barang != null)
+                {
+                    return barang;
+                }
+            }
+
+            // 4. Cek pencarian parsial Nama Barang (misal ketik "air" atau "susu")
             var cocok = daftarBarang.Where(b => b.Stok > 0 && b.Nama.Contains(teks, StringComparison.OrdinalIgnoreCase)).ToList();
-            return cocok.Count == 1 ? cocok[0] : null;
+            if (cocok.Count == 1) return cocok[0];
+            if (cocok.Count > 1)
+            {
+                var awalan = cocok.FirstOrDefault(b => b.Nama.StartsWith(teks, StringComparison.OrdinalIgnoreCase));
+                return awalan ?? cocok[0];
+            }
+
+            // 5. Cek pencarian parsial Kode Barang
+            var cocokKode = daftarBarang.Where(b => b.Stok > 0 && b.Kode.Contains(teks, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (cocokKode.Count >= 1) return cocokKode[0];
+
+            return null;
         }
 
         private void AturGridKeranjang()
@@ -456,6 +518,14 @@ namespace Sukimart
             bayarDiaturOtomatis = false;
         }
 
+        private void TambahUangDiterima(int nominal)
+        {
+            decimal dasar = bayarDiisiManual ? NilaiBayarDiketik() : 0;
+            nudBayar.Value = Math.Min(nudBayar.Maximum, dasar + nominal);
+            bayarDiisiManual = true;
+            HitungKembalian();
+        }
+
         private int NilaiBayarDiketik()
         {
             string angka = new string(nudBayar.Text.Where(char.IsDigit).ToArray());
@@ -532,12 +602,31 @@ namespace Sukimart
                     var brg = daftarBarang.FirstOrDefault(b => b.Kode == item.KodeBarang);
                     if (brg != null)
                     {
+                        int stokSebelum = brg.Stok;
                         brg.Stok = Math.Max(0, brg.Stok - item.Jumlah);
+
+                        try
+                        {
+                            PenyimpananData.TambahRiwayatStok(new RiwayatStok
+                            {
+                                Tanggal = DateTime.Now,
+                                KodeBarang = brg.Kode,
+                                NamaBarang = brg.Nama,
+                                Jenis = "TERJUAL",
+                                Jumlah = item.Jumlah,
+                                StokSebelum = stokSebelum,
+                                StokSesudah = brg.Stok,
+                                Keterangan = $"Penjualan {idTransaksi}",
+                                Pengguna = Navigasi.PenggunaAktif
+                            });
+                        }
+                        catch { }
                     }
                 }
 
                 PenyimpananData.TambahTransaksi(trx, details);
                 PenyimpananData.SimpanBarang(daftarBarang);
+                PenyimpananData.CatatAktivitas(Navigasi.PenggunaAktif, "Transaksi", $"Transaksi kasir {idTransaksi} selesai: Total Rp {trx.Total:N0}, Bayar Rp {trx.Bayar:N0}, Kembalian Rp {trx.Kembalian:N0} ({details.Count} jenis barang).");
 
                 try
                 {
@@ -560,11 +649,5 @@ namespace Sukimart
                 MessageBox.Show("Gagal menyimpan transaksi ke JSON: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-    }
-
-    public class FormTransaksi : FormKasir
-    {
-        public FormTransaksi() : base("kasir") { }
-        public FormTransaksi(string peran) : base(peran) { }
     }
 }

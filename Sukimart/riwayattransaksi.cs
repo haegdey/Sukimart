@@ -18,12 +18,25 @@ namespace Sukimart
             this.peran = string.IsNullOrEmpty(peran) ? Navigasi.PeranAktif : peran;
             InitializeComponent();
             UIHelper.InisialisasiForm(this);
-            MaximizeBox = false;
+            MaximizeBox = true;
             gridTransaksi.AllowUserToResizeRows = false;
             gridDetail.AllowUserToResizeRows = false;
             SesuaikanPeran();
             dtpMulai.Value = DateTime.Today.AddDays(-30);
             dtpSelesai.Value = DateTime.Today;
+
+            pnlRingkasan.Resize += (s, e) =>
+            {
+                int sepertiga = pnlRingkasan.ClientSize.Width / 3;
+                lblStatTransaksi.Location = new Point(24, 12);
+                lblValTransaksi.Location = new Point(24, 32);
+
+                lblStatOmzet.Location = new Point(sepertiga + 24, 12);
+                lblValOmzet.Location = new Point(sepertiga + 24, 32);
+
+                lblStatRata.Location = new Point(sepertiga * 2 + 24, 12);
+                lblValRata.Location = new Point(sepertiga * 2 + 24, 32);
+            };
 
             PasangEventHandlers();
             MuatData();
@@ -35,12 +48,24 @@ namespace Sukimart
             {
                 btnGudang.Visible = false;
                 btnLaporan.Visible = false;
+                btnPengguna.Visible = false;
+            }
+            else if (this.peran == "gudang")
+            {
+                btnKasir.Visible = false;
+                btnRiwayat.Visible = false;
+                btnLaporan.Visible = false;
+                btnPengguna.Visible = false;
+                btnGudang.Visible = true;
             }
             else
             {
                 btnGudang.Visible = true;
                 btnLaporan.Visible = true;
+                btnPengguna.Visible = true;
             }
+
+            UIHelper.SusunTombolSidebar(pnlKiri);
         }
 
         private void PasangEventHandlers()
@@ -51,9 +76,19 @@ namespace Sukimart
             btnRiwayat.Click += (s, e) => { /* Sedang di form riwayat */ };
             btnGudang.Click += (s, e) => Navigasi.BukaGudang(this);
             btnLaporan.Click += (s, e) => Navigasi.BukaLaporan(this);
+            btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnKeluar.Click += (s, e) => Navigasi.KeluarKeLogin(this);
 
-            btnFilter.Click += (s, e) => TerapkanFilter();
+            btnFilter.Click += (s, e) =>
+            {
+                if (dtpMulai.Value.Date > dtpSelesai.Value.Date)
+                {
+                    MessageBox.Show("Tanggal mulai tidak boleh setelah tanggal selesai!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    dtpMulai.Focus();
+                    return;
+                }
+                TerapkanFilter();
+            };
             btnReset.Click += (s, e) => ResetFilter();
             txtCari.TextChanged += (s, e) => TerapkanFilter();
 
@@ -188,12 +223,5 @@ namespace Sukimart
                 SubtotalFormat = "Rp " + d.Subtotal.ToString("N0", BudayaIndonesia)
             }).ToList();
         }
-    }
-
-    /// <summary>
-    /// Kelas kompatibilitas untuk referensi lama FormRiwayat.
-    /// </summary>
-    public class FormRiwayat : FormRiwayatTransaksi
-    {
     }
 }

@@ -39,10 +39,186 @@ namespace Sukimart
             {
                 if (e.Button == MouseButtons.Left)
                 {
+                    if (e.Clicks == 2 && targetForm.MaximizeBox)
+                    {
+                        AlihkanMaximize(targetForm);
+                        return;
+                    }
+
                     ReleaseCapture();
                     SendMessage(targetForm.Handle, WM_NCLBUTTONDOWN, HTCAPTION, 0);
                 }
             };
+        }
+
+        public static void AlihkanMaximize(Form form)
+        {
+            if (form == null || !form.MaximizeBox) return;
+
+            if (form.WindowState == FormWindowState.Maximized)
+            {
+                form.WindowState = FormWindowState.Normal;
+                form.Size = new Size(1280, 720);
+                PusatkanForm(form);
+            }
+            else
+            {
+                form.WindowState = FormWindowState.Maximized;
+            }
+        }
+
+        public static void PusatkanForm(Form form)
+        {
+            if (form == null) return;
+            Screen layar = Screen.FromControl(form);
+            form.Location = new Point(
+                layar.WorkingArea.Left + Math.Max(0, (layar.WorkingArea.Width - form.Width) / 2),
+                layar.WorkingArea.Top + Math.Max(0, (layar.WorkingArea.Height - form.Height) / 2)
+            );
+        }
+
+        /// <summary>
+        /// Merapatkan tombol-tombol menu sidebar yang terlihat sehingga tidak ada lubang kosong
+        /// ketika sebagian tombol disembunyikan berdasarkan peran pengguna (Kasir / Gudang).
+        /// </summary>
+        public static void SusunTombolSidebar(Panel pnlKiri)
+        {
+            if (pnlKiri == null) return;
+
+            if (!pnlKiri.Visible)
+            {
+                pnlKiri.VisibleChanged -= SusunSaatTampil;
+                pnlKiri.VisibleChanged += SusunSaatTampil;
+                return;
+            }
+
+            PastikanTombolLogAktivitas(pnlKiri);
+
+            // Dapatkan tombol acuan (seperti btnPengguna atau btnDashboard) untuk memastikan ukuran & padding seragam
+            Control[] acuanArr = pnlKiri.Controls.Find("btnPengguna", false);
+            if (acuanArr.Length == 0) acuanArr = pnlKiri.Controls.Find("btnDashboard", false);
+            Button? acuan = acuanArr.Length > 0 ? acuanArr[0] as Button : null;
+
+            int x = acuan != null ? acuan.Location.X : 16;
+            int lebar = acuan != null ? acuan.Width : 208;
+            int tinggi = acuan != null ? acuan.Height : 40;
+            Padding padding = acuan != null ? acuan.Padding : new Padding(16, 0, 0, 0);
+
+            Control[] btnDashArr = pnlKiri.Controls.Find("btnDashboard", false);
+            int y = btnDashArr.Length > 0 ? btnDashArr[0].Location.Y : 112;
+            int jarak = 8;
+            if (tinggi != 40)
+            {
+                jarak = Math.Max(6, (int)Math.Round(tinggi * 0.2));
+            }
+
+            string[] urutanTombol = { "btnDashboard", "btnKasir", "btnKatalog", "btnRiwayat", "btnGudang", "btnLaporan", "btnPengguna", "btnLogAktivitas" };
+
+            foreach (string nama in urutanTombol)
+            {
+                Control[] ditemukan = pnlKiri.Controls.Find(nama, false);
+                if (ditemukan.Length > 0 && ditemukan[0] is Button btn && btn.Visible)
+                {
+                    btn.Size = new Size(lebar, tinggi);
+                    btn.Padding = padding;
+                    btn.Location = new Point(x, y);
+                    btn.FlatAppearance.BorderSize = 0;
+                    btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.UseVisualStyleBackColor = false;
+                    y += btn.Height + jarak;
+                }
+            }
+        }
+
+        public static void PastikanTombolLogAktivitas(Panel pnlKiri)
+        {
+            if (pnlKiri == null) return;
+
+            Form? formInduk = pnlKiri.FindForm();
+            bool isAdmin = string.Equals(Navigasi.PeranAktif, "admin", StringComparison.OrdinalIgnoreCase);
+
+            Control[] acuanArr = pnlKiri.Controls.Find("btnPengguna", false);
+            if (acuanArr.Length == 0) acuanArr = pnlKiri.Controls.Find("btnDashboard", false);
+            Button? acuan = acuanArr.Length > 0 ? acuanArr[0] as Button : null;
+
+            int lebar = acuan != null ? acuan.Width : 208;
+            int tinggi = acuan != null ? acuan.Height : 40;
+            int x = acuan != null ? acuan.Location.X : 16;
+            Padding padding = acuan != null ? acuan.Padding : new Padding(16, 0, 0, 0);
+            float ukuranFont = acuan != null ? acuan.Font.SizeInPoints : 10F;
+
+            Control[] ditemukan = pnlKiri.Controls.Find("btnLogAktivitas", false);
+            if (ditemukan.Length > 0 && ditemukan[0] is Button btnAda)
+            {
+                btnAda.Visible = isAdmin;
+                btnAda.Size = new Size(lebar, tinggi);
+                btnAda.Padding = padding;
+                btnAda.Location = new Point(x, btnAda.Location.Y);
+                btnAda.FlatAppearance.BorderSize = 0;
+                btnAda.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+                btnAda.FlatStyle = FlatStyle.Flat;
+                btnAda.UseVisualStyleBackColor = false;
+                if (formInduk is FormLogAktivitas)
+                {
+                    btnAda.BackColor = Color.FromArgb(255, 196, 0);
+                    btnAda.Font = FontInter.Buat(ukuranFont, FontStyle.Bold);
+                }
+                else
+                {
+                    btnAda.BackColor = Color.White;
+                    btnAda.Font = FontInter.Buat(ukuranFont, FontStyle.Regular);
+                }
+                return;
+            }
+
+            Button btnLog = new Button
+            {
+                Name = "btnLogAktivitas",
+                Text = "Log Aktivitas",
+                Size = new Size(lebar, tinggi),
+                Location = new Point(x, 448),
+                Cursor = Cursors.Hand,
+                FlatStyle = FlatStyle.Flat,
+                Font = (formInduk is FormLogAktivitas) ? FontInter.Buat(ukuranFont, FontStyle.Bold) : FontInter.Buat(ukuranFont, FontStyle.Regular),
+                BackColor = (formInduk is FormLogAktivitas) ? Color.FromArgb(255, 196, 0) : Color.White,
+                ForeColor = Color.FromArgb(31, 41, 55),
+                Padding = padding,
+                TextAlign = ContentAlignment.MiddleLeft,
+                UseVisualStyleBackColor = false,
+                Visible = isAdmin
+            };
+            btnLog.FlatAppearance.BorderSize = 0;
+            btnLog.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+
+            btnLog.Click += (s, e) =>
+            {
+                Form? f = btnLog.FindForm();
+                if (f != null)
+                {
+                    Navigasi.BukaLogAktivitas(f);
+                }
+            };
+
+            pnlKiri.Controls.Add(btnLog);
+        }
+
+        public static void RatakanTengah(params DataGridViewColumn[] daftarKolom)
+        {
+            foreach (DataGridViewColumn kolom in daftarKolom)
+            {
+                kolom.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                kolom.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+        }
+
+        private static void SusunSaatTampil(object? sender, EventArgs e)
+        {
+            if (sender is Panel pnl && pnl.Visible)
+            {
+                pnl.VisibleChanged -= SusunSaatTampil;
+                SusunTombolSidebar(pnl);
+            }
         }
 
         /// <summary>
@@ -74,7 +250,6 @@ namespace Sukimart
         {
             if (form == null) return;
 
-            // Pasang drag pada form itu sendiri
             FontInter.Terapkan(form);
 
             PasangDrag(form, form);
@@ -117,12 +292,8 @@ namespace Sukimart
                 }
             }
         }
-        public static readonly Color WarnaGarisTepi = Color.FromArgb(229, 231, 235);
 
-        private static readonly string[] KataKolomAngka =
-        {
-            "Harga", "Total", "Subtotal", "Stok", "Qty", "Jumlah", "Omzet", "Bayar", "Kembalian", "Terjual"
-        };
+        public static readonly Color WarnaGarisTepi = Color.FromArgb(229, 231, 235);
 
         private static readonly ConditionalWeakTable<Control, object> IndukBergaris = new ConditionalWeakTable<Control, object>();
 
@@ -140,6 +311,14 @@ namespace Sukimart
             grid.ColumnAdded += (s, e) => RapikanKolom(e.Column);
         }
 
+        // Kolom mata uang: rata kanan (Harga, Total, Subtotal, dsb.)
+        private static readonly string[] KataKolomUang =
+            { "Harga", "Total", "Subtotal", "Omzet", "Bayar", "Kembalian" };
+
+        // Kolom angka biasa (Stok, Qty, Jumlah): rata tengah supaya rapi
+        private static readonly string[] KataKolomAngka =
+            { "Stok", "Qty", "Jumlah", "Terjual", "Min" };
+
         private static void RapikanKolom(DataGridViewColumn kolom)
         {
             if (kolom.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
@@ -147,24 +326,29 @@ namespace Sukimart
                 kolom.MinimumWidth = 64;
             }
 
-            if (KolomAngka(kolom))
-            {
-                kolom.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                kolom.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
-            }
-        }
-
-        private static bool KolomAngka(DataGridViewColumn kolom)
-        {
             string gabungan = (kolom.Name ?? "") + "|" + (kolom.DataPropertyName ?? "") + "|" + (kolom.HeaderText ?? "");
+
+            // Kolom mata uang: rata kanan, header pun rata kanan
+            foreach (string kata in KataKolomUang)
+            {
+                if (gabungan.IndexOf(kata, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    kolom.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    kolom.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    return;
+                }
+            }
+
+            // Kolom angka stok/qty: rata tengah, header juga tengah
             foreach (string kata in KataKolomAngka)
             {
                 if (gabungan.IndexOf(kata, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    return true;
+                    kolom.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    kolom.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    return;
                 }
             }
-            return false;
         }
 
         private static bool PerluGarisTepi(Control ctrl)
