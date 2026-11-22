@@ -6,10 +6,6 @@ namespace Sukimart
         private List<Barang> daftarBarang = new List<Barang>();
         private Barang? barangTerpilih;
         private bool hanyaMenipis = false;
-        private readonly Label lblPemasok = new Label();
-        private readonly TextBox txtPemasok = new TextBox();
-        private readonly Label lblAlasan = new Label();
-        private readonly ComboBox cmbAlasan = new ComboBox();
 
         public FormGudang() : this("admin")
         {
@@ -91,59 +87,7 @@ namespace Sukimart
 
         private void SiapkanFormPergerakanStok()
         {
-            pnlRestock.Controls.Add(lblPemasok);
-            pnlRestock.Controls.Add(txtPemasok);
-            pnlRestock.Controls.Add(lblAlasan);
-            pnlRestock.Controls.Add(cmbAlasan);
-
-            lblPemasok.AutoSize = true;
-            lblPemasok.Font = FontInter.Buat(9F, FontStyle.Bold);
-            lblPemasok.ForeColor = Color.FromArgb(75, 85, 99);
-            lblPemasok.Location = new Point(608, 24);
-
-            txtPemasok.Font = FontInter.Buat(10F);
-            txtPemasok.Location = new Point(608, 48);
-            txtPemasok.MaxLength = 100;
-            txtPemasok.Size = new Size(184, 23);
-
-            lblAlasan.AutoSize = true;
-            lblAlasan.Font = FontInter.Buat(9F, FontStyle.Bold);
-            lblAlasan.ForeColor = Color.FromArgb(75, 85, 99);
-            lblAlasan.Location = new Point(608, 24);
-            lblAlasan.Text = "Alasan";
-
-            cmbAlasan.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbAlasan.Font = FontInter.Buat(10F);
-            cmbAlasan.Items.AddRange(new object[] { "RUSAK", "KEDALUWARSA", "DIKEMBALIKAN", "LAINNYA" });
-            cmbAlasan.Location = new Point(608, 48);
-            cmbAlasan.Size = new Size(184, 24);
-
-            pnlRestock.Height = 152;
-            txtKeterangan.Location = new Point(24, 116);
-            txtKeterangan.Size = new Size(768, 23);
-            lblKeterangan.Location = new Point(24, 92);
-            lblKeterangan.Text = "Keterangan";
-            txtKeterangan.PlaceholderText = "Opsional";
-            btnSimpanStok.Location = new Point(808, 104);
-            AturTataLetakPergerakanStok();
-            pnlKanan.Resize += (s, e) => AturTataLetakPergerakanStok();
             AturInputPergerakanStok();
-        }
-
-        private void AturTataLetakPergerakanStok()
-        {
-            int margin = 40;
-            int lebar = pnlKanan.ClientSize.Width - (margin * 2);
-            int tinggiPanel = pnlRestock.Height;
-            int yPanel = pnlKanan.ClientSize.Height - margin - tinggiPanel;
-            pnlRestock.Location = new Point(margin, yPanel);
-            pnlRestock.Size = new Size(lebar, tinggiPanel);
-            gridGudang.Size = new Size(lebar, Math.Max(160, yPanel - gridGudang.Top - 24));
-            btnSimpanStok.Location = new Point(Math.Max(808, lebar - 152), 104);
-            int lebarInput = Math.Max(160, btnSimpanStok.Left - 624);
-            txtPemasok.Size = new Size(lebarInput, 23);
-            cmbAlasan.Size = new Size(lebarInput, 24);
-            txtKeterangan.Size = new Size(Math.Max(300, btnSimpanStok.Left - 40), 23);
         }
 
         private void AturInputPergerakanStok()
@@ -174,7 +118,7 @@ namespace Sukimart
         {
             string keyword = txtCariGudang.Text.Trim().ToLower();
 
-            var query = daftarBarang.AsEnumerable();
+            var query = daftarBarang.Where(b => b.Aktif).AsEnumerable();
 
             if (hanyaMenipis)
             {
@@ -319,6 +263,34 @@ namespace Sukimart
 
             try
             {
+                string keteranganRiwayat;
+                if (stokKeluar)
+                {
+                    string ketTambahan = txtKeterangan.Text.Trim();
+                    string alasanBersih = alasan.Trim();
+                    if (!string.IsNullOrWhiteSpace(alasanBersih) && !string.IsNullOrWhiteSpace(ketTambahan))
+                    {
+                        keteranganRiwayat = $"{alasanBersih} \u2022 {ketTambahan}";
+                    }
+                    else if (!string.IsNullOrWhiteSpace(alasanBersih))
+                    {
+                        keteranganRiwayat = alasanBersih;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(ketTambahan))
+                    {
+                        keteranganRiwayat = ketTambahan;
+                    }
+                    else
+                    {
+                        keteranganRiwayat = "-";
+                    }
+                }
+                else
+                {
+                    string ketTambahan = txtKeterangan.Text.Trim();
+                    keteranganRiwayat = !string.IsNullOrWhiteSpace(ketTambahan) ? ketTambahan : "-";
+                }
+
                 PenyimpananData.TambahRiwayatStok(new RiwayatStok
                 {
                     Tanggal = DateTime.Now,
@@ -328,7 +300,8 @@ namespace Sukimart
                     Jumlah = jumlah,
                     StokSebelum = stokSebelum,
                     StokSesudah = stokSesudah,
-                    Keterangan = stokKeluar ? $"{id} · {alasan}" : $"{id} · {pemasok}",
+                    Pemasok = stokKeluar ? "" : pemasok,
+                    Keterangan = keteranganRiwayat,
                     Pengguna = Navigasi.PenggunaAktif
                 });
                 string jenisLog = stokKeluar ? "Stok Keluar" : "Stok Masuk";

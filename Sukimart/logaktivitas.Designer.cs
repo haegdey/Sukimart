@@ -19,6 +19,7 @@ namespace Sukimart
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             pnlKiri = new Panel();
             btnKeluar = new Button();
+            btnGantiSandi = new Button();
             btnLogAktivitas = new Button();
             btnPengguna = new Button();
             btnLaporan = new Button();
@@ -59,6 +60,7 @@ namespace Sukimart
             // 
             pnlKiri.BackColor = Color.White;
             pnlKiri.Controls.Add(btnKeluar);
+            pnlKiri.Controls.Add(btnGantiSandi);
             pnlKiri.Controls.Add(btnLogAktivitas);
             pnlKiri.Controls.Add(btnPengguna);
             pnlKiri.Controls.Add(btnLaporan);
@@ -95,6 +97,26 @@ namespace Sukimart
             btnKeluar.Text = "Keluar";
             btnKeluar.TextAlign = ContentAlignment.MiddleLeft;
             btnKeluar.UseVisualStyleBackColor = false;
+            // 
+            // btnGantiSandi
+            // 
+            btnGantiSandi.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnGantiSandi.BackColor = Color.White;
+            btnGantiSandi.Cursor = Cursors.Hand;
+            btnGantiSandi.FlatAppearance.BorderSize = 0;
+            btnGantiSandi.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnGantiSandi.FlatStyle = FlatStyle.Flat;
+            btnGantiSandi.Font = new Font("Microsoft Sans Serif", 10F);
+            btnGantiSandi.ForeColor = Color.FromArgb(75, 85, 99);
+            btnGantiSandi.Location = new Point(18, 789);
+            btnGantiSandi.Margin = new Padding(3, 4, 3, 4);
+            btnGantiSandi.Name = "btnGantiSandi";
+            btnGantiSandi.Padding = new Padding(18, 0, 0, 0);
+            btnGantiSandi.Size = new Size(238, 53);
+            btnGantiSandi.TabIndex = 14;
+            btnGantiSandi.Text = "Ganti Kata Sandi";
+            btnGantiSandi.TextAlign = ContentAlignment.MiddleLeft;
+            btnGantiSandi.UseVisualStyleBackColor = false;
             // 
             // btnLogAktivitas
             // 
@@ -586,5 +608,6 @@ namespace Sukimart
         private DataGridViewTextBoxColumn colJenis;
         private DataGridViewTextBoxColumn colAksi;
         private Label lblStatusTabel;
+        private Button btnGantiSandi;
     }
 }

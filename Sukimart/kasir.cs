@@ -10,6 +10,9 @@ namespace Sukimart
         private readonly List<ItemKeranjang> keranjang = new List<ItemKeranjang>();
         private bool bayarDiisiManual;
         private bool bayarDiaturOtomatis;
+        private Barang? barangTerpilih;
+        private readonly List<Button> daftarTombolKategori = new List<Button>();
+        private string kategoriTerpilih = "Semua";
 
         public FormKasir() : this(Navigasi.PeranAktif)
         {
@@ -71,6 +74,12 @@ namespace Sukimart
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
 
             btnTambahKeranjang.Click += BtnTambahKeranjang_Click;
+            txtCariProduk.TextChanged += (s, e) => TampilkanKartuProduk();
+            btnHapusCari.Click += (s, e) =>
+            {
+                txtCariProduk.Clear();
+                txtCariProduk.Focus();
+            };
             gridKeranjang.CellClick += GridKeranjang_CellClick;
             gridKeranjang.CellMouseEnter += (s, e) =>
             {
@@ -148,14 +157,8 @@ namespace Sukimart
             try
             {
                 daftarBarang = PenyimpananData.BacaBarang();
-                cmbBarang.Items.Clear();
-                foreach (Barang b in daftarBarang.Where(b => b.Stok > 0))
-                {
-                    cmbBarang.Items.Add($"{b.Nama} [{b.Kode}] · Rp {b.Harga:N0} (Stok: {b.Stok})");
-                }
-
-                cmbBarang.SelectedIndex = -1;
-                cmbBarang.Text = "";
+                MuatDaftarKategori();
+                TampilkanKartuProduk();
             }
             catch (Exception ex)
             {
@@ -163,18 +166,191 @@ namespace Sukimart
             }
         }
 
+        private void MuatDaftarKategori()
+        {
+            flowKategori.SuspendLayout();
+            flowKategori.Controls.Clear();
+            daftarTombolKategori.Clear();
+
+            List<string> listKategori = new List<string> { "Semua" };
+            var kategoriUnik = daftarBarang
+                .Where(b => b.Aktif)
+                .Select(b => b.Kategori?.Trim())
+                .Where(k => !string.IsNullOrEmpty(k))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(k => k)
+                .ToList();
+
+            foreach (var kat in kategoriUnik)
+            {
+                if (kat != null && !listKategori.Any(k => string.Equals(k, kat, StringComparison.OrdinalIgnoreCase)))
+                {
+                    listKategori.Add(kat);
+                }
+            }
+
+            foreach (var kat in listKategori)
+            {
+                string tagKategori = kat;
+                Button btn = new Button
+                {
+                    Text = tagKategori,
+                    Height = 32,
+                    AutoSize = true,
+                    MinimumSize = new Size(68, 32),
+                    Cursor = Cursors.Hand,
+                    FlatStyle = FlatStyle.Flat,
+                    Margin = new Padding(0, 0, 8, 0),
+                    Tag = tagKategori
+                };
+                btn.FlatAppearance.BorderSize = 1;
+                btn.Click += (s, e) =>
+                {
+                    kategoriTerpilih = tagKategori;
+                    PerbaruiWarnaTombolKategori();
+                    TampilkanKartuProduk();
+                };
+
+                daftarTombolKategori.Add(btn);
+                flowKategori.Controls.Add(btn);
+            }
+
+            PerbaruiWarnaTombolKategori();
+            flowKategori.ResumeLayout();
+        }
+
+        private void PerbaruiWarnaTombolKategori()
+        {
+            foreach (var btn in daftarTombolKategori)
+            {
+                bool aktif = string.Equals(btn.Tag?.ToString(), kategoriTerpilih, StringComparison.OrdinalIgnoreCase);
+                if (aktif)
+                {
+                    btn.BackColor = Color.FromArgb(255, 196, 0);
+                    btn.ForeColor = Color.FromArgb(31, 41, 55);
+                    btn.FlatAppearance.BorderColor = Color.FromArgb(255, 196, 0);
+                    btn.Font = FontInter.Buat(9F, FontStyle.Bold);
+                }
+                else
+                {
+                    btn.BackColor = Color.White;
+                    btn.ForeColor = Color.FromArgb(75, 85, 99);
+                    btn.FlatAppearance.BorderColor = Color.FromArgb(229, 231, 235);
+                    btn.Font = FontInter.Buat(9F, FontStyle.Regular);
+                }
+            }
+        }
+
+        private void TampilkanKartuProduk()
+        {
+            flowProduk.SuspendLayout();
+            flowProduk.Controls.Clear();
+
+            string kataKunci = txtCariProduk.Text.Trim();
+
+            var hasil = daftarBarang.Where(b => b.Aktif).AsEnumerable();
+
+            if (!string.Equals(kategoriTerpilih, "Semua", StringComparison.OrdinalIgnoreCase))
+            {
+                hasil = hasil.Where(b => string.Equals(b.Kategori, kategoriTerpilih, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(kataKunci))
+            {
+                hasil = hasil.Where(b =>
+                    (b.Nama != null && b.Nama.Contains(kataKunci, StringComparison.OrdinalIgnoreCase)) ||
+                    (b.Kode != null && b.Kode.Contains(kataKunci, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            var listHasil = hasil.ToList();
+
+            if (listHasil.Count == 0)
+            {
+                Label lblKosong = new Label
+                {
+                    Text = "Tidak ada produk yang sesuai",
+                    Font = FontInter.Buat(10F, FontStyle.Regular),
+                    ForeColor = Color.FromArgb(156, 163, 175),
+                    AutoSize = false,
+                    Size = new Size(580, 80),
+                    TextAlign = ContentAlignment.MiddleCenter
+                };
+                flowProduk.Controls.Add(lblKosong);
+            }
+            else
+            {
+                foreach (var b in listHasil)
+                {
+                    bool isDipilih = barangTerpilih != null && barangTerpilih.Kode == b.Kode;
+                    KartuProduk kartu = new KartuProduk();
+                    kartu.SetBarang(b, isDipilih);
+                    kartu.Margin = new Padding(0, 0, 10, 10);
+
+                    kartu.KartuDiklik += (s, e) =>
+                    {
+                        if (s is KartuProduk kp && kp.Barang != null)
+                        {
+                            PilihKartuProduk(kp.Barang);
+                        }
+                    };
+
+                    kartu.KartuDoubleKlik += (s, e) =>
+                    {
+                        if (s is KartuProduk kp && kp.Barang != null)
+                        {
+                            PilihKartuProduk(kp.Barang);
+                            TambahBarangKeKeranjang(kp.Barang, (int)nudJumlah.Value);
+                        }
+                    };
+
+                    flowProduk.Controls.Add(kartu);
+                }
+            }
+
+            flowProduk.ResumeLayout();
+        }
+
+        private void PilihKartuProduk(Barang? barang)
+        {
+            barangTerpilih = barang;
+            foreach (Control c in flowProduk.Controls)
+            {
+                if (c is KartuProduk kartu)
+                {
+                    kartu.Terpilih = barang != null && kartu.Barang?.Kode == barang.Kode;
+                }
+            }
+        }
+
         private void BtnTambahKeranjang_Click(object? sender, EventArgs e)
         {
-            Barang? barang = CariBarangDipilih();
-
-            if (barang == null)
+            if (barangTerpilih == null)
             {
-                MessageBox.Show("Produk tidak ditemukan! Ketik kode atau nama produk, lalu pilih dari daftar.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbBarang.Focus();
+                Barang? dicari = CariBarangDariTeks();
+                if (dicari != null)
+                {
+                    PilihKartuProduk(dicari);
+                }
+            }
+
+            if (barangTerpilih == null)
+            {
+                MessageBox.Show("Silakan pilih produk terlebih dahulu dari kartu produk!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtCariProduk.Focus();
                 return;
             }
 
-            int qtyBeli = (int)nudJumlah.Value;
+            TambahBarangKeKeranjang(barangTerpilih, (int)nudJumlah.Value);
+        }
+
+        private void TambahBarangKeKeranjang(Barang barang, int qtyBeli)
+        {
+            if (barang.Stok <= 0)
+            {
+                MessageBox.Show($"Stok produk '{barang.Nama}' sudah habis!", "Stok Habis", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var itemAda = keranjang.FirstOrDefault(k => k.KodeBarang == barang.Kode);
             int qtySekarang = itemAda?.Jumlah ?? 0;
 
@@ -198,6 +374,7 @@ namespace Sukimart
                 {
                     KodeBarang = barang.Kode,
                     NamaBarang = barang.Nama,
+                    HargaBeli = barang.HargaBeli,
                     Harga = barang.Harga,
                     Jumlah = qtyBeli
                 });
@@ -206,8 +383,6 @@ namespace Sukimart
             nudJumlah.Value = 1;
             PerbaruiTampilanKeranjang();
             PilihBaris(barang.Kode);
-            cmbBarang.SelectedIndex = -1;
-            cmbBarang.Text = "";
             FokusPencarian();
         }
 
@@ -222,9 +397,9 @@ namespace Sukimart
 
         private bool TanganiPintasan(Keys tombol)
         {
-            bool diPencarian = cmbBarang.ContainsFocus;
+            bool diPencarian = txtCariProduk.ContainsFocus;
             bool diBayar = nudBayar.ContainsFocus;
-            bool pencarianKosong = cmbBarang.Text.Trim().Length == 0;
+            bool pencarianKosong = txtCariProduk.Text.Trim().Length == 0;
 
             switch (tombol)
             {
@@ -244,10 +419,10 @@ namespace Sukimart
                     return true;
 
                 case Keys.Multiply when diPencarian:
-                    if (int.TryParse(cmbBarang.Text.Trim(), out int jumlah) && jumlah > 0)
+                    if (int.TryParse(txtCariProduk.Text.Trim(), out int jumlah) && jumlah > 0)
                     {
                         nudJumlah.Value = Math.Min(jumlah, (int)nudJumlah.Maximum);
-                        cmbBarang.Text = "";
+                        txtCariProduk.Text = "";
                     }
                     return true;
 
@@ -259,11 +434,11 @@ namespace Sukimart
                     UbahJumlahBarisTerpilih(-1);
                     return true;
 
-                case Keys.Up when diPencarian && pencarianKosong && !cmbBarang.DroppedDown:
+                case Keys.Up when diPencarian && pencarianKosong:
                     PindahBaris(-1);
                     return true;
 
-                case Keys.Down when diPencarian && pencarianKosong && !cmbBarang.DroppedDown:
+                case Keys.Down when diPencarian && pencarianKosong:
                     PindahBaris(1);
                     return true;
 
@@ -275,10 +450,10 @@ namespace Sukimart
                     FokusPencarian();
                     return true;
 
-                case Keys.Escape when diPencarian && !cmbBarang.DroppedDown:
-                    cmbBarang.SelectedIndex = -1;
-                    cmbBarang.Text = "";
+                case Keys.Escape when diPencarian:
+                    txtCariProduk.Text = "";
                     nudJumlah.Value = 1;
+                    PilihKartuProduk(null);
                     return true;
             }
             return false;
@@ -286,8 +461,8 @@ namespace Sukimart
 
         private void FokusPencarian()
         {
-            cmbBarang.Focus();
-            cmbBarang.SelectAll();
+            txtCariProduk.Focus();
+            txtCariProduk.SelectAll();
         }
 
         private string? KodeBarisTerpilih()
@@ -374,48 +549,30 @@ namespace Sukimart
             PilihBaris(kode);
         }
 
-        private Barang? CariBarangDipilih()
+        private Barang? CariBarangDariTeks()
         {
-            string teks = cmbBarang.SelectedIndex >= 0 ? cmbBarang.SelectedItem?.ToString() ?? "" : cmbBarang.Text;
-            teks = teks.Trim();
+            string teks = txtCariProduk.Text.Trim();
             if (teks.Length == 0)
             {
                 return null;
             }
 
-            // 1. Cek apakah teks adalah Kode Barang persis (misal scan barcode atau ketik kode MNM001)
-            Barang? barang = daftarBarang.FirstOrDefault(b => string.Equals(b.Kode, teks, StringComparison.OrdinalIgnoreCase));
+            // 1. Cek apakah teks adalah Kode Barang persis
+            Barang? barang = daftarBarang.FirstOrDefault(b => b.Aktif && string.Equals(b.Kode, teks, StringComparison.OrdinalIgnoreCase));
             if (barang != null)
             {
                 return barang;
             }
 
-            // 2. Cek apakah item dipilih dari format baru "Nama [Kode] ..."
-            int kurungBuka = teks.IndexOf('[');
-            int kurungTutup = teks.IndexOf(']');
-            if (kurungBuka >= 0 && kurungTutup > kurungBuka)
+            // 2. Cek apakah teks adalah Nama Barang persis
+            barang = daftarBarang.FirstOrDefault(b => b.Aktif && string.Equals(b.Nama, teks, StringComparison.OrdinalIgnoreCase));
+            if (barang != null)
             {
-                string kodeDiKurung = teks.Substring(kurungBuka + 1, kurungTutup - kurungBuka - 1).Trim();
-                barang = daftarBarang.FirstOrDefault(b => string.Equals(b.Kode, kodeDiKurung, StringComparison.OrdinalIgnoreCase));
-                if (barang != null)
-                {
-                    return barang;
-                }
+                return barang;
             }
 
-            // 3. Dukung juga format lama "Kode - Nama ..."
-            if (teks.Contains(" - "))
-            {
-                string kodeLama = teks.Split(new[] { " - " }, StringSplitOptions.None)[0].Trim();
-                barang = daftarBarang.FirstOrDefault(b => string.Equals(b.Kode, kodeLama, StringComparison.OrdinalIgnoreCase));
-                if (barang != null)
-                {
-                    return barang;
-                }
-            }
-
-            // 4. Cek pencarian parsial Nama Barang (misal ketik "air" atau "susu")
-            var cocok = daftarBarang.Where(b => b.Stok > 0 && b.Nama.Contains(teks, StringComparison.OrdinalIgnoreCase)).ToList();
+            // 3. Cek pencarian parsial Nama Barang
+            var cocok = daftarBarang.Where(b => b.Aktif && b.Stok > 0 && b.Nama.Contains(teks, StringComparison.OrdinalIgnoreCase)).ToList();
             if (cocok.Count == 1) return cocok[0];
             if (cocok.Count > 1)
             {
@@ -423,8 +580,8 @@ namespace Sukimart
                 return awalan ?? cocok[0];
             }
 
-            // 5. Cek pencarian parsial Kode Barang
-            var cocokKode = daftarBarang.Where(b => b.Stok > 0 && b.Kode.Contains(teks, StringComparison.OrdinalIgnoreCase)).ToList();
+            // 4. Cek pencarian parsial Kode Barang
+            var cocokKode = daftarBarang.Where(b => b.Aktif && b.Stok > 0 && b.Kode.Contains(teks, StringComparison.OrdinalIgnoreCase)).ToList();
             if (cocokKode.Count >= 1) return cocokKode[0];
 
             return null;
@@ -589,6 +746,7 @@ namespace Sukimart
                 IdTransaksi = idTransaksi,
                 KodeBarang = k.KodeBarang,
                 NamaBarang = k.NamaBarang,
+                HargaBeli = k.HargaBeli,
                 HargaSatuan = k.Harga,
                 Jumlah = k.Jumlah,
                 Subtotal = k.Subtotal,

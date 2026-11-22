@@ -5,9 +5,19 @@ namespace Sukimart
         public string Kode { get; set; } = "";
         public string Nama { get; set; } = "";
         public string Kategori { get; set; } = "";
+        public int HargaBeli { get; set; }
         public int Harga { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public int HargaJual
+        {
+            get => Harga;
+            set => Harga = value;
+        }
+
         public int Stok { get; set; }
         public int StokMinimum { get; set; }
+        public bool Aktif { get; set; } = true;
     }
 
     public class Transaksi
@@ -26,6 +36,7 @@ namespace Sukimart
         public string IdTransaksi { get; set; } = "";
         public string KodeBarang { get; set; } = "";
         public string NamaBarang { get; set; } = "";
+        public int HargaBeli { get; set; }
         public int Harga { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
@@ -98,6 +109,7 @@ namespace Sukimart
         public int Jumlah { get; set; }
         public int StokSebelum { get; set; }
         public int StokSesudah { get; set; }
+        public string Pemasok { get; set; } = "";
         public string Keterangan { get; set; } = "";
         public string Pengguna { get; set; } = "";
     }
@@ -130,11 +142,26 @@ namespace Sukimart
     {
         public string KodeBarang { get; set; } = "";
         public string NamaBarang { get; set; } = "";
+        public int HargaBeli { get; set; }
         public int Harga { get; set; }
         public int Jumlah { get; set; }
         public int Subtotal
         {
             get { return Harga * Jumlah; }
         }
+    }
+
+    public class ItemLabaProduk
+    {
+        public string Kode { get; set; } = "";
+        public string Nama { get; set; } = "";
+        public string Terjual { get; set; } = "";
+        public string Pendapatan { get; set; } = "";
+        public string TotalModal { get; set; } = "";
+        public string LabaKotor { get; set; } = "";
+        public int RawTerjual { get; set; }
+        public long RawPendapatan { get; set; }
+        public long RawModal { get; set; }
+        public long RawLaba { get; set; }
     }
 }

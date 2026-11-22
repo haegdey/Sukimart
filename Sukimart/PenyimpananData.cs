@@ -138,7 +138,54 @@ namespace Sukimart
 
         public static List<DetailTransaksi> BacaDetailTransaksi()
         {
-            return BacaData<DetailTransaksi>("detail_transaksi.json");
+            List<DetailTransaksi> daftarDetail = BacaData<DetailTransaksi>("detail_transaksi.json");
+            bool adaMigrasi = false;
+            if (daftarDetail.Any(d => d.HargaBeli <= 0))
+            {
+                List<Barang> daftarBarang = BacaBarang();
+                var mapBarangByKode = daftarBarang
+                    .Where(b => !string.IsNullOrEmpty(b.Kode))
+                    .GroupBy(b => b.Kode, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                var mapBarangByNama = daftarBarang
+                    .Where(b => !string.IsNullOrEmpty(b.Nama))
+                    .GroupBy(b => b.Nama, StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+
+                foreach (var d in daftarDetail)
+                {
+                    if (d.HargaBeli <= 0)
+                    {
+                        if (mapBarangByKode.TryGetValue(d.KodeBarang, out var brgKode) && brgKode.HargaBeli > 0)
+                        {
+                            d.HargaBeli = brgKode.HargaBeli;
+                            adaMigrasi = true;
+                        }
+                        else if (mapBarangByNama.TryGetValue(d.NamaBarang, out var brgNama) && brgNama.HargaBeli > 0)
+                        {
+                            d.HargaBeli = brgNama.HargaBeli;
+                            adaMigrasi = true;
+                        }
+                        else
+                        {
+                            // Estimasi rasio modal wajar (70% - 75% dari harga jual transaksi)
+                            d.HargaBeli = Math.Max(0, (int)Math.Round(d.Harga * 0.75));
+                            adaMigrasi = true;
+                        }
+                    }
+                }
+
+                if (adaMigrasi)
+                {
+                    try
+                    {
+                        SimpanDetailTransaksi(daftarDetail);
+                    }
+                    catch { }
+                }
+            }
+            return daftarDetail;
         }
 
         public static void SimpanDetailTransaksi(List<DetailTransaksi> daftarDetail)

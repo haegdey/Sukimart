@@ -7,6 +7,7 @@ namespace Sukimart
         private static readonly CultureInfo BudayaIndonesia = new CultureInfo("id-ID");
         private readonly string peran;
         private List<Barang> daftarBarang = new List<Barang>();
+        private string tabAktif = "aktif";
 
         public FormKatalog() : this(Navigasi.PeranAktif)
         {
@@ -22,16 +23,30 @@ namespace Sukimart
             gridBarang.AllowUserToResizeRows = false;
             SesuaikanPeran();
             PasangEventHandlers();
+            UbahTabKatalog("aktif");
             MuatDataBarang();
         }
 
         private void SesuaikanPeran()
         {
+            bool isAdmin = this.peran == "admin";
             bool bolehKelola = this.peran != "kasir";
+
+            btnTabAktif.Visible = isAdmin;
+            btnTabNonaktif.Visible = isAdmin;
+            if (!isAdmin)
+            {
+                txtCari.Width = gridBarang.Width;
+                tabAktif = "aktif";
+            }
+
             btnTambahItem.Visible = bolehKelola;
             btnEditProduk.Visible = bolehKelola;
-            btnHapusBarang.Visible = bolehKelola;
             btnKelolaKategori.Visible = bolehKelola;
+
+            // Tombol aksi (Hapus / Aktifkan) HANYA untuk Admin
+            btnHapusBarang.Visible = isAdmin;
+
             if (!bolehKelola)
             {
                 gridBarang.Height += btnTambahItem.Bottom - gridBarang.Bottom;
@@ -39,12 +54,14 @@ namespace Sukimart
 
             if (this.peran == "kasir")
             {
+                colHargaBeli.Visible = false;
                 btnGudang.Visible = false;
                 btnLaporan.Visible = false;
                 btnPengguna.Visible = false;
             }
             else if (this.peran == "gudang")
             {
+                colHargaBeli.Visible = true;
                 btnKasir.Visible = false;
                 btnRiwayat.Visible = false;
                 btnLaporan.Visible = false;
@@ -53,6 +70,7 @@ namespace Sukimart
             }
             else
             {
+                colHargaBeli.Visible = true;
                 btnKasir.Visible = true;
                 btnRiwayat.Visible = true;
                 btnGudang.Visible = true;
@@ -74,6 +92,9 @@ namespace Sukimart
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
 
+            btnTabAktif.Click += (s, e) => UbahTabKatalog("aktif");
+            btnTabNonaktif.Click += (s, e) => UbahTabKatalog("nonaktif");
+
             txtCari.TextChanged += (s, e) => FilterDaftarBarang();
 
             btnTambahItem.Click += BtnTambahItem_Click;
@@ -87,6 +108,49 @@ namespace Sukimart
                     BtnEditProduk_Click(s, e);
                 }
             };
+        }
+
+        private void UbahTabKatalog(string tab)
+        {
+            if (this.peran != "admin")
+            {
+                tab = "aktif";
+            }
+
+            tabAktif = tab;
+            bool isAktif = tabAktif == "aktif";
+
+            AturTombolTab(btnTabAktif, "Barang Aktif", isAktif);
+            AturTombolTab(btnTabNonaktif, "Barang Nonaktif", !isAktif);
+
+            if (isAktif)
+            {
+                btnHapusBarang.Text = "Hapus Barang";
+                btnHapusBarang.ForeColor = Color.FromArgb(220, 38, 38);
+                btnHapusBarang.FlatAppearance.BorderColor = Color.FromArgb(254, 202, 202);
+                btnHapusBarang.FlatAppearance.MouseOverBackColor = Color.FromArgb(254, 242, 242);
+            }
+            else
+            {
+                btnHapusBarang.Text = "Aktifkan Barang";
+                btnHapusBarang.ForeColor = Color.FromArgb(16, 149, 102);
+                btnHapusBarang.FlatAppearance.BorderColor = Color.FromArgb(167, 243, 208);
+                btnHapusBarang.FlatAppearance.MouseOverBackColor = Color.FromArgb(236, 253, 245);
+            }
+
+            FilterDaftarBarang();
+        }
+
+        private static void AturTombolTab(Button tombol, string teks, bool aktif)
+        {
+            tombol.BackColor = aktif ? Color.FromArgb(255, 196, 0) : Color.White;
+            tombol.Cursor = Cursors.Hand;
+            tombol.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
+            tombol.FlatAppearance.BorderSize = aktif ? 0 : 1;
+            tombol.FlatStyle = FlatStyle.Flat;
+            tombol.Font = FontInter.Buat(9.5F, aktif ? FontStyle.Bold : FontStyle.Regular);
+            tombol.ForeColor = aktif ? Color.FromArgb(31, 41, 55) : Color.FromArgb(75, 85, 99);
+            tombol.Text = teks;
         }
 
         public void MuatDataBarang()
@@ -105,19 +169,28 @@ namespace Sukimart
         private void FilterDaftarBarang()
         {
             string keyword = txtCari.Text.Trim().ToLower();
-            var hasil = string.IsNullOrEmpty(keyword)
-                ? daftarBarang
-                : daftarBarang.Where(b =>
-                    b.Nama.ToLower().Contains(keyword) ||
-                    b.Kode.ToLower().Contains(keyword) ||
-                    b.Kategori.ToLower().Contains(keyword)).ToList();
+            bool tampilkanAktif = (this.peran != "admin") || (tabAktif == "aktif");
+
+            var hasil = daftarBarang.Where(b => b.Aktif == tampilkanAktif);
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                hasil = hasil.Where(b =>
+                    (b.Nama ?? "").ToLower().Contains(keyword) ||
+                    (b.Kode ?? "").ToLower().Contains(keyword) ||
+                    (b.Kategori ?? "").ToLower().Contains(keyword));
+            }
+
+            var listHasil = hasil.ToList();
 
             gridBarang.AutoGenerateColumns = false;
-            gridBarang.DataSource = hasil.Select(b => new
+            gridBarang.DataSource = listHasil.Select(b => new
             {
                 b.Kode,
                 b.Nama,
                 b.Kategori,
+                HargaBeliFormat = "Rp " + b.HargaBeli.ToString("N0", BudayaIndonesia),
+                b.HargaBeli,
                 HargaFormat = "Rp " + b.Harga.ToString("N0", BudayaIndonesia),
                 b.Harga,
                 b.Stok,
@@ -193,37 +266,85 @@ namespace Sukimart
 
         private void BtnHapusBarang_Click(object? sender, EventArgs e)
         {
+            if (this.peran != "admin")
+            {
+                MessageBox.Show("Hanya Admin yang memiliki hak akses untuk tindakan ini.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Barang? barang = BarangTerpilih();
             if (barang == null)
             {
-                MessageBox.Show("Pilih barang dari tabel yang ingin dihapus terlebih dahulu.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string pesanPilih = tabAktif == "aktif"
+                    ? "Pilih barang dari tabel yang ingin dihapus terlebih dahulu."
+                    : "Pilih barang dari tabel yang ingin diaktifkan terlebih dahulu.";
+                MessageBox.Show(pesanPilih, "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 gridBarang.Focus();
                 return;
             }
 
+            if (tabAktif == "aktif")
+            {
+                ProsesHapusAtauNonaktifkanBarang(barang);
+            }
+            else
+            {
+                ProsesAktifkanBarang(barang);
+            }
+        }
+
+        private void ProsesHapusAtauNonaktifkanBarang(Barang barang)
+        {
             // Cek apakah barang pernah terjual (ada di detail transaksi)
             List<DetailTransaksi> daftarDetail = PenyimpananData.BacaDetailTransaksi();
             bool pernahTerjual = daftarDetail.Any(d => d.KodeBarang == barang.Kode);
-            if (pernahTerjual)
-            {
-                MessageBox.Show(
-                    $"Barang '{barang.Nama}' ({barang.Kode}) tidak dapat dihapus karena pernah terjual.\n" +
-                    "Data transaksi harus tetap terjaga.",
-                    "Tidak Dapat Dihapus", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
             // Cek apakah barang pernah ada riwayat stok (barang masuk/keluar)
             List<RiwayatStok> daftarRiwayat = PenyimpananData.BacaRiwayatStok();
-            bool adaRiwayat = daftarRiwayat.Any(r => r.KodeBarang == barang.Kode);
-            if (adaRiwayat)
+            bool adaRiwayatStok = daftarRiwayat.Any(r => r.KodeBarang == barang.Kode);
+
+            bool adaBarangMasuk = PenyimpananData.BacaBarangMasuk().Any(m => m.KodeBarang == barang.Kode);
+            bool adaBarangKeluar = PenyimpananData.BacaBarangKeluar().Any(k => k.KodeBarang == barang.Kode);
+
+            bool adaCatatan = pernahTerjual || adaRiwayatStok || adaBarangMasuk || adaBarangKeluar;
+
+            if (adaCatatan)
             {
-                MessageBox.Show(
-                    $"Barang '{barang.Nama}' ({barang.Kode}) tidak dapat dihapus karena sudah pernah dicatat masuk atau keluar di gudang.",
-                    "Tidak Dapat Dihapus", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                DialogResult pilihan = MessageBox.Show(
+                    "Tidak bisa dihapus, produk ini sudah ada catatan transaksi, apakah kamu ingin menonaktifkan barang?",
+                    "Konfirmasi Nonaktifkan",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (pilihan == DialogResult.Yes)
+                {
+                    try
+                    {
+                        barang.Aktif = false;
+                        PenyimpananData.SimpanBarang(daftarBarang);
+                        try
+                        {
+                            PenyimpananData.CatatAktivitas(
+                                Navigasi.PenggunaAktif,
+                                "Nonaktifkan Barang",
+                                $"Menonaktifkan barang '{barang.Nama}' ({barang.Kode})."
+                            );
+                        }
+                        catch { }
+
+                        MessageBox.Show($"Barang '{barang.Nama}' berhasil dinonaktifkan.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MuatDataBarang();
+                    }
+                    catch (Exception ex)
+                    {
+                        barang.Aktif = true;
+                        MessageBox.Show("Gagal menonaktifkan barang: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
                 return;
             }
 
+            // Jika belum memiliki riwayat: Hapus permanen
             DialogResult konfirmasi = MessageBox.Show(
                 $"Apakah Anda yakin ingin menghapus barang '{barang.Nama}' ({barang.Kode})?",
                 "Konfirmasi Hapus",
@@ -254,6 +375,41 @@ namespace Sukimart
                 {
                     daftarBarang.Insert(posisi, barang);
                     MessageBox.Show("Gagal menghapus barang: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void ProsesAktifkanBarang(Barang barang)
+        {
+            DialogResult konfirmasi = MessageBox.Show(
+                "Apakah Anda yakin ingin mengaktifkan kembali barang ini?",
+                "Konfirmasi Aktifkan",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (konfirmasi == DialogResult.Yes)
+            {
+                try
+                {
+                    barang.Aktif = true;
+                    PenyimpananData.SimpanBarang(daftarBarang);
+                    try
+                    {
+                        PenyimpananData.CatatAktivitas(
+                            Navigasi.PenggunaAktif,
+                            "Aktifkan Barang",
+                            $"Mengaktifkan kembali barang '{barang.Nama}' ({barang.Kode})."
+                        );
+                    }
+                    catch { }
+
+                    MessageBox.Show($"Barang '{barang.Nama}' berhasil diaktifkan kembali.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MuatDataBarang();
+                }
+                catch (Exception ex)
+                {
+                    barang.Aktif = false;
+                    MessageBox.Show("Gagal mengaktifkan barang: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

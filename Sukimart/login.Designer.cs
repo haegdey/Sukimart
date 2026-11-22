@@ -63,47 +63,48 @@ namespace Sukimart
             pnlKiri.Controls.Add(lblMerk);
             pnlKiri.Dock = DockStyle.Left;
             pnlKiri.Location = new Point(0, 0);
+            pnlKiri.Margin = new Padding(3, 4, 3, 4);
             pnlKiri.Name = "pnlKiri";
-            pnlKiri.Size = new Size(560, 720);
+            pnlKiri.Size = new Size(640, 960);
             pnlKiri.TabIndex = 1;
             // 
             // lblPassSalah
             // 
             lblPassSalah.AutoSize = true;
-            lblPassSalah.Font = new Font("Inter", 9F);
+            lblPassSalah.Font = new Font("Microsoft Sans Serif", 9F);
             lblPassSalah.ForeColor = Color.FromArgb(220, 38, 38);
-            lblPassSalah.Location = new Point(80, 410);
+            lblPassSalah.Location = new Point(91, 547);
             lblPassSalah.Name = "lblPassSalah";
-            lblPassSalah.Size = new Size(0, 15);
+            lblPassSalah.Size = new Size(0, 18);
             lblPassSalah.TabIndex = 9;
             // 
             // lblUsnSalah
             // 
             lblUsnSalah.AutoSize = true;
-            lblUsnSalah.Font = new Font("Inter", 9F);
+            lblUsnSalah.Font = new Font("Microsoft Sans Serif", 9F);
             lblUsnSalah.ForeColor = Color.FromArgb(220, 38, 38);
-            lblUsnSalah.Location = new Point(80, 330);
+            lblUsnSalah.Location = new Point(91, 440);
             lblUsnSalah.Name = "lblUsnSalah";
-            lblUsnSalah.Size = new Size(0, 15);
+            lblUsnSalah.Size = new Size(0, 18);
             lblUsnSalah.TabIndex = 8;
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Font = new Font("Inter", 9F, FontStyle.Bold);
-            lblPassword.Location = new Point(80, 360);
+            lblPassword.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold);
+            lblPassword.Location = new Point(91, 480);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(69, 16);
+            lblPassword.Size = new Size(89, 18);
             lblPassword.TabIndex = 7;
             lblPassword.Text = "Kata Sandi";
             // 
             // lblUsername
             // 
             lblUsername.AutoSize = true;
-            lblUsername.Font = new Font("Inter", 9F, FontStyle.Bold);
-            lblUsername.Location = new Point(80, 280);
+            lblUsername.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold);
+            lblUsername.Location = new Point(91, 373);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(73, 16);
+            lblUsername.Size = new Size(131, 18);
             lblUsername.TabIndex = 6;
             lblUsername.Text = "Nama Pengguna";
             // 
@@ -113,11 +114,12 @@ namespace Sukimart
             btnMasuk.Cursor = Cursors.Hand;
             btnMasuk.FlatAppearance.BorderSize = 0;
             btnMasuk.FlatStyle = FlatStyle.Flat;
-            btnMasuk.Font = new Font("Inter", 10F, FontStyle.Bold);
+            btnMasuk.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
             btnMasuk.ForeColor = Color.Black;
-            btnMasuk.Location = new Point(80, 448);
+            btnMasuk.Location = new Point(91, 597);
+            btnMasuk.Margin = new Padding(3, 4, 3, 4);
             btnMasuk.Name = "btnMasuk";
-            btnMasuk.Size = new Size(400, 40);
+            btnMasuk.Size = new Size(457, 53);
             btnMasuk.TabIndex = 5;
             btnMasuk.Text = "Masuk";
             btnMasuk.UseVisualStyleBackColor = false;
@@ -126,34 +128,36 @@ namespace Sukimart
             // txtPassword
             // 
             txtPassword.BackColor = Color.White;
-            txtPassword.Font = new Font("Inter", 10F);
+            txtPassword.Font = new Font("Microsoft Sans Serif", 10F);
             txtPassword.ForeColor = Color.Black;
-            txtPassword.Location = new Point(80, 380);
+            txtPassword.Location = new Point(91, 507);
+            txtPassword.Margin = new Padding(3, 4, 3, 4);
             txtPassword.Name = "txtPassword";
             txtPassword.PlaceholderText = "Masukkan kata sandi";
-            txtPassword.Size = new Size(400, 25);
+            txtPassword.Size = new Size(457, 26);
             txtPassword.TabIndex = 4;
             txtPassword.UseSystemPasswordChar = true;
             // 
             // txtUsername
             // 
             txtUsername.BackColor = Color.White;
-            txtUsername.Font = new Font("Inter", 10F);
+            txtUsername.Font = new Font("Microsoft Sans Serif", 10F);
             txtUsername.ForeColor = Color.Black;
-            txtUsername.Location = new Point(80, 300);
+            txtUsername.Location = new Point(91, 400);
+            txtUsername.Margin = new Padding(3, 4, 3, 4);
             txtUsername.Name = "txtUsername";
             txtUsername.PlaceholderText = "Masukkan nama pengguna";
-            txtUsername.Size = new Size(400, 25);
+            txtUsername.Size = new Size(457, 26);
             txtUsername.TabIndex = 3;
             // 
             // lblJudul
             // 
             lblJudul.AutoSize = true;
-            lblJudul.Font = new Font("Inter", 20F, FontStyle.Bold);
+            lblJudul.Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold);
             lblJudul.ForeColor = Color.Black;
-            lblJudul.Location = new Point(80, 208);
+            lblJudul.Location = new Point(91, 277);
             lblJudul.Name = "lblJudul";
-            lblJudul.Size = new Size(116, 36);
+            lblJudul.Size = new Size(122, 39);
             lblJudul.TabIndex = 2;
             lblJudul.Text = "Masuk";
             // 
@@ -161,9 +165,10 @@ namespace Sukimart
             // 
             pictureLogo.BackColor = Color.Transparent;
             pictureLogo.Image = Properties.Resources.logo;
-            pictureLogo.Location = new Point(80, 64);
+            pictureLogo.Location = new Point(91, 85);
+            pictureLogo.Margin = new Padding(3, 4, 3, 4);
             pictureLogo.Name = "pictureLogo";
-            pictureLogo.Size = new Size(40, 40);
+            pictureLogo.Size = new Size(46, 53);
             pictureLogo.SizeMode = PictureBoxSizeMode.Zoom;
             pictureLogo.TabIndex = 1;
             pictureLogo.TabStop = false;
@@ -171,11 +176,11 @@ namespace Sukimart
             // lblMerk
             // 
             lblMerk.AutoSize = true;
-            lblMerk.Font = new Font("Inter", 14F, FontStyle.Bold);
+            lblMerk.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold);
             lblMerk.ForeColor = Color.Black;
-            lblMerk.Location = new Point(128, 72);
+            lblMerk.Location = new Point(146, 96);
             lblMerk.Name = "lblMerk";
-            lblMerk.Size = new Size(126, 25);
+            lblMerk.Size = new Size(144, 29);
             lblMerk.TabIndex = 0;
             lblMerk.Text = "SUKIMART";
             // 
@@ -186,9 +191,10 @@ namespace Sukimart
             pnlKanan.Controls.Add(lblKecil);
             pnlKanan.Controls.Add(lblBesar);
             pnlKanan.Dock = DockStyle.Fill;
-            pnlKanan.Location = new Point(560, 0);
+            pnlKanan.Location = new Point(640, 0);
+            pnlKanan.Margin = new Padding(3, 4, 3, 4);
             pnlKanan.Name = "pnlKanan";
-            pnlKanan.Size = new Size(720, 720);
+            pnlKanan.Size = new Size(823, 960);
             pnlKanan.TabIndex = 2;
             // 
             // nightControlBox1
@@ -205,7 +211,7 @@ namespace Sukimart
             nightControlBox1.EnableMaximizeColor = Color.FromArgb(160, 160, 160);
             nightControlBox1.EnableMinimizeButton = true;
             nightControlBox1.EnableMinimizeColor = Color.FromArgb(160, 160, 160);
-            nightControlBox1.Location = new Point(581, 0);
+            nightControlBox1.Location = new Point(684, 0);
             nightControlBox1.MaximizeHoverColor = Color.FromArgb(15, 255, 255, 255);
             nightControlBox1.MaximizeHoverForeColor = Color.White;
             nightControlBox1.MinimizeHoverColor = Color.FromArgb(15, 255, 255, 255);
@@ -217,32 +223,33 @@ namespace Sukimart
             // lblKecil
             // 
             lblKecil.AutoSize = true;
-            lblKecil.Font = new Font("Inter", 12F);
-            lblKecil.Location = new Point(64, 376);
+            lblKecil.Font = new Font("Microsoft Sans Serif", 12F);
+            lblKecil.Location = new Point(73, 501);
             lblKecil.Name = "lblKecil";
-            lblKecil.Size = new Size(393, 22);
+            lblKecil.Size = new Size(400, 25);
             lblKecil.TabIndex = 2;
             lblKecil.Text = "\"Kasir, stok, dan laporan dalam satu aplikasi\"";
             // 
             // lblBesar
             // 
             lblBesar.AutoSize = true;
-            lblBesar.Font = new Font("Inter", 28F, FontStyle.Bold);
-            lblBesar.Location = new Point(64, 320);
+            lblBesar.Font = new Font("Microsoft Sans Serif", 28F, FontStyle.Bold);
+            lblBesar.Location = new Point(73, 427);
             lblBesar.Name = "lblBesar";
-            lblBesar.Size = new Size(436, 45);
+            lblBesar.Size = new Size(541, 54);
             lblBesar.TabIndex = 1;
             lblBesar.Text = "Kelola toko lebih mudah";
             // 
             // FormLogin
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            ClientSize = new Size(1280, 720);
+            ClientSize = new Size(1463, 960);
             Controls.Add(pnlKanan);
             Controls.Add(pnlKiri);
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(3, 4, 3, 4);
             MaximizeBox = false;
             Name = "FormLogin";
             StartPosition = FormStartPosition.CenterScreen;

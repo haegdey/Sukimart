@@ -126,8 +126,21 @@ namespace Sukimart
                     btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.UseVisualStyleBackColor = false;
+
+                    float ukuranTombol = btn.Font != null ? btn.Font.SizeInPoints : (acuan != null ? acuan.Font.SizeInPoints : 10F);
+                    FontStyle gayaTombol = btn.Font != null ? btn.Font.Style : FontStyle.Regular;
+                    btn.Font = FontInter.Buat(ukuranTombol, gayaTombol);
+
                     y += btn.Height + jarak;
                 }
+            }
+
+            Control[] lblNamaArr = pnlKiri.Controls.Find("lblNama", false);
+            if (lblNamaArr.Length > 0 && lblNamaArr[0] is Label lblNama)
+            {
+                float ukuranNama = lblNama.Font != null ? lblNama.Font.SizeInPoints : 14F;
+                FontStyle gayaNama = lblNama.Font != null ? lblNama.Font.Style : FontStyle.Bold;
+                lblNama.Font = FontInter.Buat(ukuranNama, gayaNama);
             }
 
             PastikanTombolBawah(pnlKiri);
@@ -167,6 +180,7 @@ namespace Sukimart
 
             // Cari atau buat tombol Ganti Kata Sandi
             Control[] gantiArr = pnlKiri.Controls.Find("btnGantiSandi", false);
+            if (gantiArr.Length == 0) gantiArr = pnlKiri.Controls.Find("btnGantiPassword", false);
             Button btnGanti;
             if (gantiArr.Length > 0 && gantiArr[0] is Button btnAda)
             {
@@ -189,17 +203,10 @@ namespace Sukimart
                 btnGanti.FlatAppearance.BorderSize = 0;
                 btnGanti.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
 
-                btnGanti.Click += (s, e) =>
-                {
-                    Form? f = btnGanti.FindForm();
-                    if (f != null)
-                    {
-                        Navigasi.BukaGantiKataSandi(f);
-                    }
-                };
-
                 pnlKiri.Controls.Add(btnGanti);
             }
+
+            PasangHandlerGantiSandi(btnGanti);
 
             btnGanti.Size = new Size(lebar, tinggi);
             btnGanti.Padding = padding;
@@ -252,6 +259,7 @@ namespace Sukimart
                 {
                     btnAda.BackColor = Color.White;
                     btnAda.Font = FontInter.Buat(ukuranFont, FontStyle.Regular);
+                    PasangHandlerLogAktivitas(btnAda);
                 }
                 return;
             }
@@ -275,16 +283,39 @@ namespace Sukimart
             btnLog.FlatAppearance.BorderSize = 0;
             btnLog.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
 
-            btnLog.Click += (s, e) =>
+            PasangHandlerLogAktivitas(btnLog);
+
+            pnlKiri.Controls.Add(btnLog);
+        }
+
+        private static readonly ConditionalWeakTable<Button, object> TombolTerpasang = new ConditionalWeakTable<Button, object>();
+
+        private static void PasangHandlerGantiSandi(Button btn)
+        {
+            if (TombolTerpasang.TryGetValue(btn, out _)) return;
+            TombolTerpasang.Add(btn, new object());
+            btn.Click += (s, e) =>
             {
-                Form? f = btnLog.FindForm();
+                Form? f = btn.FindForm();
                 if (f != null)
+                {
+                    Navigasi.BukaGantiKataSandi(f);
+                }
+            };
+        }
+
+        private static void PasangHandlerLogAktivitas(Button btn)
+        {
+            if (TombolTerpasang.TryGetValue(btn, out _)) return;
+            TombolTerpasang.Add(btn, new object());
+            btn.Click += (s, e) =>
+            {
+                Form? f = btn.FindForm();
+                if (f != null && !(f is FormLogAktivitas))
                 {
                     Navigasi.BukaLogAktivitas(f);
                 }
             };
-
-            pnlKiri.Controls.Add(btnLog);
         }
 
         public static void RatakanTengah(params DataGridViewColumn[] daftarKolom)
@@ -401,13 +432,13 @@ namespace Sukimart
             grid.ColumnAdded += (s, e) => RapikanKolom(e.Column);
         }
 
-        // Kolom mata uang: rata kanan (Harga, Total, Subtotal, dsb.)
+        // Kolom mata uang dan angka laporan: rata kanan (Harga, Total, Subtotal, Terjual, dsb.)
         private static readonly string[] KataKolomUang =
-            { "Harga", "Total", "Subtotal", "Omzet", "Bayar", "Kembalian" };
+            { "Harga", "Total", "Subtotal", "Omzet", "Bayar", "Kembalian", "Pendapatan", "Modal", "Laba", "Terjual" };
 
         // Kolom angka biasa (Stok, Qty, Jumlah): rata tengah supaya rapi
         private static readonly string[] KataKolomAngka =
-            { "Stok", "Qty", "Jumlah", "Terjual", "Min" };
+            { "Stok", "Qty", "Jumlah", "Min" };
 
         private static void RapikanKolom(DataGridViewColumn kolom)
         {
@@ -416,9 +447,23 @@ namespace Sukimart
                 kolom.MinimumWidth = 64;
             }
 
-            string gabungan = (kolom.Name ?? "") + "|" + (kolom.DataPropertyName ?? "") + "|" + (kolom.HeaderText ?? "");
+            string propOrHeader = (kolom.DataPropertyName ?? "") + "|" + (kolom.HeaderText ?? "");
 
-            // Kolom mata uang: rata kanan, header pun rata kanan
+            // Kolom identitas dan teks: rata kiri
+            string[] kataKolomTeks = { "Kode", "Nama", "Produk", "Barang", "Kategori", "Kasir", "Faktur", "Waktu", "Tanggal", "Keterangan", "Pemasok", "Alasan", "Petugas" };
+            foreach (string kata in kataKolomTeks)
+            {
+                if (propOrHeader.IndexOf(kata, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    kolom.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                    kolom.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                    return;
+                }
+            }
+
+            string gabungan = (kolom.Name ?? "") + "|" + propOrHeader;
+
+            // Kolom mata uang dan angka laporan: rata kanan, header pun rata kanan
             foreach (string kata in KataKolomUang)
             {
                 if (gabungan.IndexOf(kata, StringComparison.OrdinalIgnoreCase) >= 0)

@@ -17,6 +17,10 @@ namespace Sukimart
 
         private static readonly PrivateFontCollection koleksi = new PrivateFontCollection();
         private static readonly List<IntPtr> memoriFont = new List<IntPtr>();
+        private static readonly Dictionary<(int, FontStyle), Font> cacheFont = new Dictionary<(int, FontStyle), Font>();
+        private static readonly HashSet<Font> fontInterDibuat = new HashSet<Font>();
+        private static readonly object kunciKoleksi = new object();
+
         private static FontFamily? keluarga;
         private static bool sudahDimuat;
 
@@ -28,37 +32,42 @@ namespace Sukimart
         public static void Muat()
         {
             if (sudahDimuat) return;
-            sudahDimuat = true;
 
-            try
+            lock (kunciKoleksi)
             {
-                Assembly assembly = typeof(FontInter).Assembly;
-                foreach (string namaResource in assembly.GetManifestResourceNames())
+                if (sudahDimuat) return;
+                sudahDimuat = true;
+
+                try
                 {
-                    if (!namaResource.EndsWith(".ttf", StringComparison.OrdinalIgnoreCase)) continue;
+                    Assembly assembly = typeof(FontInter).Assembly;
+                    foreach (string namaResource in assembly.GetManifestResourceNames())
+                    {
+                        if (!namaResource.EndsWith(".ttf", StringComparison.OrdinalIgnoreCase)) continue;
 
-                    using Stream? aliran = assembly.GetManifestResourceStream(namaResource);
-                    if (aliran == null) continue;
+                        using Stream? aliran = assembly.GetManifestResourceStream(namaResource);
+                        if (aliran == null) continue;
 
-                    byte[] data = new byte[aliran.Length];
-                    aliran.ReadExactly(data);
+                        byte[] data = new byte[aliran.Length];
+                        aliran.ReadExactly(data);
 
-                    IntPtr penunjuk = Marshal.AllocCoTaskMem(data.Length);
-                    Marshal.Copy(data, 0, penunjuk, data.Length);
-                    memoriFont.Add(penunjuk);
+                        IntPtr penunjuk = Marshal.AllocCoTaskMem(data.Length);
+                        Marshal.Copy(data, 0, penunjuk, data.Length);
+                        memoriFont.Add(penunjuk);
 
-                    koleksi.AddMemoryFont(penunjuk, data.Length);
+                        koleksi.AddMemoryFont(penunjuk, data.Length);
 
-                    uint jumlahFont = 0;
-                    AddFontMemResourceEx(penunjuk, (uint)data.Length, IntPtr.Zero, ref jumlahFont);
+                        uint jumlahFont = 0;
+                        AddFontMemResourceEx(penunjuk, (uint)data.Length, IntPtr.Zero, ref jumlahFont);
+                    }
+
+                    keluarga = koleksi.Families.FirstOrDefault(f =>
+                        string.Equals(f.Name, NamaFont, StringComparison.OrdinalIgnoreCase));
                 }
-
-                keluarga = koleksi.Families.FirstOrDefault(f =>
-                    string.Equals(f.Name, NamaFont, StringComparison.OrdinalIgnoreCase));
-            }
-            catch (Exception)
-            {
-                keluarga = null;
+                catch (Exception)
+                {
+                    keluarga = null;
+                }
             }
         }
 
@@ -66,12 +75,30 @@ namespace Sukimart
         {
             Muat();
 
-            if (keluarga != null && keluarga.IsStyleAvailable(gaya))
-            {
-                return new Font(keluarga, ukuran, gaya, GraphicsUnit.Point);
-            }
+            int kunciUkuran = (int)Math.Round(ukuran * 100);
+            var kunci = (kunciUkuran, gaya);
 
-            return new Font(FontCadangan, ukuran, gaya, GraphicsUnit.Point);
+            lock (kunciKoleksi)
+            {
+                if (cacheFont.TryGetValue(kunci, out Font? fontCached))
+                {
+                    return fontCached;
+                }
+
+                Font fontBaru;
+                if (keluarga != null && keluarga.IsStyleAvailable(gaya))
+                {
+                    fontBaru = new Font(keluarga, ukuran, gaya, GraphicsUnit.Point);
+                }
+                else
+                {
+                    fontBaru = new Font(FontCadangan, ukuran, gaya, GraphicsUnit.Point);
+                }
+
+                cacheFont[kunci] = fontBaru;
+                fontInterDibuat.Add(fontBaru);
+                return fontBaru;
+            }
         }
 
         public static void Terapkan(Control kontrol)
@@ -87,9 +114,31 @@ namespace Sukimart
                 GantiFontGrid(grid);
             }
 
+            // Pasang event agar kontrol yang ditambahkan secara dinamis ke container ini otomatis mendapatkan font Inter
+            kontrol.ControlAdded -= Kontrol_ControlAdded;
+            kontrol.ControlAdded += Kontrol_ControlAdded;
+
             foreach (Control anak in kontrol.Controls)
             {
                 Terapkan(anak);
+            }
+        }
+
+        private static void Kontrol_ControlAdded(object? sender, ControlEventArgs e)
+        {
+            if (e.Control != null)
+            {
+                Terapkan(e.Control);
+            }
+        }
+
+        public static bool SudahFontInter(Font? font)
+        {
+            if (font == null) return false;
+
+            lock (kunciKoleksi)
+            {
+                return fontInterDibuat.Contains(font);
             }
         }
 
@@ -97,8 +146,14 @@ namespace Sukimart
         {
             if (font == null) return false;
 
-            string namaDiminta = font.OriginalFontName ?? string.Empty;
-            return string.Equals(namaDiminta, NamaFont, StringComparison.OrdinalIgnoreCase);
+            // Jika font sudah dibuat oleh FontInter, tidak perlu diganti lagi
+            if (SudahFontInter(font))
+            {
+                return false;
+            }
+
+            // Ganti seluruh font yang belum berasal dari FontInter (misal: "Microsoft Sans Serif", "Inter" dari Designer, "Segoe UI", dll)
+            return true;
         }
 
         private static Font Salin(Font font)
@@ -116,9 +171,9 @@ namespace Sukimart
 
         private static void GantiFontGaya(DataGridViewCellStyle? gaya)
         {
-            if (gaya != null && PerluDiganti(gaya.Font))
+            if (gaya != null && gaya.Font != null && PerluDiganti(gaya.Font))
             {
-                gaya.Font = Salin(gaya.Font!);
+                gaya.Font = Salin(gaya.Font);
             }
         }
 

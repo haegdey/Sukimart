@@ -3,6 +3,7 @@
     "kode": "MKN001",
     "nama": "Sukironi",
     "kategori": "Makanan",
+    "hargaBeli": 8000,
     "harga": 10000,
     "stok": 0,
     "stokMinimum": 5
@@ -11,6 +12,7 @@
     "kode": "MKN002",
     "nama": "Roti Ambakar",
     "kategori": "Makanan",
+    "hargaBeli": 12000,
     "harga": 15000,
     "stok": 0,
     "stokMinimum": 5
@@ -19,6 +21,7 @@
     "kode": "MNM002",
     "nama": "Susu Asli Ngawi",
     "kategori": "Minuman",
+    "hargaBeli": 3500,
     "harga": 5000,
     "stok": 13,
     "stokMinimum": 5
@@ -27,6 +30,7 @@
     "kode": "MNM001",
     "nama": "Air Pegunungan Ngawi",
     "kategori": "Minuman",
+    "hargaBeli": 2000,
     "harga": 3000,
     "stok": 98,
     "stokMinimum": 10
@@ -35,6 +39,7 @@
     "kode": "MNM003",
     "nama": "Es Teler Mwanis",
     "kategori": "Minuman",
+    "hargaBeli": 7000,
     "harga": 10000,
     "stok": 2,
     "stokMinimum": 5
@@ -43,6 +48,7 @@
     "kode": "MNM004",
     "nama": "Es Teh Anget",
     "kategori": "Minuman",
+    "hargaBeli": 3500,
     "harga": 5000,
     "stok": 19,
     "stokMinimum": 5
@@ -51,6 +57,7 @@
     "kode": "MKN003",
     "nama": "Es Kwental Mwanis",
     "kategori": "Minuman",
+    "hargaBeli": 3000,
     "harga": 4000,
     "stok": 0,
     "stokMinimum": 5

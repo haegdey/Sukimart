@@ -32,8 +32,10 @@ namespace Sukimart
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             pnlKiri = new Panel();
             btnKeluar = new Button();
+            btnGantiSandi = new Button();
             btnLaporan = new Button();
             btnPengguna = new Button();
+            btnLogAktivitas = new Button();
             btnGudang = new Button();
             btnRiwayat = new Button();
             btnKatalog = new Button();
@@ -63,6 +65,10 @@ namespace Sukimart
             btnRiwayatStok = new Button();
             lblJenisStok = new Label();
             cmbJenisStok = new ComboBox();
+            lblPemasok = new Label();
+            txtPemasok = new TextBox();
+            lblAlasan = new Label();
+            cmbAlasan = new ComboBox();
             lblKeterangan = new Label();
             txtKeterangan = new TextBox();
             pnlKiri.SuspendLayout();
@@ -77,7 +83,9 @@ namespace Sukimart
             // 
             pnlKiri.BackColor = Color.White;
             pnlKiri.Controls.Add(btnKeluar);
+            pnlKiri.Controls.Add(btnGantiSandi);
             pnlKiri.Controls.Add(btnPengguna);
+            pnlKiri.Controls.Add(btnLogAktivitas);
             pnlKiri.Controls.Add(btnLaporan);
             pnlKiri.Controls.Add(btnGudang);
             pnlKiri.Controls.Add(btnRiwayat);
@@ -142,6 +150,43 @@ namespace Sukimart
             btnPengguna.Text = "Pengguna";
             btnPengguna.TextAlign = ContentAlignment.MiddleLeft;
             btnPengguna.UseVisualStyleBackColor = false;
+            // 
+            // btnLogAktivitas
+            // 
+            btnLogAktivitas.BackColor = Color.White;
+            btnLogAktivitas.Cursor = Cursors.Hand;
+            btnLogAktivitas.FlatAppearance.BorderSize = 0;
+            btnLogAktivitas.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnLogAktivitas.FlatStyle = FlatStyle.Flat;
+            btnLogAktivitas.Font = new Font("Inter", 10F);
+            btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
+            btnLogAktivitas.Location = new Point(16, 448);
+            btnLogAktivitas.Name = "btnLogAktivitas";
+            btnLogAktivitas.Padding = new Padding(16, 0, 0, 0);
+            btnLogAktivitas.Size = new Size(208, 40);
+            btnLogAktivitas.TabIndex = 13;
+            btnLogAktivitas.Text = "Log Aktivitas";
+            btnLogAktivitas.TextAlign = ContentAlignment.MiddleLeft;
+            btnLogAktivitas.UseVisualStyleBackColor = false;
+            // 
+            // btnGantiSandi
+            // 
+            btnGantiSandi.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnGantiSandi.BackColor = Color.White;
+            btnGantiSandi.Cursor = Cursors.Hand;
+            btnGantiSandi.FlatAppearance.BorderSize = 0;
+            btnGantiSandi.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnGantiSandi.FlatStyle = FlatStyle.Flat;
+            btnGantiSandi.Font = new Font("Inter", 10F);
+            btnGantiSandi.ForeColor = Color.FromArgb(75, 85, 99);
+            btnGantiSandi.Location = new Point(16, 592);
+            btnGantiSandi.Name = "btnGantiSandi";
+            btnGantiSandi.Padding = new Padding(16, 0, 0, 0);
+            btnGantiSandi.Size = new Size(208, 40);
+            btnGantiSandi.TabIndex = 14;
+            btnGantiSandi.Text = "Ganti Kata Sandi";
+            btnGantiSandi.TextAlign = ContentAlignment.MiddleLeft;
+            btnGantiSandi.UseVisualStyleBackColor = false;
             // 
             // btnGudang
             // 
@@ -383,7 +428,7 @@ namespace Sukimart
             gridGudang.RowHeadersVisible = false;
             gridGudang.RowTemplate.Height = 36;
             gridGudang.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            gridGudang.Size = new Size(960, 392);
+            gridGudang.Size = new Size(960, 344);
             gridGudang.TabIndex = 6;
             // 
             // colKode
@@ -435,21 +480,25 @@ namespace Sukimart
             // 
             // pnlRestock
             // 
+            pnlRestock.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnlRestock.BackColor = Color.White;
             pnlRestock.BorderStyle = BorderStyle.None;
             pnlRestock.Controls.Add(lblPilihBarangRestock);
             pnlRestock.Controls.Add(txtBarangTerpilih);
-            pnlRestock.Controls.Add(lblJumlahMasuk);
-            pnlRestock.Controls.Add(nudJumlahMasuk);
-            pnlRestock.Controls.Add(btnSimpanStok);
             pnlRestock.Controls.Add(lblJenisStok);
             pnlRestock.Controls.Add(cmbJenisStok);
+            pnlRestock.Controls.Add(lblJumlahMasuk);
+            pnlRestock.Controls.Add(nudJumlahMasuk);
+            pnlRestock.Controls.Add(lblPemasok);
+            pnlRestock.Controls.Add(txtPemasok);
+            pnlRestock.Controls.Add(lblAlasan);
+            pnlRestock.Controls.Add(cmbAlasan);
             pnlRestock.Controls.Add(lblKeterangan);
             pnlRestock.Controls.Add(txtKeterangan);
-            pnlRestock.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnlRestock.Location = new Point(40, 576);
+            pnlRestock.Controls.Add(btnSimpanStok);
+            pnlRestock.Location = new Point(40, 528);
             pnlRestock.Name = "pnlRestock";
-            pnlRestock.Size = new Size(960, 104);
+            pnlRestock.Size = new Size(960, 152);
             pnlRestock.TabIndex = 7;
             // 
             // lblPilihBarangRestock
@@ -474,6 +523,27 @@ namespace Sukimart
             txtBarangTerpilih.Size = new Size(296, 23);
             txtBarangTerpilih.TabIndex = 2;
             // 
+            // lblJenisStok
+            // 
+            lblJenisStok.AutoSize = true;
+            lblJenisStok.Font = new Font("Inter", 9F, FontStyle.Bold);
+            lblJenisStok.ForeColor = Color.FromArgb(75, 85, 99);
+            lblJenisStok.Location = new Point(336, 24);
+            lblJenisStok.Name = "lblJenisStok";
+            lblJenisStok.Size = new Size(34, 15);
+            lblJenisStok.TabIndex = 3;
+            lblJenisStok.Text = "Jenis";
+            // 
+            // cmbJenisStok
+            // 
+            cmbJenisStok.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbJenisStok.Font = new Font("Inter", 10F);
+            cmbJenisStok.Items.AddRange(new object[] { "Stok Masuk", "Stok Keluar" });
+            cmbJenisStok.Location = new Point(336, 48);
+            cmbJenisStok.Name = "cmbJenisStok";
+            cmbJenisStok.Size = new Size(136, 24);
+            cmbJenisStok.TabIndex = 4;
+            // 
             // lblJumlahMasuk
             // 
             lblJumlahMasuk.AutoSize = true;
@@ -482,7 +552,7 @@ namespace Sukimart
             lblJumlahMasuk.Location = new Point(488, 24);
             lblJumlahMasuk.Name = "lblJumlahMasuk";
             lblJumlahMasuk.Size = new Size(150, 15);
-            lblJumlahMasuk.TabIndex = 3;
+            lblJumlahMasuk.TabIndex = 5;
             lblJumlahMasuk.Text = "Jumlah";
             // 
             // nudJumlahMasuk
@@ -493,22 +563,91 @@ namespace Sukimart
             nudJumlahMasuk.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudJumlahMasuk.Name = "nudJumlahMasuk";
             nudJumlahMasuk.Size = new Size(104, 24);
-            nudJumlahMasuk.TabIndex = 4;
+            nudJumlahMasuk.TabIndex = 6;
             nudJumlahMasuk.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            // 
+            // lblPemasok
+            // 
+            lblPemasok.AutoSize = true;
+            lblPemasok.Font = new Font("Inter", 9F, FontStyle.Bold);
+            lblPemasok.ForeColor = Color.FromArgb(75, 85, 99);
+            lblPemasok.Location = new Point(608, 24);
+            lblPemasok.Name = "lblPemasok";
+            lblPemasok.Size = new Size(61, 15);
+            lblPemasok.TabIndex = 7;
+            lblPemasok.Text = "Pemasok";
+            // 
+            // txtPemasok
+            // 
+            txtPemasok.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtPemasok.Font = new Font("Inter", 10F);
+            txtPemasok.Location = new Point(608, 48);
+            txtPemasok.MaxLength = 100;
+            txtPemasok.Name = "txtPemasok";
+            txtPemasok.PlaceholderText = "Nama pemasok...";
+            txtPemasok.Size = new Size(328, 23);
+            txtPemasok.TabIndex = 8;
+            // 
+            // lblAlasan
+            // 
+            lblAlasan.AutoSize = true;
+            lblAlasan.Font = new Font("Inter", 9F, FontStyle.Bold);
+            lblAlasan.ForeColor = Color.FromArgb(75, 85, 99);
+            lblAlasan.Location = new Point(608, 24);
+            lblAlasan.Name = "lblAlasan";
+            lblAlasan.Size = new Size(47, 15);
+            lblAlasan.TabIndex = 9;
+            lblAlasan.Text = "Alasan";
+            lblAlasan.Visible = false;
+            // 
+            // cmbAlasan
+            // 
+            cmbAlasan.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cmbAlasan.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAlasan.Font = new Font("Inter", 10F);
+            cmbAlasan.FormattingEnabled = true;
+            cmbAlasan.Items.AddRange(new object[] { "RUSAK", "KEDALUWARSA", "DIKEMBALIKAN", "LAINNYA" });
+            cmbAlasan.Location = new Point(608, 48);
+            cmbAlasan.Name = "cmbAlasan";
+            cmbAlasan.Size = new Size(328, 24);
+            cmbAlasan.TabIndex = 10;
+            cmbAlasan.Visible = false;
+            // 
+            // lblKeterangan
+            // 
+            lblKeterangan.AutoSize = true;
+            lblKeterangan.Font = new Font("Inter", 9F, FontStyle.Bold);
+            lblKeterangan.ForeColor = Color.FromArgb(75, 85, 99);
+            lblKeterangan.Location = new Point(24, 92);
+            lblKeterangan.Name = "lblKeterangan";
+            lblKeterangan.Size = new Size(75, 15);
+            lblKeterangan.TabIndex = 11;
+            lblKeterangan.Text = "Keterangan";
+            // 
+            // txtKeterangan
+            // 
+            txtKeterangan.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            txtKeterangan.Font = new Font("Inter", 10F);
+            txtKeterangan.Location = new Point(24, 114);
+            txtKeterangan.MaxLength = 100;
+            txtKeterangan.Name = "txtKeterangan";
+            txtKeterangan.PlaceholderText = "Opsional";
+            txtKeterangan.Size = new Size(768, 23);
+            txtKeterangan.TabIndex = 12;
             // 
             // btnSimpanStok
             // 
+            btnSimpanStok.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnSimpanStok.BackColor = Color.FromArgb(255, 196, 0);
             btnSimpanStok.Cursor = Cursors.Hand;
             btnSimpanStok.FlatAppearance.BorderSize = 0;
             btnSimpanStok.FlatStyle = FlatStyle.Flat;
             btnSimpanStok.Font = new Font("Inter", 10F, FontStyle.Bold);
             btnSimpanStok.ForeColor = Color.FromArgb(31, 41, 55);
-            btnSimpanStok.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnSimpanStok.Location = new Point(808, 44);
+            btnSimpanStok.Location = new Point(808, 108);
             btnSimpanStok.Name = "btnSimpanStok";
             btnSimpanStok.Size = new Size(128, 32);
-            btnSimpanStok.TabIndex = 6;
+            btnSimpanStok.TabIndex = 13;
             btnSimpanStok.Text = "Simpan";
             btnSimpanStok.UseVisualStyleBackColor = false;
             // 
@@ -527,37 +666,6 @@ namespace Sukimart
             btnRiwayatStok.TabIndex = 8;
             btnRiwayatStok.Text = "Kartu Stok";
             btnRiwayatStok.UseVisualStyleBackColor = false;
-            lblJenisStok.AutoSize = true;
-            lblJenisStok.Font = new Font("Inter", 9F, FontStyle.Bold);
-            lblJenisStok.ForeColor = Color.FromArgb(75, 85, 99);
-            lblJenisStok.Location = new Point(336, 24);
-            lblJenisStok.Name = "lblJenisStok";
-            lblJenisStok.Size = new Size(34, 15);
-            lblJenisStok.TabIndex = 7;
-            lblJenisStok.Text = "Jenis";
-            cmbJenisStok.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbJenisStok.Font = new Font("Inter", 10F);
-            cmbJenisStok.Items.AddRange(new object[] { "Stok Masuk", "Stok Keluar" });
-            cmbJenisStok.Location = new Point(336, 48);
-            cmbJenisStok.Name = "cmbJenisStok";
-            cmbJenisStok.Size = new Size(136, 24);
-            cmbJenisStok.TabIndex = 3;
-            lblKeterangan.AutoSize = true;
-            lblKeterangan.Font = new Font("Inter", 9F, FontStyle.Bold);
-            lblKeterangan.ForeColor = Color.FromArgb(75, 85, 99);
-            lblKeterangan.Location = new Point(608, 24);
-            lblKeterangan.Name = "lblKeterangan";
-            lblKeterangan.Size = new Size(72, 15);
-            lblKeterangan.TabIndex = 8;
-            lblKeterangan.Text = "Keterangan";
-            txtKeterangan.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            txtKeterangan.Font = new Font("Inter", 10F);
-            txtKeterangan.Location = new Point(608, 48);
-            txtKeterangan.MaxLength = 100;
-            txtKeterangan.Name = "txtKeterangan";
-            txtKeterangan.PlaceholderText = "Opsional";
-            txtKeterangan.Size = new Size(184, 23);
-            txtKeterangan.TabIndex = 5;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1280, 720);
@@ -584,6 +692,8 @@ namespace Sukimart
         private Panel pnlKiri;
         private Button btnLaporan;
         private Button btnPengguna;
+        private Button btnLogAktivitas;
+        private Button btnGantiSandi;
         private Button btnGudang;
         private Button btnRiwayat;
         private Button btnKatalog;
@@ -614,6 +724,10 @@ namespace Sukimart
         private Button btnRiwayatStok;
         private Label lblJenisStok;
         private ComboBox cmbJenisStok;
+        private Label lblPemasok;
+        private TextBox txtPemasok;
+        private Label lblAlasan;
+        private ComboBox cmbAlasan;
         private Label lblKeterangan;
         private TextBox txtKeterangan;
     }
