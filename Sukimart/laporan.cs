@@ -9,7 +9,6 @@ namespace Sukimart
         private readonly string peran;
         private List<Transaksi> semuaTransaksi = new List<Transaksi>();
         private List<DetailTransaksi> semuaDetail = new List<DetailTransaksi>();
-        private string jenisLaporan = "penjualan";
         private string subJenisPenjualan = "transaksi";
         private List<ItemLabaProduk> daftarLabaSaatIni = new List<ItemLabaProduk>();
         private string kolomUrutLaba = "LabaKotor";
@@ -24,10 +23,6 @@ namespace Sukimart
             UIHelper.InisialisasiForm(this);
             AktifkanBebasFlicker();
             MaximizeBox = true;
-            if (this.peran == "gudang")
-            {
-                jenisLaporan = "gudang";
-            }
             gridLaporan.AllowUserToResizeRows = false;
             gridLaba.AllowUserToResizeRows = false;
             SiapkanFilterLaporan();
@@ -64,8 +59,14 @@ namespace Sukimart
             dtpMulai.Value = DateTime.Today.AddDays(-30);
             dtpSelesai.Value = DateTime.Today;
 
-            AturTombolMode(btnPenjualan, "Penjualan", true, 120);
-            AturTombolMode(btnGudangReport, "Inventaris Gudang", false, 152);
+            btnLaporan.BackColor = Color.FromArgb(255, 196, 0);
+            btnLaporan.ForeColor = Color.FromArgb(31, 41, 55);
+            btnLaporan.Font = FontInter.Buat(10F, FontStyle.Bold);
+
+            btnLaporanInventaris.BackColor = Color.White;
+            btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
+            btnLaporanInventaris.Font = FontInter.Buat(10F, FontStyle.Regular);
+
             AturTombolSub(btnSubTransaksi, "Transaksi", true, 110);
             AturTombolSub(btnSubLaba, "Laba", false, 110);
 
@@ -111,19 +112,6 @@ namespace Sukimart
             };
         }
 
-        private static void AturTombolMode(Button tombol, string teks, bool aktif, int lebar)
-        {
-            tombol.BackColor = aktif ? Color.FromArgb(255, 196, 0) : Color.White;
-            tombol.Cursor = Cursors.Hand;
-            tombol.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
-            tombol.FlatAppearance.BorderSize = aktif ? 0 : 1;
-            tombol.FlatStyle = FlatStyle.Flat;
-            tombol.Font = FontInter.Buat(10F, aktif ? FontStyle.Bold : FontStyle.Regular);
-            tombol.ForeColor = aktif ? Color.FromArgb(31, 41, 55) : Color.FromArgb(75, 85, 99);
-            tombol.Size = new Size(lebar, 32);
-            tombol.Text = teks;
-        }
-
         private static void AturTombolSub(Button tombol, string teks, bool aktif, int lebar = 110)
         {
             tombol.BackColor = aktif ? Color.FromArgb(255, 196, 0) : Color.White;
@@ -145,14 +133,16 @@ namespace Sukimart
             int jarak = 20;
             int lebarKartu = (lebarTersedia - 3 * jarak) / 4;
 
-            // 1. Header & Tombol Navigasi Utama (diletakkan DI ATAS 4 panel card)
+            // 1. Header & Sub-Navigasi (Transaksi & Laba) di atas 4 kartu
             lblJudul.Location = new Point(margin, 24);
-            btnPenjualan.Location = new Point(margin, 68);
-            btnPenjualan.Size = new Size(120, 32);
-            btnGudangReport.Location = new Point(margin + 128, 68);
-            btnGudangReport.Size = new Size(152, 32);
+            btnSubTransaksi.Location = new Point(margin, 68);
+            btnSubTransaksi.Size = new Size(110, 32);
+            btnSubTransaksi.Visible = true;
+            btnSubLaba.Location = new Point(margin + 118, 68);
+            btnSubLaba.Size = new Size(110, 32);
+            btnSubLaba.Visible = true;
 
-            // 2. 4 Panel KPI Cards (tersusun horizontal di bawah tombol utama)
+            // 2. 4 Panel KPI Cards (tersusun horizontal di bawah tombol sub-navigasi)
             int yCards = 112;
             int tinggiKartu = 104;
             pnlCard1.Location = new Point(margin, yCards);
@@ -164,30 +154,20 @@ namespace Sukimart
             pnlCard4.Location = new Point(margin + 3 * (lebarKartu + jarak), yCards);
             pnlCard4.Size = new Size(lebarKartu, tinggiKartu);
 
-            // 3. Sub-Navigasi (Transaksi & Laba) dan Filter Tanggal (di bawah 4 panel card)
+            // 3. Filter Tanggal (di bawah 4 panel card)
             int yFilter = 232;
-            bool isPenjualan = jenisLaporan == "penjualan";
-
-            btnSubTransaksi.Visible = isPenjualan;
-            btnSubLaba.Visible = isPenjualan;
-            btnSubTransaksi.Location = new Point(margin, yFilter);
-            btnSubTransaksi.Size = new Size(110, 32);
-            btnSubLaba.Location = new Point(margin + 118, yFilter);
-            btnSubLaba.Size = new Size(110, 32);
-
-            int xDate = isPenjualan ? (margin + 244) : margin;
-            dtpMulai.Location = new Point(xDate, yFilter + 2);
+            dtpMulai.Location = new Point(margin, yFilter + 2);
             dtpMulai.Size = new Size(130, 27);
-            lblSampai.Location = new Point(xDate + 144, yFilter + 7);
+            lblSampai.Location = new Point(margin + 138, yFilter + 7);
             lblSampai.Size = new Size(28, 20);
-            dtpSelesai.Location = new Point(xDate + 184, yFilter + 2);
+            dtpSelesai.Location = new Point(margin + 172, yFilter + 2);
             dtpSelesai.Size = new Size(130, 27);
-            btnTerapkanTanggal.Location = new Point(xDate + 326, yFilter);
+            btnTerapkanTanggal.Location = new Point(margin + 312, yFilter);
             btnTerapkanTanggal.Size = new Size(96, 32);
 
             // 4. Keterangan Perhitungan & Judul Tabel / Ringkasan
             int yInfo = 276;
-            bool isLaba = isPenjualan && subJenisPenjualan == "laba";
+            bool isLaba = subJenisPenjualan == "laba";
 
             lblInfoHitung.Visible = isLaba;
             lblJudulTabel.Visible = isLaba;
@@ -260,10 +240,11 @@ namespace Sukimart
         private void SesuaikanPeran()
         {
             bool admin = peran == "admin";
-            btnGudang.Visible = admin;
-            btnLaporan.Visible = admin;
+            bool gudang = peran == "gudang";
+            btnGudang.Visible = admin || gudang;
+            btnLaporan.Visible = admin || gudang;
+            btnLaporanInventaris.Visible = admin || gudang;
             btnPengguna.Visible = admin;
-            btnPenjualan.Visible = admin;
             UIHelper.SusunTombolSidebar(pnlKiri);
         }
 
@@ -274,10 +255,9 @@ namespace Sukimart
             btnKatalog.Click += (s, e) => Navigasi.BukaKatalog(this);
             btnRiwayat.Click += (s, e) => Navigasi.BukaRiwayat(this);
             btnGudang.Click += (s, e) => Navigasi.BukaGudang(this);
+            btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
-            btnPenjualan.Click += (s, e) => UbahJenisLaporan("penjualan");
-            btnGudangReport.Click += (s, e) => UbahJenisLaporan("gudang");
             btnSubTransaksi.Click += (s, e) => UbahSubJenisPenjualan("transaksi");
             btnSubLaba.Click += (s, e) => UbahSubJenisPenjualan("laba");
             btnTerapkanTanggal.Click += (s, e) => TerapkanLaporan();
@@ -299,15 +279,6 @@ namespace Sukimart
             {
                 MessageBox.Show("Gagal memuat data laporan: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void UbahJenisLaporan(string jenis)
-        {
-            jenisLaporan = jenis;
-            AturTombolMode(btnPenjualan, "Penjualan", jenis == "penjualan", 120);
-            AturTombolMode(btnGudangReport, "Inventaris Gudang", jenis == "gudang", 152);
-
-            TerapkanLaporan();
         }
 
         private void UbahSubJenisPenjualan(string subJenis)
@@ -340,20 +311,13 @@ namespace Sukimart
             {
                 AturTataLetakResponsif();
 
-                if (jenisLaporan == "gudang")
+                if (subJenisPenjualan == "laba")
                 {
-                    TerapkanLaporanGudang();
+                    TerapkanLaporanLaba();
                 }
                 else
                 {
-                    if (subJenisPenjualan == "laba")
-                    {
-                        TerapkanLaporanLaba();
-                    }
-                    else
-                    {
-                        TerapkanLaporanPenjualan();
-                    }
+                    TerapkanLaporanPenjualan();
                 }
             }
             finally
@@ -601,39 +565,6 @@ namespace Sukimart
             else if (kolomUrutLaba == "Terjual") colLabaTerjual.HeaderCell.SortGlyphDirection = urutanSortLaba;
             else if (kolomUrutLaba == "Nama") colLabaNama.HeaderCell.SortGlyphDirection = urutanSortLaba;
             else if (kolomUrutLaba == "Kode") colLabaKode.HeaderCell.SortGlyphDirection = urutanSortLaba;
-        }
-
-        private void TerapkanLaporanGudang()
-        {
-            lblJudul.Text = "Laporan Inventaris Gudang";
-            lblCard1Judul.Text = "Jenis Barang";
-            lblCard2Judul.Text = "Minimum / Habis";
-            lblCard3Judul.Text = "Unit Masuk";
-            lblCard4Judul.Text = "Unit Keluar";
-
-            DateTime mulai = dtpMulai.Value.Date;
-            DateTime selesai = dtpSelesai.Value.Date.AddDays(1).AddTicks(-1);
-            List<Barang> barang = PenyimpananData.BacaBarang();
-            List<BarangMasuk> masuk = PenyimpananData.BacaBarangMasuk().Where(data => data.Tanggal >= mulai && data.Tanggal <= selesai).ToList();
-            List<BarangKeluar> keluar = PenyimpananData.BacaBarangKeluar().Where(data => data.Tanggal >= mulai && data.Tanggal <= selesai).ToList();
-            int minimum = barang.Count(data => data.Stok > 0 && data.Stok <= data.StokMinimum);
-            int habis = barang.Count(data => data.Stok == 0);
-
-            lblOmzetNilai.Text = barang.Count.ToString("N0", BudayaIndonesia);
-            lblOmzetNilai.ForeColor = Color.FromArgb(16, 149, 102);
-            lblTrxNilai.Text = $"{minimum} / {habis}";
-            lblTrxNilai.ForeColor = Color.FromArgb(31, 41, 55);
-            lblItemTerjualNilai.Text = masuk.Sum(data => data.Jumlah).ToString("N0", BudayaIndonesia);
-            lblItemTerjualNilai.ForeColor = Color.FromArgb(31, 41, 55);
-            lblRataNilai.Text = keluar.Sum(data => data.Jumlah).ToString("N0", BudayaIndonesia);
-            lblRataNilai.ForeColor = Color.FromArgb(31, 41, 55);
-
-            lblRingkasan.Text = $"Stok saat ini ditampilkan untuk semua barang. Pergerakan dicatat dari {mulai:dd/MM/yyyy} sampai {selesai:dd/MM/yyyy}.";
-            AturKolomLaporan();
-            var dataStok = barang.Select(data => new { Jenis = "STOK", Tanggal = "-", Kode = data.Kode, Nama = data.Nama, Jumlah = data.Stok.ToString("N0", BudayaIndonesia), Keterangan = data.Stok == 0 ? "HABIS" : data.Stok <= data.StokMinimum ? "MINIMUM" : "AMAN" });
-            var dataMasuk = masuk.Select(data => new { Jenis = "MASUK", Tanggal = data.Tanggal.ToString("dd/MM/yyyy"), Kode = data.KodeBarang, Nama = data.NamaBarang, Jumlah = "+" + data.Jumlah.ToString("N0", BudayaIndonesia), Keterangan = $"{data.Id} · {data.Pemasok}" });
-            var dataKeluar = keluar.Select(data => new { Jenis = "KELUAR", Tanggal = data.Tanggal.ToString("dd/MM/yyyy"), Kode = data.KodeBarang, Nama = data.NamaBarang, Jumlah = "−" + data.Jumlah.ToString("N0", BudayaIndonesia), Keterangan = $"{data.Id} · {data.Alasan}" });
-            gridLaporan.DataSource = dataStok.Concat(dataMasuk).Concat(dataKeluar).ToList();
         }
 
         private void AturKolomLaporan()

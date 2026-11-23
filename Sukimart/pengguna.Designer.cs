@@ -22,6 +22,7 @@ namespace Sukimart
             btnGantiSandi = new Button();
             btnLogAktivitas = new Button();
             btnPengguna = new Button();
+            btnLaporanInventaris = new Button();
             btnLaporan = new Button();
             btnGudang = new Button();
             btnRiwayat = new Button();
@@ -70,6 +71,7 @@ namespace Sukimart
             pnlKiri.Controls.Add(btnGantiSandi);
             pnlKiri.Controls.Add(btnLogAktivitas);
             pnlKiri.Controls.Add(btnPengguna);
+            pnlKiri.Controls.Add(btnLaporanInventaris);
             pnlKiri.Controls.Add(btnLaporan);
             pnlKiri.Controls.Add(btnGudang);
             pnlKiri.Controls.Add(btnRiwayat);
@@ -160,11 +162,29 @@ namespace Sukimart
             btnLaporan.Location = new Point(16, 352);
             btnLaporan.Padding = new Padding(16, 0, 0, 0);
             btnLaporan.Size = new Size(208, 40);
-            btnLaporan.Text = "Laporan";
+            btnLaporan.Text = "Laporan Penjualan";
             btnLaporan.TextAlign = ContentAlignment.MiddleLeft;
             btnLaporan.UseVisualStyleBackColor = false;
             btnLaporan.Name = "btnLaporan";
             btnLaporan.TabIndex = 10;
+            // 
+            // btnLaporanInventaris
+            // 
+            btnLaporanInventaris.BackColor = Color.White;
+            btnLaporanInventaris.Cursor = Cursors.Hand;
+            btnLaporanInventaris.FlatAppearance.BorderSize = 0;
+            btnLaporanInventaris.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
+            btnLaporanInventaris.Font = new Font("Inter", 10F);
+            btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
+            btnLaporanInventaris.Location = new Point(16, 396);
+            btnLaporanInventaris.Padding = new Padding(16, 0, 0, 0);
+            btnLaporanInventaris.Size = new Size(208, 40);
+            btnLaporanInventaris.Text = "Laporan Inventaris";
+            btnLaporanInventaris.TextAlign = ContentAlignment.MiddleLeft;
+            btnLaporanInventaris.UseVisualStyleBackColor = false;
+            btnLaporanInventaris.Name = "btnLaporanInventaris";
+            btnLaporanInventaris.TabIndex = 11;
             btnGudang.BackColor = Color.White;
             btnGudang.Cursor = Cursors.Hand;
             btnGudang.FlatAppearance.BorderSize = 0;
@@ -577,6 +597,7 @@ namespace Sukimart
         private Panel pnlKiri;
         private Button btnKeluar;
         private Button btnPengguna;
+        private Button btnLaporanInventaris;
         private Button btnLaporan;
         private Button btnGudang;
         private Button btnRiwayat;

@@ -14,6 +14,7 @@ namespace Sukimart
             btnKasir.Click += btnKasir_Click;
             btnGudang.Click += btnGudang_Click;
             btnLaporan.Click += btnLaporan_Click;
+            btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
 
             SesuaikanPeran();
@@ -31,6 +32,7 @@ namespace Sukimart
                 btnKasir.Visible = false;
                 btnRiwayat.Visible = false;
                 btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = false;
                 btnGudang.Visible = true;
                 btnKatalog.Visible = true;
@@ -40,6 +42,7 @@ namespace Sukimart
             {
                 btnGudang.Visible = false;
                 btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = false;
                 btnPengguna.Visible = false;
                 btnKasir.Visible = true;
                 btnKatalog.Visible = true;
@@ -52,6 +55,7 @@ namespace Sukimart
                 btnRiwayat.Visible = true;
                 btnGudang.Visible = true;
                 btnLaporan.Visible = true;
+                btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = true;
                 lblJudul.Text = "Dashboard Admin";
             }

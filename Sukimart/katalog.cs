@@ -57,6 +57,7 @@ namespace Sukimart
                 colHargaBeli.Visible = false;
                 btnGudang.Visible = false;
                 btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = false;
                 btnPengguna.Visible = false;
             }
             else if (this.peran == "gudang")
@@ -65,6 +66,7 @@ namespace Sukimart
                 btnKasir.Visible = false;
                 btnRiwayat.Visible = false;
                 btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = false;
                 btnGudang.Visible = true;
             }
@@ -75,6 +77,7 @@ namespace Sukimart
                 btnRiwayat.Visible = true;
                 btnGudang.Visible = true;
                 btnLaporan.Visible = true;
+                btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = true;
             }
 
@@ -89,6 +92,7 @@ namespace Sukimart
             btnRiwayat.Click += (s, e) => Navigasi.BukaRiwayat(this);
             btnGudang.Click += (s, e) => Navigasi.BukaGudang(this);
             btnLaporan.Click += (s, e) => Navigasi.BukaLaporan(this);
+            btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
 
@@ -295,6 +299,16 @@ namespace Sukimart
 
         private void ProsesHapusAtauNonaktifkanBarang(Barang barang)
         {
+            if (PenyimpananData.ApakahBarangTerkunciOpname(barang.Kode, out string nomorOpn))
+            {
+                MessageBox.Show(
+                    $"Produk '{barang.Nama}' ({barang.Kode}) sedang dalam proses Stok Opname ({nomorOpn}) dan tidak dapat dihapus atau dinonaktifkan sampai sesi opname selesai.",
+                    "Stok Terkunci Opname",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             // Cek apakah barang pernah terjual (ada di detail transaksi)
             List<DetailTransaksi> daftarDetail = PenyimpananData.BacaDetailTransaksi();
             bool pernahTerjual = daftarDetail.Any(d => d.KodeBarang == barang.Kode);

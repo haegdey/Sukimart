@@ -60,6 +60,12 @@ namespace Sukimart
                                    r.Jenis.Equals("Stok Masuk", StringComparison.OrdinalIgnoreCase);
                     bool isKeluar = r.Jenis.Equals("KELUAR", StringComparison.OrdinalIgnoreCase) ||
                                     r.Jenis.Equals("Stok Keluar", StringComparison.OrdinalIgnoreCase);
+                    bool isOpname = r.Jenis.Equals("Penyesuaian Opname", StringComparison.OrdinalIgnoreCase) ||
+                                    r.Jenis.Contains("Opname", StringComparison.OrdinalIgnoreCase);
+
+                    string tandaJumlah = isOpname
+                        ? (r.StokSesudah >= r.StokSebelum ? "+" : "−")
+                        : (isMasuk ? "+" : "−");
 
                     if (isMasuk)
                     {
@@ -163,7 +169,7 @@ namespace Sukimart
                         Tanggal = r.Tanggal.ToString("dd/MM/yyyy HH:mm", BudayaIndonesia),
                         r.Jenis,
                         StokAwal = r.StokSebelum,
-                        JumlahFormat = (isMasuk ? "+" : "−") + r.Jumlah.ToString("N0", BudayaIndonesia),
+                        JumlahFormat = tandaJumlah + r.Jumlah.ToString("N0", BudayaIndonesia),
                         r.StokSesudah,
                         Pemasok = pemasokTampil,
                         Keterangan = keteranganTampil,

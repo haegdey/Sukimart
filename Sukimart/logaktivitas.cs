@@ -59,6 +59,7 @@ namespace Sukimart
             btnRiwayat.Click += (s, e) => Navigasi.BukaRiwayat(this);
             btnGudang.Click += (s, e) => Navigasi.BukaGudang(this);
             btnLaporan.Click += (s, e) => Navigasi.BukaLaporan(this);
+            btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnLogAktivitas.Click += (s, e) => { /* Sedang di form Log Aktivitas */ };
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
@@ -95,7 +96,8 @@ namespace Sukimart
                 "Hapus Akun",
                 "Transaksi",
                 "Stok Masuk",
-                "Stok Keluar"
+                "Stok Keluar",
+                "Stok Opname"
             });
             cmbFilterJenis.SelectedIndex = 0;
 

@@ -41,6 +41,7 @@ namespace Sukimart
             btnGantiSandi = new Button();
             btnLogAktivitas = new Button();
             btnPengguna = new Button();
+            btnLaporanInventaris = new Button();
             btnLaporan = new Button();
             btnGudang = new Button();
             btnRiwayat = new Button();
@@ -64,8 +65,6 @@ namespace Sukimart
             pnlCard4 = new Panel();
             lblCard4Judul = new Label();
             lblRataNilai = new Label();
-            btnPenjualan = new Button();
-            btnGudangReport = new Button();
             btnSubTransaksi = new Button();
             btnSubLaba = new Button();
             dtpMulai = new DateTimePicker();
@@ -118,6 +117,7 @@ namespace Sukimart
             pnlKiri.Controls.Add(btnGantiSandi);
             pnlKiri.Controls.Add(btnLogAktivitas);
             pnlKiri.Controls.Add(btnPengguna);
+            pnlKiri.Controls.Add(btnLaporanInventaris);
             pnlKiri.Controls.Add(btnLaporan);
             pnlKiri.Controls.Add(btnGudang);
             pnlKiri.Controls.Add(btnRiwayat);
@@ -181,7 +181,7 @@ namespace Sukimart
             btnLogAktivitas.FlatStyle = FlatStyle.Flat;
             btnLogAktivitas.Font = new Font("Microsoft Sans Serif", 10F);
             btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLogAktivitas.Location = new Point(18, 597);
+            btnLogAktivitas.Location = new Point(18, 661);
             btnLogAktivitas.Margin = new Padding(3, 4, 3, 4);
             btnLogAktivitas.Name = "btnLogAktivitas";
             btnLogAktivitas.Padding = new Padding(18, 0, 0, 0);
@@ -200,7 +200,7 @@ namespace Sukimart
             btnPengguna.FlatStyle = FlatStyle.Flat;
             btnPengguna.Font = new Font("Microsoft Sans Serif", 10F);
             btnPengguna.ForeColor = Color.FromArgb(31, 41, 55);
-            btnPengguna.Location = new Point(18, 533);
+            btnPengguna.Location = new Point(18, 597);
             btnPengguna.Margin = new Padding(3, 4, 3, 4);
             btnPengguna.Name = "btnPengguna";
             btnPengguna.Padding = new Padding(18, 0, 0, 0);
@@ -225,9 +225,28 @@ namespace Sukimart
             btnLaporan.Padding = new Padding(18, 0, 0, 0);
             btnLaporan.Size = new Size(238, 53);
             btnLaporan.TabIndex = 10;
-            btnLaporan.Text = "Laporan";
+            btnLaporan.Text = "Laporan Penjualan";
             btnLaporan.TextAlign = ContentAlignment.MiddleLeft;
             btnLaporan.UseVisualStyleBackColor = false;
+            // 
+            // btnLaporanInventaris
+            // 
+            btnLaporanInventaris.BackColor = Color.White;
+            btnLaporanInventaris.Cursor = Cursors.Hand;
+            btnLaporanInventaris.FlatAppearance.BorderSize = 0;
+            btnLaporanInventaris.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
+            btnLaporanInventaris.Font = new Font("Microsoft Sans Serif", 10F);
+            btnLaporanInventaris.ForeColor = Color.FromArgb(75, 85, 99);
+            btnLaporanInventaris.Location = new Point(18, 533);
+            btnLaporanInventaris.Margin = new Padding(3, 4, 3, 4);
+            btnLaporanInventaris.Name = "btnLaporanInventaris";
+            btnLaporanInventaris.Padding = new Padding(18, 0, 0, 0);
+            btnLaporanInventaris.Size = new Size(238, 53);
+            btnLaporanInventaris.TabIndex = 11;
+            btnLaporanInventaris.Text = "Laporan Inventaris";
+            btnLaporanInventaris.TextAlign = ContentAlignment.MiddleLeft;
+            btnLaporanInventaris.UseVisualStyleBackColor = false;
             // 
             // btnGudang
             // 
@@ -354,8 +373,6 @@ namespace Sukimart
             pnlKanan.Controls.Add(pnlCard2);
             pnlKanan.Controls.Add(pnlCard3);
             pnlKanan.Controls.Add(pnlCard4);
-            pnlKanan.Controls.Add(btnPenjualan);
-            pnlKanan.Controls.Add(btnGudangReport);
             pnlKanan.Controls.Add(btnSubTransaksi);
             pnlKanan.Controls.Add(btnSubLaba);
             pnlKanan.Controls.Add(dtpMulai);
@@ -536,37 +553,6 @@ namespace Sukimart
             lblRataNilai.Size = new Size(93, 39);
             lblRataNilai.TabIndex = 1;
             lblRataNilai.Text = "Rp 0";
-            // 
-            // btnPenjualan
-            // 
-            btnPenjualan.BackColor = Color.FromArgb(255, 196, 0);
-            btnPenjualan.Cursor = Cursors.Hand;
-            btnPenjualan.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
-            btnPenjualan.FlatAppearance.BorderSize = 0;
-            btnPenjualan.FlatStyle = FlatStyle.Flat;
-            btnPenjualan.Font = new Font("Inter", 10F, FontStyle.Bold);
-            btnPenjualan.ForeColor = Color.FromArgb(31, 41, 55);
-            btnPenjualan.Location = new Point(40, 68);
-            btnPenjualan.Name = "btnPenjualan";
-            btnPenjualan.Size = new Size(120, 32);
-            btnPenjualan.TabIndex = 11;
-            btnPenjualan.Text = "Penjualan";
-            btnPenjualan.UseVisualStyleBackColor = false;
-            // 
-            // btnGudangReport
-            // 
-            btnGudangReport.BackColor = Color.White;
-            btnGudangReport.Cursor = Cursors.Hand;
-            btnGudangReport.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
-            btnGudangReport.FlatStyle = FlatStyle.Flat;
-            btnGudangReport.Font = new Font("Inter", 10F);
-            btnGudangReport.ForeColor = Color.FromArgb(75, 85, 99);
-            btnGudangReport.Location = new Point(168, 68);
-            btnGudangReport.Name = "btnGudangReport";
-            btnGudangReport.Size = new Size(152, 32);
-            btnGudangReport.TabIndex = 12;
-            btnGudangReport.Text = "Inventaris Gudang";
-            btnGudangReport.UseVisualStyleBackColor = false;
             // 
             // btnSubTransaksi
             // 
@@ -1027,6 +1013,7 @@ namespace Sukimart
         #endregion
 
         private Panel pnlKiri;
+        private Button btnLaporanInventaris;
         private Button btnLaporan;
         private Button btnPengguna;
         private Button btnGudang;
@@ -1052,8 +1039,6 @@ namespace Sukimart
         private Panel pnlCard4;
         private Label lblCard4Judul;
         private Label lblRataNilai;
-        private Button btnPenjualan;
-        private Button btnGudangReport;
         private Button btnSubTransaksi;
         private Button btnSubLaba;
         private DateTimePicker dtpMulai;

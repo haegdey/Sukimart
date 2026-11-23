@@ -38,6 +38,7 @@ namespace Sukimart
             {
                 btnGudang.Visible = false;
                 btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = false;
                 btnPengguna.Visible = false;
                 btnLogAktivitas.Visible = false;
             }
@@ -46,6 +47,7 @@ namespace Sukimart
                 btnKasir.Visible = false;
                 btnRiwayat.Visible = false;
                 btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = false;
                 btnGudang.Visible = true;
                 btnLogAktivitas.Visible = false;
@@ -54,6 +56,7 @@ namespace Sukimart
             {
                 btnGudang.Visible = true;
                 btnLaporan.Visible = true;
+                btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = true;
                 btnLogAktivitas.Visible = true;
             }
@@ -69,6 +72,7 @@ namespace Sukimart
             btnRiwayat.Click += (s, e) => Navigasi.BukaRiwayat(this);
             btnGudang.Click += (s, e) => Navigasi.BukaGudang(this);
             btnLaporan.Click += (s, e) => Navigasi.BukaLaporan(this);
+            btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnLogAktivitas.Click += (s, e) => Navigasi.BukaLogAktivitas(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
@@ -345,6 +349,16 @@ namespace Sukimart
 
         private void TambahBarangKeKeranjang(Barang barang, int qtyBeli)
         {
+            if (PenyimpananData.ApakahBarangTerkunciOpname(barang.Kode, out string nomorOpn))
+            {
+                MessageBox.Show(
+                    $"Produk '{barang.Nama}' ({barang.Kode}) tidak dapat ditambahkan ke keranjang karena sedang dalam proses Stok Opname ({nomorOpn}) dan stoknya terkunci.\nTransaksi penjualan untuk produk ini sementara dicegah demi keakuratan penghitungan fisik.",
+                    "Stok Terkunci Opname",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             if (barang.Stok <= 0)
             {
                 MessageBox.Show($"Stok produk '{barang.Nama}' sudah habis!", "Stok Habis", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -532,6 +546,16 @@ namespace Sukimart
 
             if (perubahan > 0)
             {
+                if (PenyimpananData.ApakahBarangTerkunciOpname(kode, out string nomorOpn))
+                {
+                    MessageBox.Show(
+                        $"Produk ini sedang dalam proses Stok Opname ({nomorOpn}) dan stoknya terkunci.",
+                        "Stok Terkunci Opname",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
                 Barang? barang = daftarBarang.FirstOrDefault(b => b.Kode == kode);
                 if (barang != null && item.Jumlah + perubahan > barang.Stok)
                 {
@@ -716,6 +740,21 @@ namespace Sukimart
             if (keranjang.Count == 0)
             {
                 MessageBox.Show("Keranjang belanja masih kosong! Tambahkan produk terlebih dahulu.", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var produkTerkunci = keranjang
+                .Where(k => PenyimpananData.ApakahBarangTerkunciOpname(k.KodeBarang, out _))
+                .ToList();
+
+            if (produkTerkunci.Count > 0)
+            {
+                string daftarNama = string.Join("\n- ", produkTerkunci.Select(p => $"{p.NamaBarang} ({p.KodeBarang})"));
+                MessageBox.Show(
+                    $"Transaksi penjualan tidak dapat diproses karena produk berikut sedang dalam proses Stok Opname dan stoknya terkunci:\n- {daftarNama}\n\nSilakan hapus produk tersebut dari keranjang sebelum memproses transaksi.",
+                    "Transaksi Ditolak - Stok Terkunci Opname",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Stop);
                 return;
             }
 
