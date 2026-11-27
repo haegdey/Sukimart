@@ -32,20 +32,22 @@ namespace Sukimart
             bool isAdmin = this.peran == "admin";
             bool bolehKelola = this.peran != "kasir";
 
-            btnTabAktif.Visible = isAdmin;
-            btnTabNonaktif.Visible = isAdmin;
-            if (!isAdmin)
+            btnTabAktif.Visible = bolehKelola;
+            btnTabNonaktif.Visible = bolehKelola;
+            if (!bolehKelola)
             {
                 txtCari.Width = gridBarang.Width;
                 tabAktif = "aktif";
+            }
+            else
+            {
+                txtCari.Width = btnTabAktif.Left - txtCari.Left - 16;
             }
 
             btnTambahItem.Visible = bolehKelola;
             btnEditProduk.Visible = bolehKelola;
             btnKelolaKategori.Visible = bolehKelola;
-
-            // Tombol aksi (Hapus / Aktifkan) HANYA untuk Admin
-            btnHapusBarang.Visible = isAdmin;
+            btnHapusBarang.Visible = bolehKelola;
 
             if (!bolehKelola)
             {
@@ -55,20 +57,24 @@ namespace Sukimart
             if (this.peran == "kasir")
             {
                 colHargaBeli.Visible = false;
+                btnKasir.Visible = true;
+                btnRiwayat.Visible = true;
                 btnGudang.Visible = false;
                 btnLaporan.Visible = false;
                 btnLaporanInventaris.Visible = false;
                 btnPengguna.Visible = false;
+                btnLogAktivitas.Visible = false;
             }
             else if (this.peran == "gudang")
             {
                 colHargaBeli.Visible = true;
                 btnKasir.Visible = false;
                 btnRiwayat.Visible = false;
+                btnGudang.Visible = true;
                 btnLaporan.Visible = false;
                 btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = false;
-                btnGudang.Visible = true;
+                btnLogAktivitas.Visible = false;
             }
             else
             {
@@ -79,6 +85,7 @@ namespace Sukimart
                 btnLaporan.Visible = true;
                 btnLaporanInventaris.Visible = true;
                 btnPengguna.Visible = true;
+                btnLogAktivitas.Visible = true;
             }
 
             UIHelper.SusunTombolSidebar(pnlKiri);
@@ -94,6 +101,8 @@ namespace Sukimart
             btnLaporan.Click += (s, e) => Navigasi.BukaLaporan(this);
             btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
+            btnLogAktivitas.Click += (s, e) => Navigasi.BukaLogAktivitas(this);
+            btnGantiSandi.Click += (s, e) => Navigasi.BukaGantiKataSandi(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
 
             btnTabAktif.Click += (s, e) => UbahTabKatalog("aktif");
@@ -116,7 +125,7 @@ namespace Sukimart
 
         private void UbahTabKatalog(string tab)
         {
-            if (this.peran != "admin")
+            if (this.peran == "kasir")
             {
                 tab = "aktif";
             }
@@ -173,7 +182,7 @@ namespace Sukimart
         private void FilterDaftarBarang()
         {
             string keyword = txtCari.Text.Trim().ToLower();
-            bool tampilkanAktif = (this.peran != "admin") || (tabAktif == "aktif");
+            bool tampilkanAktif = (this.peran == "kasir") || (tabAktif == "aktif");
 
             var hasil = daftarBarang.Where(b => b.Aktif == tampilkanAktif);
 
@@ -270,9 +279,9 @@ namespace Sukimart
 
         private void BtnHapusBarang_Click(object? sender, EventArgs e)
         {
-            if (this.peran != "admin")
+            if (this.peran != "admin" && this.peran != "gudang")
             {
-                MessageBox.Show("Hanya Admin yang memiliki hak akses untuk tindakan ini.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Hanya Admin dan Petugas Gudang yang memiliki hak akses untuk tindakan ini.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -358,7 +367,45 @@ namespace Sukimart
                 return;
             }
 
-            // Jika belum memiliki riwayat: Hapus permanen
+            // Jika belum memiliki riwayat:
+            // Role Gudang TIDAK BOLEH menghapus permanen, hanya boleh menonaktifkan
+            if (this.peran == "gudang")
+            {
+                DialogResult konfirmasiGudang = MessageBox.Show(
+                    $"Apakah Anda yakin ingin menonaktifkan barang '{barang.Nama}' ({barang.Kode})?",
+                    "Konfirmasi Nonaktifkan",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (konfirmasiGudang == DialogResult.Yes)
+                {
+                    try
+                    {
+                        barang.Aktif = false;
+                        PenyimpananData.SimpanBarang(daftarBarang);
+                        try
+                        {
+                            PenyimpananData.CatatAktivitas(
+                                Navigasi.PenggunaAktif,
+                                "Nonaktifkan Barang",
+                                $"Menonaktifkan barang '{barang.Nama}' ({barang.Kode})."
+                            );
+                        }
+                        catch { }
+
+                        MessageBox.Show($"Barang '{barang.Nama}' berhasil dinonaktifkan.", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MuatDataBarang();
+                    }
+                    catch (Exception ex)
+                    {
+                        barang.Aktif = true;
+                        MessageBox.Show("Gagal menonaktifkan barang: " + ex.Message, "Kesalahan", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                return;
+            }
+
+            // Jika belum memiliki riwayat dan pengguna adalah Admin: Hapus permanen
             DialogResult konfirmasi = MessageBox.Show(
                 $"Apakah Anda yakin ingin menghapus barang '{barang.Nama}' ({barang.Kode})?",
                 "Konfirmasi Hapus",
@@ -395,6 +442,16 @@ namespace Sukimart
 
         private void ProsesAktifkanBarang(Barang barang)
         {
+            if (PenyimpananData.ApakahBarangTerkunciOpname(barang.Kode, out string nomorOpn))
+            {
+                MessageBox.Show(
+                    $"Produk '{barang.Nama}' ({barang.Kode}) sedang dalam proses Stok Opname ({nomorOpn}) dan tidak dapat diaktifkan sampai sesi opname selesai.",
+                    "Stok Terkunci Opname",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             DialogResult konfirmasi = MessageBox.Show(
                 "Apakah Anda yakin ingin mengaktifkan kembali barang ini?",
                 "Konfirmasi Aktifkan",

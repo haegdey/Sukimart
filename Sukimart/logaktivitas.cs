@@ -62,6 +62,7 @@ namespace Sukimart
             btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnLogAktivitas.Click += (s, e) => { /* Sedang di form Log Aktivitas */ };
+            btnGantiSandi.Click += (s, e) => Navigasi.BukaGantiKataSandi(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
 
             btnSegarkan.Click += (s, e) => MuatLogAktivitas();
@@ -86,6 +87,8 @@ namespace Sukimart
                 "Tambah Barang",
                 "Ubah Barang",
                 "Hapus Barang",
+                "Nonaktifkan Barang",
+                "Aktifkan Barang",
                 "Tambah Kategori",
                 "Ubah Kategori",
                 "Hapus Kategori",

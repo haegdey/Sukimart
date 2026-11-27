@@ -291,6 +291,8 @@ namespace Sukimart
             if (a.StartsWith("TAMBAH BARANG", StringComparison.OrdinalIgnoreCase)) return "Tambah Barang";
             if (a.StartsWith("UBAH BARANG", StringComparison.OrdinalIgnoreCase)) return "Ubah Barang";
             if (a.StartsWith("HAPUS BARANG", StringComparison.OrdinalIgnoreCase)) return "Hapus Barang";
+            if (a.StartsWith("NONAKTIFKAN BARANG", StringComparison.OrdinalIgnoreCase)) return "Nonaktifkan Barang";
+            if (a.StartsWith("AKTIFKAN BARANG", StringComparison.OrdinalIgnoreCase)) return "Aktifkan Barang";
             if (a.StartsWith("TAMBAH KATEGORI", StringComparison.OrdinalIgnoreCase)) return "Tambah Kategori";
             if (a.StartsWith("UBAH KATEGORI", StringComparison.OrdinalIgnoreCase)) return "Ubah Kategori";
             if (a.StartsWith("HAPUS KATEGORI", StringComparison.OrdinalIgnoreCase)) return "Hapus Kategori";

@@ -75,6 +75,7 @@ namespace Sukimart
             btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
             btnLogAktivitas.Click += (s, e) => Navigasi.BukaLogAktivitas(this);
+            btnGantiSandi.Click += (s, e) => Navigasi.BukaGantiKataSandi(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
 
             btnTambahKeranjang.Click += BtnTambahKeranjang_Click;

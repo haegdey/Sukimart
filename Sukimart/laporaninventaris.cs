@@ -34,6 +34,16 @@ namespace Sukimart
             pnlKanan.Resize += (s, e) => AturTataLetakResponsif();
             AturTataLetakResponsif();
 
+            if (this.peran != "admin" && this.peran != "gudang")
+            {
+                Shown += (s, e) =>
+                {
+                    MessageBox.Show("Menu Laporan Inventaris hanya dapat diakses oleh Admin dan Petugas Gudang.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Navigasi.BukaDashboard(this);
+                };
+                return;
+            }
+
             MuatDataSemua();
         }
 
@@ -119,13 +129,18 @@ namespace Sukimart
             colJumlahMin.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             colJumlahStatus.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
+            colRiwayatJenis.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             colRiwayatJenis.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            colRiwayatJumlah.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            colRiwayatJumlah.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            colRiwayatJumlah.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             gridJumlahStok.CellFormatting += GridJumlahStok_CellFormatting;
             gridRiwayatStok.CellFormatting += GridRiwayatStok_CellFormatting;
             gridJumlahStok.CellDoubleClick += GridJumlahStok_CellDoubleClick;
             gridJumlahStok.KeyDown += GridJumlahStok_KeyDown;
+            gridRiwayatStok.CellDoubleClick += GridRiwayatStok_CellDoubleClick;
+            gridRiwayatStok.KeyDown += GridRiwayatStok_KeyDown;
         }
 
         private static void AturTombolSub(Button tombol, string teks, bool aktif, int lebar = 130)
@@ -143,13 +158,37 @@ namespace Sukimart
 
         private void SesuaikanPeran()
         {
-            bool admin = peran == "admin";
-            bool gudang = peran == "gudang";
-            btnGudang.Visible = admin || gudang;
-            btnLaporan.Visible = admin || gudang;
-            btnLaporanInventaris.Visible = admin || gudang;
-            btnPengguna.Visible = admin;
-            btnLogAktivitas.Visible = admin;
+            if (this.peran == "kasir")
+            {
+                btnKasir.Visible = true;
+                btnRiwayat.Visible = true;
+                btnGudang.Visible = false;
+                btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = false;
+                btnPengguna.Visible = false;
+                btnLogAktivitas.Visible = false;
+            }
+            else if (this.peran == "gudang")
+            {
+                btnKasir.Visible = false;
+                btnRiwayat.Visible = false;
+                btnGudang.Visible = true;
+                btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = true;
+                btnPengguna.Visible = false;
+                btnLogAktivitas.Visible = false;
+            }
+            else
+            {
+                btnKasir.Visible = true;
+                btnRiwayat.Visible = true;
+                btnGudang.Visible = true;
+                btnLaporan.Visible = true;
+                btnLaporanInventaris.Visible = true;
+                btnPengguna.Visible = true;
+                btnLogAktivitas.Visible = true;
+            }
+
             UIHelper.SusunTombolSidebar(pnlKiri);
         }
 
@@ -480,6 +519,8 @@ namespace Sukimart
                     NamaBarang = r.NamaBarang,
                     Jenis = jenis,
                     Jumlah = r.Jumlah,
+                    StokSebelum = r.StokSebelum,
+                    StokSesudah = r.StokSesudah,
                     Keterangan = !string.IsNullOrWhiteSpace(r.Keterangan) ? r.Keterangan : "-",
                     Pengguna = !string.IsNullOrWhiteSpace(r.Pengguna) ? r.Pengguna : "-"
                 });
@@ -656,6 +697,7 @@ namespace Sukimart
             {
                 string val = e.Value?.ToString() ?? "";
                 e.CellStyle.Font = FontInter.Buat(9.5F, FontStyle.Bold);
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 if (val.StartsWith("+"))
                 {
                     e.CellStyle.ForeColor = Color.FromArgb(16, 149, 102);
@@ -669,6 +711,7 @@ namespace Sukimart
             {
                 string jenis = e.Value?.ToString() ?? "";
                 e.CellStyle.Font = FontInter.Buat(9.5F, FontStyle.Bold);
+                e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 if (jenis == "MASUK")
                 {
                     e.CellStyle.ForeColor = Color.FromArgb(16, 149, 102);
@@ -681,6 +724,46 @@ namespace Sukimart
                 {
                     e.CellStyle.ForeColor = Color.FromArgb(220, 38, 38);
                 }
+            }
+        }
+
+        private void GridRiwayatStok_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
+        {
+            // Abaikan klik pada header kolom (-1) atau baris yang tidak valid
+            if (e.RowIndex < 0 || e.RowIndex >= gridRiwayatStok.Rows.Count)
+            {
+                return;
+            }
+
+            var row = gridRiwayatStok.Rows[e.RowIndex];
+            if (row.DataBoundItem is ItemMutasiStok item)
+            {
+                string tanda = (item.TandaJumlah == "−" || item.TandaJumlah == "-") ? "-" : "+";
+                string jumlahTeks = $"{tanda}{item.Jumlah.ToString("N0", BudayaIndonesia)}";
+
+                string pesan = $"DETAIL RIWAYAT STOK\n\n" +
+                               $"Tanggal: {item.Tanggal:dd/MM/yyyy HH:mm}\n" +
+                               $"Kode Barang: {item.KodeBarang}\n" +
+                               $"Nama Barang: {item.NamaBarang}\n" +
+                               $"Jenis: {item.Jenis}\n" +
+                               $"Jumlah: {jumlahTeks}\n" +
+                               $"Keterangan: {item.Keterangan}\n" +
+                               $"Oleh: {item.Pengguna}";
+
+                MessageBox.Show(pesan, "Detail Riwayat Stok", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Data riwayat stok tidak ditemukan.", "Informasi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void GridRiwayatStok_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter && gridRiwayatStok.CurrentRow != null)
+            {
+                e.SuppressKeyPress = true;
+                GridRiwayatStok_CellDoubleClick(gridRiwayatStok, new DataGridViewCellEventArgs(0, gridRiwayatStok.CurrentRow.Index));
             }
         }
 
@@ -708,7 +791,21 @@ namespace Sukimart
         public string NamaBarang { get; set; } = "";
         public string Jenis { get; set; } = "";
         public int Jumlah { get; set; }
-        public string JumlahFormat => (Jenis == "MASUK" ? "+" : "−") + Jumlah.ToString("N0", BudayaIndonesia);
+        public int StokSebelum { get; set; }
+        public int StokSesudah { get; set; }
+        public string TandaJumlah
+        {
+            get
+            {
+                if (Jenis == "MASUK") return "+";
+                if (Jenis == "PENYESUAIAN OPNAME")
+                {
+                    return StokSesudah >= StokSebelum ? "+" : "−";
+                }
+                return "−";
+            }
+        }
+        public string JumlahFormat => TandaJumlah + Jumlah.ToString("N0", BudayaIndonesia);
         public string Keterangan { get; set; } = "";
         public string Pengguna { get; set; } = "";
     }

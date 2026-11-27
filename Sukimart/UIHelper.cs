@@ -87,6 +87,7 @@ namespace Sukimart
 
             if (!pnlKiri.Visible)
             {
+                PastikanTombolBawah(pnlKiri);
                 pnlKiri.VisibleChanged -= SusunSaatTampil;
                 pnlKiri.VisibleChanged += SusunSaatTampil;
                 return;
@@ -146,6 +147,8 @@ namespace Sukimart
             PastikanTombolBawah(pnlKiri);
         }
 
+        private static readonly ConditionalWeakTable<Button, ToolTip> TooltipTombol = new ConditionalWeakTable<Button, ToolTip>();
+
         public static void PastikanTombolBawah(Panel pnlKiri)
         {
             if (pnlKiri == null) return;
@@ -160,25 +163,56 @@ namespace Sukimart
             int x = acuan != null ? acuan.Location.X : 16;
             int lebar = acuan != null ? acuan.Width : 208;
             int tinggi = acuan != null ? acuan.Height : 40;
-            Padding padding = acuan != null ? acuan.Padding : new Padding(16, 0, 0, 0);
             float ukuranFont = acuan != null ? acuan.Font.SizeInPoints : 10F;
-            int jarak = tinggi != 40 ? Math.Max(6, (int)Math.Round(tinggi * 0.2)) : 8;
 
             // Cari tombol Keluar
             Control[] keluarArr = pnlKiri.Controls.Find("btnKeluar", false);
             if (keluarArr.Length == 0) keluarArr = pnlKiri.Controls.Find("btnKeluarBenar", false);
             Button? btnKeluar = keluarArr.Length > 0 ? keluarArr[0] as Button : null;
 
+            int paddingBawah = 16;
+            int yKeluar;
             if (btnKeluar != null)
             {
+                if (pnlKiri.ClientSize.Height > tinggi + paddingBawah + 60)
+                {
+                    yKeluar = pnlKiri.ClientSize.Height - tinggi - paddingBawah;
+                }
+                else
+                {
+                    yKeluar = btnKeluar.Location.Y;
+                }
+
                 btnKeluar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
                 btnKeluar.Size = new Size(lebar, tinggi);
-                btnKeluar.Padding = padding;
-                btnKeluar.Location = new Point(x, btnKeluar.Location.Y);
-                btnKeluar.Font = FontInter.Buat(ukuranFont, FontStyle.Regular);
+                btnKeluar.Location = new Point(x, yKeluar);
+                btnKeluar.Font = FontInter.Buat(ukuranFont, FontStyle.Bold);
+                btnKeluar.BackColor = Color.White;
+                btnKeluar.ForeColor = Color.FromArgb(220, 38, 38);
+                btnKeluar.FlatStyle = FlatStyle.Flat;
+                btnKeluar.FlatAppearance.BorderSize = 1;
+                btnKeluar.FlatAppearance.BorderColor = Color.FromArgb(239, 68, 68);
+                btnKeluar.FlatAppearance.MouseOverBackColor = Color.FromArgb(254, 242, 242);
+                btnKeluar.Cursor = Cursors.Hand;
+                btnKeluar.TextAlign = ContentAlignment.MiddleCenter;
+                btnKeluar.Padding = new Padding(0);
+                btnKeluar.Text = "Keluar";
+                btnKeluar.UseVisualStyleBackColor = false;
+                btnKeluar.Visible = true;
+            }
+            else
+            {
+                yKeluar = pnlKiri.ClientSize.Height - tinggi - paddingBawah;
             }
 
-            // Cari atau buat tombol Ganti Kata Sandi
+            int lebarBtnGanti = 38;
+            int tinggiBtnGanti = 38;
+            int jarakKeluarInfo = 12;
+            int tinggiInfo = 42;
+            int yInfo = yKeluar - tinggiInfo - jarakKeluarInfo;
+            int lebarTeksAkun = Math.Max(50, lebar - lebarBtnGanti - 8);
+
+            // Cari atau buat tombol Ganti Kata Sandi (ikon kunci saja)
             Control[] gantiArr = pnlKiri.Controls.Find("btnGantiSandi", false);
             if (gantiArr.Length == 0) gantiArr = pnlKiri.Controls.Find("btnGantiPassword", false);
             Button btnGanti;
@@ -191,35 +225,97 @@ namespace Sukimart
                 btnGanti = new Button
                 {
                     Name = "btnGantiSandi",
-                    Text = "Ganti Kata Sandi",
                     Cursor = Cursors.Hand,
                     FlatStyle = FlatStyle.Flat,
-                    BackColor = Color.White,
-                    ForeColor = Color.FromArgb(75, 85, 99),
-                    TextAlign = ContentAlignment.MiddleLeft,
                     UseVisualStyleBackColor = false,
                     Anchor = AnchorStyles.Bottom | AnchorStyles.Left
                 };
-                btnGanti.FlatAppearance.BorderSize = 0;
-                btnGanti.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
-
                 pnlKiri.Controls.Add(btnGanti);
             }
 
             PasangHandlerGantiSandi(btnGanti);
 
-            btnGanti.Size = new Size(lebar, tinggi);
-            btnGanti.Padding = padding;
-            btnGanti.Font = FontInter.Buat(ukuranFont, FontStyle.Regular);
+            btnGanti.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnGanti.Size = new Size(lebarBtnGanti, tinggiBtnGanti);
+            btnGanti.Location = new Point(x + lebar - lebarBtnGanti, yInfo + 2);
+            btnGanti.Text = string.Empty;
+            btnGanti.Image = Properties.Resources.kunci;
+            btnGanti.ImageAlign = ContentAlignment.MiddleCenter;
+            btnGanti.FlatStyle = FlatStyle.Flat;
+            btnGanti.FlatAppearance.BorderSize = 0;
+            btnGanti.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnGanti.BackColor = Color.White;
+            btnGanti.Cursor = Cursors.Hand;
+            btnGanti.Padding = new Padding(0);
             btnGanti.Visible = true;
 
-            if (btnKeluar != null)
+            if (!TooltipTombol.TryGetValue(btnGanti, out _))
             {
-                int yGanti = btnKeluar.Location.Y - tinggi - jarak;
-                btnGanti.Location = new Point(x, yGanti);
-                btnGanti.BringToFront();
-                btnKeluar.BringToFront();
+                ToolTip tip = new ToolTip();
+                tip.SetToolTip(btnGanti, "Ganti Kata Sandi");
+                TooltipTombol.Add(btnGanti, tip);
             }
+
+            // Cari atau buat lblAkunNama
+            Control[] namaArr = pnlKiri.Controls.Find("lblAkunNama", false);
+            Label lblAkunNama;
+            if (namaArr.Length > 0 && namaArr[0] is Label lNama)
+            {
+                lblAkunNama = lNama;
+            }
+            else
+            {
+                lblAkunNama = new Label
+                {
+                    Name = "lblAkunNama",
+                    Anchor = AnchorStyles.Bottom | AnchorStyles.Left
+                };
+                pnlKiri.Controls.Add(lblAkunNama);
+            }
+
+            lblAkunNama.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblAkunNama.Location = new Point(x, yInfo);
+            lblAkunNama.Size = new Size(lebarTeksAkun, 22);
+            lblAkunNama.Font = FontInter.Buat(ukuranFont >= 10F ? 10.5F : 9.5F, FontStyle.Bold);
+            lblAkunNama.ForeColor = Color.FromArgb(31, 41, 55);
+            lblAkunNama.AutoEllipsis = true;
+            lblAkunNama.TextAlign = ContentAlignment.MiddleLeft;
+            lblAkunNama.Text = Navigasi.DapatkanNamaTampilan();
+            lblAkunNama.BackColor = Color.Transparent;
+            lblAkunNama.Visible = true;
+
+            // Cari atau buat lblAkunRole
+            Control[] roleArr = pnlKiri.Controls.Find("lblAkunRole", false);
+            Label lblAkunRole;
+            if (roleArr.Length > 0 && roleArr[0] is Label lRole)
+            {
+                lblAkunRole = lRole;
+            }
+            else
+            {
+                lblAkunRole = new Label
+                {
+                    Name = "lblAkunRole",
+                    Anchor = AnchorStyles.Bottom | AnchorStyles.Left
+                };
+                pnlKiri.Controls.Add(lblAkunRole);
+            }
+
+            lblAkunRole.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblAkunRole.Location = new Point(x, yInfo + 22);
+            lblAkunRole.Size = new Size(lebarTeksAkun, 18);
+            lblAkunRole.Font = FontInter.Buat(ukuranFont >= 10F ? 8.5F : 8F, FontStyle.Regular);
+            lblAkunRole.ForeColor = Color.FromArgb(107, 114, 128);
+            lblAkunRole.AutoEllipsis = true;
+            lblAkunRole.TextAlign = ContentAlignment.MiddleLeft;
+            lblAkunRole.Text = Navigasi.DapatkanLabelRole();
+            lblAkunRole.BackColor = Color.Transparent;
+            lblAkunRole.Visible = true;
+
+            lblAkunNama.BringToFront();
+            lblAkunRole.BringToFront();
+            btnGanti.BringToFront();
+            if (btnKeluar != null) btnKeluar.BringToFront();
         }
 
         public static void PastikanTombolLogAktivitas(Panel pnlKiri)
@@ -375,6 +471,7 @@ namespace Sukimart
             Control[] pnlKiriArr = form.Controls.Find("pnlKiri", true);
             if (pnlKiriArr.Length > 0 && pnlKiriArr[0] is Panel pnlKiri && !(form is FormLogin))
             {
+                PastikanTombolBawah(pnlKiri);
                 SusunTombolSidebar(pnlKiri);
             }
         }

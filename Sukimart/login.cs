@@ -118,7 +118,7 @@ namespace Sukimart
                 PenyimpananData.CatatAktivitas(akun.NamaPengguna, "Login", $"Pengguna '{akun.NamaPengguna}' ({akun.Peran}) berhasil masuk ke sistem.");
             }
             catch { }
-            Navigasi.MulaiSesi(this, akun.NamaPengguna, akun.Peran);
+            Navigasi.MulaiSesi(this, akun.NamaPengguna, akun.Peran, akun.NamaLengkap);
         }
 
         private void ResetErrorLabels()

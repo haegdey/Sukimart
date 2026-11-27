@@ -19,6 +19,8 @@ namespace Sukimart
             DataGridViewCellStyle gayaSel = new DataGridViewCellStyle();
             pnlKiri = new Panel();
             btnKeluar = new Button();
+            lblAkunNama = new Label();
+            lblAkunRole = new Label();
             btnGantiSandi = new Button();
             btnLogAktivitas = new Button();
             btnPengguna = new Button();
@@ -68,6 +70,8 @@ namespace Sukimart
             SuspendLayout();
             pnlKiri.BackColor = Color.White;
             pnlKiri.Controls.Add(btnKeluar);
+            pnlKiri.Controls.Add(lblAkunNama);
+            pnlKiri.Controls.Add(lblAkunRole);
             pnlKiri.Controls.Add(btnGantiSandi);
             pnlKiri.Controls.Add(btnLogAktivitas);
             pnlKiri.Controls.Add(btnPengguna);
@@ -87,16 +91,18 @@ namespace Sukimart
             pnlKiri.TabIndex = 1;
             btnKeluar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnKeluar.BackColor = Color.White;
-            btnKeluar.FlatAppearance.BorderColor = Color.FromArgb(229, 231, 235);
-            btnKeluar.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnKeluar.Cursor = Cursors.Hand;
+            btnKeluar.FlatAppearance.BorderColor = Color.FromArgb(239, 68, 68);
+            btnKeluar.FlatAppearance.BorderSize = 1;
+            btnKeluar.FlatAppearance.MouseOverBackColor = Color.FromArgb(254, 242, 242);
             btnKeluar.FlatStyle = FlatStyle.Flat;
-            btnKeluar.Font = new Font("Inter", 10F);
-            btnKeluar.ForeColor = Color.FromArgb(75, 85, 99);
+            btnKeluar.Font = new Font("Inter", 10F, FontStyle.Bold);
+            btnKeluar.ForeColor = Color.FromArgb(220, 38, 38);
             btnKeluar.Location = new Point(16, 640);
-            btnKeluar.Padding = new Padding(16, 0, 0, 0);
+            btnKeluar.Padding = new Padding(0);
             btnKeluar.Size = new Size(208, 40);
             btnKeluar.Text = "Keluar";
-            btnKeluar.TextAlign = ContentAlignment.MiddleLeft;
+            btnKeluar.TextAlign = ContentAlignment.MiddleCenter;
             btnKeluar.UseVisualStyleBackColor = false;
             btnKeluar.Name = "btnKeluar";
             btnKeluar.TabIndex = 11;
@@ -134,6 +140,32 @@ namespace Sukimart
             btnLogAktivitas.TextAlign = ContentAlignment.MiddleLeft;
             btnLogAktivitas.UseVisualStyleBackColor = false;
             // 
+            // lblAkunNama
+            // 
+            lblAkunNama.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblAkunNama.AutoEllipsis = true;
+            lblAkunNama.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblAkunNama.ForeColor = Color.FromArgb(31, 41, 55);
+            lblAkunNama.Location = new Point(16, 590);
+            lblAkunNama.Name = "lblAkunNama";
+            lblAkunNama.Size = new Size(162, 22);
+            lblAkunNama.TabIndex = 15;
+            lblAkunNama.Text = "Nama Pengguna";
+            lblAkunNama.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblAkunRole
+            // 
+            lblAkunRole.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblAkunRole.AutoEllipsis = true;
+            lblAkunRole.Font = new Font("Inter", 8.5F);
+            lblAkunRole.ForeColor = Color.FromArgb(107, 114, 128);
+            lblAkunRole.Location = new Point(16, 612);
+            lblAkunRole.Name = "lblAkunRole";
+            lblAkunRole.Size = new Size(162, 18);
+            lblAkunRole.TabIndex = 16;
+            lblAkunRole.Text = "Role";
+            lblAkunRole.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // btnGantiSandi
             // 
             btnGantiSandi.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -144,13 +176,14 @@ namespace Sukimart
             btnGantiSandi.FlatStyle = FlatStyle.Flat;
             btnGantiSandi.Font = new Font("Inter", 10F);
             btnGantiSandi.ForeColor = Color.FromArgb(75, 85, 99);
-            btnGantiSandi.Location = new Point(16, 592);
+            btnGantiSandi.Image = Properties.Resources.kunci;
+            btnGantiSandi.ImageAlign = ContentAlignment.MiddleCenter;
+            btnGantiSandi.Location = new Point(186, 592);
             btnGantiSandi.Name = "btnGantiSandi";
-            btnGantiSandi.Padding = new Padding(16, 0, 0, 0);
-            btnGantiSandi.Size = new Size(208, 40);
+            btnGantiSandi.Padding = new Padding(0);
+            btnGantiSandi.Size = new Size(38, 38);
             btnGantiSandi.TabIndex = 14;
-            btnGantiSandi.Text = "Ganti Kata Sandi";
-            btnGantiSandi.TextAlign = ContentAlignment.MiddleLeft;
+            btnGantiSandi.Text = "";
             btnGantiSandi.UseVisualStyleBackColor = false;
             btnLaporan.BackColor = Color.White;
             btnLaporan.Cursor = Cursors.Hand;
@@ -637,5 +670,7 @@ namespace Sukimart
         private DataGridViewTextBoxColumn colDibuat;
         private Button btnLogAktivitas;
         private Button btnGantiSandi;
+        private Label lblAkunNama;
+        private Label lblAkunRole;
     }
 }

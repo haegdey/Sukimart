@@ -8,19 +8,26 @@ namespace Sukimart
     {
         public static string PeranAktif { get; set; } = "kasir";
         public static string PenggunaAktif { get; set; } = "kasir";
+        public static string NamaLengkapAktif { get; set; } = "";
         public static FormLogin? FormLoginUtama { get; set; }
         private static bool sedangBeralih = false;
 
         public static void MulaiSesi(FormLogin loginForm, string peran)
         {
-            MulaiSesi(loginForm, peran, peran);
+            MulaiSesi(loginForm, peran, peran, "");
         }
 
         public static void MulaiSesi(FormLogin loginForm, string pengguna, string peran)
         {
+            MulaiSesi(loginForm, pengguna, peran, "");
+        }
+
+        public static void MulaiSesi(FormLogin loginForm, string pengguna, string peran, string namaLengkap)
+        {
             FormLoginUtama = loginForm;
             PenggunaAktif = string.IsNullOrEmpty(pengguna) ? "kasir" : pengguna;
             PeranAktif = string.IsNullOrEmpty(peran) ? "kasir" : peran;
+            NamaLengkapAktif = !string.IsNullOrWhiteSpace(namaLengkap) ? namaLengkap : PenggunaAktif;
             loginForm.Hide();
 
             Form formAwal;
@@ -144,6 +151,18 @@ namespace Sukimart
             BeralihKe(new FormGudang(PeranAktif), formSaatIni);
         }
 
+        public static void BukaGudangOpname(Form formSaatIni)
+        {
+            if (PeranAktif != "admin" && PeranAktif != "gudang")
+            {
+                MessageBox.Show("Menu Stok Opname hanya dapat diakses oleh Admin dan Petugas Gudang.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (formSaatIni is FormGudang) return;
+            BeralihKe(new FormGudang(PeranAktif, 1), formSaatIni);
+        }
+
         public static void BukaLaporan(Form formSaatIni)
         {
             BukaLaporanPenjualan(formSaatIni);
@@ -151,9 +170,9 @@ namespace Sukimart
 
         public static void BukaLaporanPenjualan(Form formSaatIni)
         {
-            if (PeranAktif != "admin" && PeranAktif != "gudang")
+            if (PeranAktif != "admin")
             {
-                MessageBox.Show("Menu Laporan Penjualan hanya dapat diakses oleh Admin dan Petugas Gudang.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Menu Laporan Penjualan hanya dapat diakses oleh Admin.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -245,6 +264,7 @@ namespace Sukimart
 
             PenggunaAktif = "kasir";
             PeranAktif = "kasir";
+            NamaLengkapAktif = "";
 
             if (FormLoginUtama != null && !FormLoginUtama.IsDisposed)
             {
@@ -259,6 +279,22 @@ namespace Sukimart
                 Application.Exit();
             }
             sedangBeralih = false;
+        }
+
+        public static string DapatkanNamaTampilan()
+        {
+            return !string.IsNullOrWhiteSpace(PenggunaAktif) ? PenggunaAktif : "Pengguna";
+        }
+
+        public static string DapatkanLabelRole()
+        {
+            return (PeranAktif?.ToLowerInvariant()) switch
+            {
+                "admin" => "Admin",
+                "gudang" => "Gudang",
+                "kasir" => "Kasir",
+                _ => char.ToUpper((PeranAktif ?? "Kasir")[0]) + (PeranAktif ?? "Kasir").Substring(1)
+            };
         }
     }
 }

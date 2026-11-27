@@ -30,6 +30,17 @@ namespace Sukimart
             PasangEventHandlers();
             pnlKanan.Resize += (s, e) => AturTataLetakResponsif();
             AturTataLetakResponsif();
+
+            if (this.peran != "admin")
+            {
+                Shown += (s, e) =>
+                {
+                    MessageBox.Show("Menu Laporan Penjualan hanya dapat diakses oleh Admin.", "Akses Ditolak", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    Navigasi.BukaDashboard(this);
+                };
+                return;
+            }
+
             MuatDataLaporan();
         }
 
@@ -41,6 +52,14 @@ namespace Sukimart
             {
                 var flag = BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic;
                 typeof(Panel).InvokeMember("DoubleBuffered", flag, null, pnlKanan, new object[] { true });
+                typeof(Panel).InvokeMember("DoubleBuffered", flag, null, pnlCard1, new object[] { true });
+                typeof(Panel).InvokeMember("DoubleBuffered", flag, null, pnlCard2, new object[] { true });
+                typeof(Panel).InvokeMember("DoubleBuffered", flag, null, pnlCard3, new object[] { true });
+                typeof(Panel).InvokeMember("DoubleBuffered", flag, null, pnlCard4, new object[] { true });
+                typeof(Panel).InvokeMember("DoubleBuffered", flag, null, pnlCardTerlaris, new object[] { true });
+                typeof(Panel).InvokeMember("DoubleBuffered", flag, null, pnlCardKasir, new object[] { true });
+                typeof(FlowLayoutPanel).InvokeMember("DoubleBuffered", flag, null, flpTerlaris, new object[] { true });
+                typeof(FlowLayoutPanel).InvokeMember("DoubleBuffered", flag, null, flpKasir, new object[] { true });
                 typeof(DataGridView).InvokeMember("DoubleBuffered", flag, null, gridLaporan, new object[] { true });
                 typeof(DataGridView).InvokeMember("DoubleBuffered", flag, null, gridLaba, new object[] { true });
             }
@@ -72,6 +91,33 @@ namespace Sukimart
 
             lblRingkasan.Font = FontInter.Buat(9F);
             lblRingkasan.ForeColor = Color.FromArgb(75, 85, 99);
+
+            Color warnaNavyJudul = Color.FromArgb(30, 41, 59);
+            lblCard1Judul.Font = FontInter.Buat(8.5F, FontStyle.Bold);
+            lblCard1Judul.ForeColor = warnaNavyJudul;
+            lblCard2Judul.Font = FontInter.Buat(8.5F, FontStyle.Bold);
+            lblCard2Judul.ForeColor = warnaNavyJudul;
+            lblCard3Judul.Font = FontInter.Buat(8.5F, FontStyle.Bold);
+            lblCard3Judul.ForeColor = warnaNavyJudul;
+            lblCard4Judul.Font = FontInter.Buat(8.5F, FontStyle.Bold);
+            lblCard4Judul.ForeColor = warnaNavyJudul;
+
+            lblTerlarisJudul.Font = FontInter.Buat(9F, FontStyle.Bold);
+            lblTerlarisJudul.ForeColor = warnaNavyJudul;
+            lblTerlarisKosong.Font = FontInter.Buat(9F);
+            lblTerlarisKosong.ForeColor = Color.FromArgb(107, 114, 128);
+
+            lblKasirJudul.Font = FontInter.Buat(9F, FontStyle.Bold);
+            lblKasirJudul.ForeColor = warnaNavyJudul;
+            lblKasirKosong.Font = FontInter.Buat(9F);
+            lblKasirKosong.ForeColor = Color.FromArgb(107, 114, 128);
+
+            PasangGayaKartu(pnlCard1);
+            PasangGayaKartu(pnlCard2);
+            PasangGayaKartu(pnlCard3);
+            PasangGayaKartu(pnlCard4);
+            PasangGayaKartu(pnlCardTerlaris);
+            PasangGayaKartu(pnlCardKasir);
 
             lblInfoHitung.Font = FontInter.Buat(8.5F);
             lblInfoHitung.ForeColor = Color.FromArgb(107, 114, 128);
@@ -112,6 +158,19 @@ namespace Sukimart
             };
         }
 
+        private static void PasangGayaKartu(Panel kartu)
+        {
+            kartu.BackColor = Color.White;
+            kartu.Paint += (s, e) =>
+            {
+                using var penBatas = new Pen(Color.FromArgb(229, 231, 235), 1);
+                e.Graphics.DrawRectangle(penBatas, 0, 0, kartu.Width - 1, kartu.Height - 1);
+
+                using var brushAksen = new SolidBrush(Color.FromArgb(255, 196, 0));
+                e.Graphics.FillRectangle(brushAksen, 1, 1, Math.Max(0, kartu.Width - 2), 3);
+            };
+        }
+
         private static void AturTombolSub(Button tombol, string teks, bool aktif, int lebar = 110)
         {
             tombol.BackColor = aktif ? Color.FromArgb(255, 196, 0) : Color.White;
@@ -127,6 +186,12 @@ namespace Sukimart
 
         private void AturTataLetakResponsif()
         {
+            if (nightControlBox1 != null)
+            {
+                nightControlBox1.Location = new Point(pnlKanan.ClientSize.Width - nightControlBox1.Width, 0);
+                nightControlBox1.BringToFront();
+            }
+
             int margin = 40;
             int lebarTersedia = pnlKanan.ClientSize.Width - (margin * 2);
             if (lebarTersedia < 500) return;
@@ -154,8 +219,46 @@ namespace Sukimart
             pnlCard4.Location = new Point(margin + 3 * (lebarKartu + jarak), yCards);
             pnlCard4.Size = new Size(lebarKartu, tinggiKartu);
 
-            // 3. Filter Tanggal (di bawah 4 panel card)
-            int yFilter = 232;
+            bool isLaba = subJenisPenjualan == "laba";
+
+            // 2b. 2 Analytics Cards (hanya tampil pada mode Transaksi)
+            pnlCardTerlaris.Visible = !isLaba;
+            pnlCardKasir.Visible = !isLaba;
+
+            int yFilter;
+            if (isLaba)
+            {
+                yFilter = 232;
+            }
+            else
+            {
+                int yAnalytics = yCards + tinggiKartu + 16;
+                int tinggiAnalytics = 216;
+                int lebarAnalyticsKiri = (lebarTersedia - jarak) / 2;
+                int lebarAnalyticsKanan = lebarTersedia - jarak - lebarAnalyticsKiri;
+
+                pnlCardTerlaris.Location = new Point(margin, yAnalytics);
+                pnlCardTerlaris.Size = new Size(lebarAnalyticsKiri, tinggiAnalytics);
+
+                pnlCardKasir.Location = new Point(margin + lebarAnalyticsKiri + jarak, yAnalytics);
+                pnlCardKasir.Size = new Size(lebarAnalyticsKanan, tinggiAnalytics);
+
+                lblTerlarisJudul.Location = new Point(20, 16);
+                flpTerlaris.Location = new Point(20, 42);
+                flpTerlaris.Size = new Size(Math.Max(100, pnlCardTerlaris.ClientSize.Width - 40), tinggiAnalytics - 54);
+                lblTerlarisKosong.Location = new Point(20, 50);
+                SesuaikanLebarItemFlow(flpTerlaris);
+
+                lblKasirJudul.Location = new Point(20, 16);
+                flpKasir.Location = new Point(20, 42);
+                flpKasir.Size = new Size(Math.Max(100, pnlCardKasir.ClientSize.Width - 40), tinggiAnalytics - 54);
+                lblKasirKosong.Location = new Point(20, 50);
+                SesuaikanLebarItemFlow(flpKasir);
+
+                yFilter = yAnalytics + tinggiAnalytics + 16;
+            }
+
+            // 3. Filter Tanggal (di bawah 2 Analytics Card pada mode Transaksi, atau di bawah 4 KPI Card pada mode Laba)
             dtpMulai.Location = new Point(margin, yFilter + 2);
             dtpMulai.Size = new Size(130, 27);
             lblSampai.Location = new Point(margin + 138, yFilter + 7);
@@ -165,32 +268,25 @@ namespace Sukimart
             btnTerapkanTanggal.Location = new Point(margin + 312, yFilter);
             btnTerapkanTanggal.Size = new Size(96, 32);
 
-            // 4. Keterangan Perhitungan & Judul Tabel / Ringkasan
-            int yInfo = 276;
-            bool isLaba = subJenisPenjualan == "laba";
-
+            // 4. Keterangan Perhitungan & Judul Tabel
+            int yInfo = yFilter + 44;
             lblInfoHitung.Visible = isLaba;
             lblJudulTabel.Visible = isLaba;
-            lblRingkasan.Visible = !isLaba;
+            lblRingkasan.Visible = false;
 
             if (isLaba)
             {
                 lblInfoHitung.Location = new Point(margin, yInfo);
                 lblJudulTabel.Location = new Point(margin, yInfo + 22);
             }
-            else
-            {
-                lblRingkasan.Location = new Point(margin, yInfo);
-                lblRingkasan.Size = new Size(lebarTersedia, 44);
-            }
 
             // 5. DataGridView
-            int yGrid = 328;
+            int yGrid = isLaba ? (yFilter + 96) : (yFilter + 48);
             int tinggiTotal = 46;
             int tinggiGrid = Math.Max(180, pnlKanan.ClientSize.Height - yGrid - (isLaba ? (tinggiTotal + 24) : 20));
 
             gridLaporan.Location = new Point(margin, yGrid);
-            gridLaporan.Size = new Size(lebarTersedia, isLaba ? tinggiGrid : (tinggiGrid + tinggiTotal + 4));
+            gridLaporan.Size = new Size(lebarTersedia, tinggiGrid);
             gridLaba.Location = new Point(margin, yGrid);
             gridLaba.Size = new Size(lebarTersedia, tinggiGrid);
 
@@ -239,12 +335,37 @@ namespace Sukimart
 
         private void SesuaikanPeran()
         {
-            bool admin = peran == "admin";
-            bool gudang = peran == "gudang";
-            btnGudang.Visible = admin || gudang;
-            btnLaporan.Visible = admin || gudang;
-            btnLaporanInventaris.Visible = admin || gudang;
-            btnPengguna.Visible = admin;
+            if (this.peran == "kasir")
+            {
+                btnKasir.Visible = true;
+                btnRiwayat.Visible = true;
+                btnGudang.Visible = false;
+                btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = false;
+                btnPengguna.Visible = false;
+                btnLogAktivitas.Visible = false;
+            }
+            else if (this.peran == "gudang")
+            {
+                btnKasir.Visible = false;
+                btnRiwayat.Visible = false;
+                btnGudang.Visible = true;
+                btnLaporan.Visible = false;
+                btnLaporanInventaris.Visible = true;
+                btnPengguna.Visible = false;
+                btnLogAktivitas.Visible = false;
+            }
+            else
+            {
+                btnKasir.Visible = true;
+                btnRiwayat.Visible = true;
+                btnGudang.Visible = true;
+                btnLaporan.Visible = true;
+                btnLaporanInventaris.Visible = true;
+                btnPengguna.Visible = true;
+                btnLogAktivitas.Visible = true;
+            }
+
             UIHelper.SusunTombolSidebar(pnlKiri);
         }
 
@@ -257,6 +378,8 @@ namespace Sukimart
             btnGudang.Click += (s, e) => Navigasi.BukaGudang(this);
             btnLaporanInventaris.Click += (s, e) => Navigasi.BukaLaporanInventaris(this);
             btnPengguna.Click += (s, e) => Navigasi.BukaPengguna(this);
+            btnLogAktivitas.Click += (s, e) => Navigasi.BukaLogAktivitas(this);
+            btnGantiSandi.Click += (s, e) => Navigasi.BukaGantiKataSandi(this);
             btnKeluar.Click += (s, e) => Navigasi.KonfirmasiDanKeluar(this);
             btnSubTransaksi.Click += (s, e) => UbahSubJenisPenjualan("transaksi");
             btnSubLaba.Click += (s, e) => UbahSubJenisPenjualan("laba");
@@ -329,10 +452,10 @@ namespace Sukimart
         private void TerapkanLaporanPenjualan()
         {
             lblJudul.Text = "Laporan Penjualan";
-            lblCard1Judul.Text = "Total Pendapatan";
-            lblCard2Judul.Text = "Jumlah Transaksi";
-            lblCard3Judul.Text = "Item Terjual";
-            lblCard4Judul.Text = "Rata-rata Transaksi";
+            lblCard1Judul.Text = "TOTAL PENDAPATAN";
+            lblCard2Judul.Text = "JUMLAH TRANSAKSI";
+            lblCard3Judul.Text = "ITEM TERJUAL";
+            lblCard4Judul.Text = "RATA-RATA TRANSAKSI";
 
             DateTime mulai = dtpMulai.Value.Date;
             DateTime selesai = dtpSelesai.Value.Date.AddDays(1).AddTicks(-1);
@@ -353,9 +476,114 @@ namespace Sukimart
             lblRataNilai.Text = "Rp " + rataRata.ToString("N0", BudayaIndonesia);
             lblRataNilai.ForeColor = Color.FromArgb(31, 41, 55);
 
-            lblRingkasan.Text = BuatRingkasanPenjualan(transaksi, detail);
+            PerbaruiKartuBarangTerlaris(detail);
+            PerbaruiKartuPenjualanKasir(transaksi);
+
             AturKolomLaporan();
             gridLaporan.DataSource = transaksi.OrderByDescending(data => data.Tanggal).Select(data => new { Faktur = data.Id, Waktu = data.Tanggal.ToString("dd/MM/yyyy HH:mm"), data.Kasir, Item = detail.Where(rincian => rincian.IdTransaksi == data.Id).Sum(rincian => rincian.Jumlah), Total = "Rp " + data.Total.ToString("N0", BudayaIndonesia) }).ToList();
+        }
+
+        private void PerbaruiKartuBarangTerlaris(List<DetailTransaksi> detail)
+        {
+            flpTerlaris.SuspendLayout();
+            try
+            {
+                BersihkanKontrolFlow(flpTerlaris);
+
+                var terlaris = detail
+                    .GroupBy(data => new { data.KodeBarang, data.NamaBarang })
+                    .Select(grup => new
+                    {
+                        grup.Key.KodeBarang,
+                        grup.Key.NamaBarang,
+                        Jumlah = grup.Sum(data => data.Jumlah)
+                    })
+                    .OrderByDescending(item => item.Jumlah)
+                    .ThenBy(item => item.KodeBarang)
+                    .Take(5)
+                    .ToList();
+
+                lblTerlarisKosong.Visible = terlaris.Count == 0;
+                flpTerlaris.Visible = terlaris.Count > 0;
+
+                for (int i = 0; i < terlaris.Count; i++)
+                {
+                    var data = terlaris[i];
+                    var baris = new ItemBarangTerlaris();
+                    baris.SetData(
+                        i + 1,
+                        data.NamaBarang,
+                        data.KodeBarang,
+                        data.Jumlah.ToString("N0", BudayaIndonesia) + " pcs",
+                        i < terlaris.Count - 1);
+                    flpTerlaris.Controls.Add(baris);
+                }
+            }
+            finally
+            {
+                flpTerlaris.ResumeLayout();
+            }
+
+            SesuaikanLebarItemFlow(flpTerlaris);
+        }
+
+        private void PerbaruiKartuPenjualanKasir(List<Transaksi> transaksi)
+        {
+            flpKasir.SuspendLayout();
+            try
+            {
+                BersihkanKontrolFlow(flpKasir);
+
+                var perKasir = transaksi
+                    .GroupBy(data => data.Kasir)
+                    .Select(grup => new
+                    {
+                        Kasir = grup.Key,
+                        Total = grup.Sum(data => data.Total)
+                    })
+                    .OrderByDescending(item => item.Total)
+                    .ThenBy(item => item.Kasir)
+                    .ToList();
+
+                lblKasirKosong.Visible = perKasir.Count == 0;
+                flpKasir.Visible = perKasir.Count > 0;
+
+                for (int i = 0; i < perKasir.Count; i++)
+                {
+                    var data = perKasir[i];
+                    var baris = new ItemPenjualanKasir();
+                    baris.SetData(
+                        data.Kasir,
+                        "Rp " + data.Total.ToString("N0", BudayaIndonesia),
+                        i < perKasir.Count - 1);
+                    flpKasir.Controls.Add(baris);
+                }
+            }
+            finally
+            {
+                flpKasir.ResumeLayout();
+            }
+
+            SesuaikanLebarItemFlow(flpKasir);
+        }
+
+        private static void BersihkanKontrolFlow(FlowLayoutPanel panel)
+        {
+            while (panel.Controls.Count > 0)
+            {
+                Control ctrl = panel.Controls[0];
+                panel.Controls.RemoveAt(0);
+                ctrl.Dispose();
+            }
+        }
+
+        private static void SesuaikanLebarItemFlow(FlowLayoutPanel panel)
+        {
+            int lebarItem = Math.Max(120, panel.ClientSize.Width - 2);
+            foreach (Control ctrl in panel.Controls)
+            {
+                ctrl.Width = lebarItem;
+            }
         }
 
         private void TerapkanLaporanLaba()
@@ -572,13 +800,6 @@ namespace Sukimart
             gridLaporan.DataSource = null;
             gridLaporan.Columns.Clear();
             gridLaporan.AutoGenerateColumns = true;
-        }
-
-        private string BuatRingkasanPenjualan(List<Transaksi> transaksi, List<DetailTransaksi> detail)
-        {
-            string barangTerlaris = string.Join(", ", detail.GroupBy(data => new { data.KodeBarang, data.NamaBarang }).OrderByDescending(grup => grup.Sum(data => data.Jumlah)).ThenBy(grup => grup.Key.KodeBarang).Take(5).Select(grup => $"{grup.Key.KodeBarang} ({grup.Sum(data => data.Jumlah)})"));
-            string perKasir = string.Join(", ", transaksi.GroupBy(data => data.Kasir).OrderBy(grup => grup.Key).Select(grup => $"{grup.Key}: Rp {grup.Sum(data => data.Total).ToString("N0", BudayaIndonesia)}"));
-            return $"5 barang terlaris: {(barangTerlaris.Length == 0 ? "Tidak ada data" : barangTerlaris)}\nPenjualan per kasir: {(perKasir.Length == 0 ? "Tidak ada data" : perKasir)}";
         }
     }
 }

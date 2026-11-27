@@ -30,9 +30,13 @@ namespace Sukimart
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             pnlKiri = new Panel();
             btnPengguna = new Button();
             btnLogAktivitas = new Button();
+            lblAkunNama = new Label();
+            lblAkunRole = new Label();
             btnGantiSandi = new Button();
             btnLaporanInventaris = new Button();
             btnLaporan = new Button();
@@ -46,30 +50,87 @@ namespace Sukimart
             lblNama = new Label();
             pnlKanan = new Panel();
             nightControlBox1 = new ReaLTaiizor.Controls.NightControlBox();
-            pnlPeringatan = new Panel();
-            lstStokMenipis = new ListBox();
-            pnlStok = new Panel();
-            lblNilaiStok = new Label();
-            lblStok = new Label();
-            pnlTerjual = new Panel();
-            lblNilaiPenjualan = new Label();
-            lblPenjualan = new Label();
-            pnlTransaksi = new Panel();
-            lblNilaiTransaksi = new Label();
-            lblTransaksiHariIni = new Label();
-            dataGridView1 = new DataGridView();
-            lblTanggal = new Label();
             lblJudul = new Label();
-            lblTransaksiTerbaru = new Label();
+            lblTanggal = new Label();
+            pnlTerjual = new Panel();
+            lblPenjualan = new Label();
+            lblNilaiPenjualan = new Label();
+            pnlLaba = new Panel();
+            lblLaba = new Label();
+            lblNilaiLaba = new Label();
+            pnlTransaksi = new Panel();
+            lblTransaksiHariIni = new Label();
+            lblNilaiTransaksi = new Label();
+            pnlStok = new Panel();
+            lblStok = new Label();
+            lblNilaiStok = new Label();
+            pnlGrafik = new Panel();
+            lblJudulGrafik = new Label();
+            lblSubGrafik = new Label();
+            pnlCanvasGrafik = new Panel();
+            pnlPeringatan = new Panel();
             lblPeringatan = new Label();
+            btnLihatInventaris = new Button();
+            flpPeringatan = new FlowLayoutPanel();
+            lblPeringatanKosong = new Label();
+            pnlTransaksiTerbaru = new Panel();
+            lblTransaksiTerbaru = new Label();
+            btnLihatSemuaTransaksi = new Button();
+            dataGridView1 = new DataGridView();
+            colNomor = new DataGridViewTextBoxColumn();
+            colTanggal = new DataGridViewTextBoxColumn();
+            colKasir = new DataGridViewTextBoxColumn();
+            colTotal = new DataGridViewTextBoxColumn();
+            pnlOpname = new Panel();
+            lblJudulOpname = new Label();
+            btnLihatPengajuan = new Button();
+            pnlOpnameMenunggu = new Panel();
+            lblOpnameMenungguLabel = new Label();
+            lblOpnameMenungguNilai = new Label();
+            pnlOpnameRevisi = new Panel();
+            lblOpnameRevisiLabel = new Label();
+            lblOpnameRevisiNilai = new Label();
+            pnlOpnameDisetujui = new Panel();
+            lblOpnameDisetujuiLabel = new Label();
+            lblOpnameDisetujuiNilai = new Label();
+            pnlInfoInventaris = new Panel();
+            lblJudulInfoInventaris = new Label();
+            pnlInvHabis = new Panel();
+            lblInvHabisLabel = new Label();
+            lblInvHabisNilai = new Label();
+            pnlInvKritis = new Panel();
+            lblInvKritisLabel = new Label();
+            lblInvKritisNilai = new Label();
+            pnlInvMinimum = new Panel();
+            lblInvMinimumLabel = new Label();
+            lblInvMinimumNilai = new Label();
+            pnlInvMasuk = new Panel();
+            lblInvMasukLabel = new Label();
+            lblInvMasukNilai = new Label();
+            pnlInvKeluar = new Panel();
+            lblInvKeluarLabel = new Label();
+            lblInvKeluarNilai = new Label();
             pnlKiri.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureLogo).BeginInit();
             pnlKanan.SuspendLayout();
-            pnlPeringatan.SuspendLayout();
-            pnlStok.SuspendLayout();
             pnlTerjual.SuspendLayout();
+            pnlLaba.SuspendLayout();
             pnlTransaksi.SuspendLayout();
+            pnlStok.SuspendLayout();
+            pnlGrafik.SuspendLayout();
+            pnlPeringatan.SuspendLayout();
+            pnlTransaksiTerbaru.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            pnlOpname.SuspendLayout();
+            pnlOpnameMenunggu.SuspendLayout();
+            pnlOpnameRevisi.SuspendLayout();
+            pnlOpnameDisetujui.SuspendLayout();
+            pnlInfoInventaris.SuspendLayout();
+            pnlInvHabis.SuspendLayout();
+            pnlInvKritis.SuspendLayout();
+            pnlInvMinimum.SuspendLayout();
+            pnlInvMasuk.SuspendLayout();
+            pnlInvKeluar.SuspendLayout();
             SuspendLayout();
             // 
             // pnlKiri
@@ -77,6 +138,8 @@ namespace Sukimart
             pnlKiri.BackColor = Color.White;
             pnlKiri.Controls.Add(btnPengguna);
             pnlKiri.Controls.Add(btnLogAktivitas);
+            pnlKiri.Controls.Add(lblAkunNama);
+            pnlKiri.Controls.Add(lblAkunRole);
             pnlKiri.Controls.Add(btnGantiSandi);
             pnlKiri.Controls.Add(btnLaporanInventaris);
             pnlKiri.Controls.Add(btnLaporan);
@@ -102,7 +165,7 @@ namespace Sukimart
             btnPengguna.FlatAppearance.BorderSize = 0;
             btnPengguna.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnPengguna.FlatStyle = FlatStyle.Flat;
-            btnPengguna.Font = new Font("Microsoft Sans Serif", 10F);
+            btnPengguna.Font = new Font("Inter", 10F);
             btnPengguna.ForeColor = Color.FromArgb(31, 41, 55);
             btnPengguna.Location = new Point(18, 533);
             btnPengguna.Margin = new Padding(3, 4, 3, 4);
@@ -121,7 +184,7 @@ namespace Sukimart
             btnLogAktivitas.FlatAppearance.BorderSize = 0;
             btnLogAktivitas.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnLogAktivitas.FlatStyle = FlatStyle.Flat;
-            btnLogAktivitas.Font = new Font("Microsoft Sans Serif", 10F);
+            btnLogAktivitas.Font = new Font("Inter", 10F);
             btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
             btnLogAktivitas.Location = new Point(18, 597);
             btnLogAktivitas.Margin = new Padding(3, 4, 3, 4);
@@ -133,6 +196,32 @@ namespace Sukimart
             btnLogAktivitas.TextAlign = ContentAlignment.MiddleLeft;
             btnLogAktivitas.UseVisualStyleBackColor = false;
             // 
+            // lblAkunNama
+            // 
+            lblAkunNama.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblAkunNama.AutoEllipsis = true;
+            lblAkunNama.Font = new Font("Inter", 10.5F, FontStyle.Bold);
+            lblAkunNama.ForeColor = Color.FromArgb(31, 41, 55);
+            lblAkunNama.Location = new Point(18, 797);
+            lblAkunNama.Name = "lblAkunNama";
+            lblAkunNama.Size = new Size(192, 22);
+            lblAkunNama.TabIndex = 15;
+            lblAkunNama.Text = "Nama Pengguna";
+            lblAkunNama.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // lblAkunRole
+            // 
+            lblAkunRole.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            lblAkunRole.AutoEllipsis = true;
+            lblAkunRole.Font = new Font("Inter", 8.5F);
+            lblAkunRole.ForeColor = Color.FromArgb(107, 114, 128);
+            lblAkunRole.Location = new Point(18, 819);
+            lblAkunRole.Name = "lblAkunRole";
+            lblAkunRole.Size = new Size(192, 18);
+            lblAkunRole.TabIndex = 16;
+            lblAkunRole.Text = "Role";
+            lblAkunRole.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // btnGantiSandi
             // 
             btnGantiSandi.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -141,16 +230,17 @@ namespace Sukimart
             btnGantiSandi.FlatAppearance.BorderSize = 0;
             btnGantiSandi.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnGantiSandi.FlatStyle = FlatStyle.Flat;
-            btnGantiSandi.Font = new Font("Microsoft Sans Serif", 10F);
+            btnGantiSandi.Font = new Font("Inter", 10F);
             btnGantiSandi.ForeColor = Color.FromArgb(75, 85, 99);
-            btnGantiSandi.Location = new Point(18, 789);
+            btnGantiSandi.Image = Properties.Resources.kunci;
+            btnGantiSandi.ImageAlign = ContentAlignment.MiddleCenter;
+            btnGantiSandi.Location = new Point(218, 799);
             btnGantiSandi.Margin = new Padding(3, 4, 3, 4);
             btnGantiSandi.Name = "btnGantiSandi";
-            btnGantiSandi.Padding = new Padding(18, 0, 0, 0);
-            btnGantiSandi.Size = new Size(238, 53);
+            btnGantiSandi.Padding = new Padding(0);
+            btnGantiSandi.Size = new Size(38, 38);
             btnGantiSandi.TabIndex = 14;
-            btnGantiSandi.Text = "Ganti Kata Sandi";
-            btnGantiSandi.TextAlign = ContentAlignment.MiddleLeft;
+            btnGantiSandi.Text = "";
             btnGantiSandi.UseVisualStyleBackColor = false;
             // 
             // btnLaporan
@@ -160,7 +250,7 @@ namespace Sukimart
             btnLaporan.FlatAppearance.BorderSize = 0;
             btnLaporan.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnLaporan.FlatStyle = FlatStyle.Flat;
-            btnLaporan.Font = new Font("Microsoft Sans Serif", 10F);
+            btnLaporan.Font = new Font("Inter", 10F);
             btnLaporan.ForeColor = Color.FromArgb(31, 41, 55);
             btnLaporan.Location = new Point(18, 469);
             btnLaporan.Margin = new Padding(3, 4, 3, 4);
@@ -179,7 +269,7 @@ namespace Sukimart
             btnLaporanInventaris.FlatAppearance.BorderSize = 0;
             btnLaporanInventaris.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
-            btnLaporanInventaris.Font = new Font("Microsoft Sans Serif", 10F);
+            btnLaporanInventaris.Font = new Font("Inter", 10F);
             btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
             btnLaporanInventaris.Location = new Point(18, 528);
             btnLaporanInventaris.Margin = new Padding(3, 4, 3, 4);
@@ -198,7 +288,7 @@ namespace Sukimart
             btnGudang.FlatAppearance.BorderSize = 0;
             btnGudang.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnGudang.FlatStyle = FlatStyle.Flat;
-            btnGudang.Font = new Font("Microsoft Sans Serif", 10F);
+            btnGudang.Font = new Font("Inter", 10F);
             btnGudang.ForeColor = Color.FromArgb(31, 41, 55);
             btnGudang.Location = new Point(18, 405);
             btnGudang.Margin = new Padding(3, 4, 3, 4);
@@ -215,19 +305,20 @@ namespace Sukimart
             btnKeluarBenar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnKeluarBenar.BackColor = Color.White;
             btnKeluarBenar.Cursor = Cursors.Hand;
-            btnKeluarBenar.FlatAppearance.BorderColor = Color.FromArgb(229, 231, 235);
-            btnKeluarBenar.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnKeluarBenar.FlatAppearance.BorderColor = Color.FromArgb(239, 68, 68);
+            btnKeluarBenar.FlatAppearance.BorderSize = 1;
+            btnKeluarBenar.FlatAppearance.MouseOverBackColor = Color.FromArgb(254, 242, 242);
             btnKeluarBenar.FlatStyle = FlatStyle.Flat;
-            btnKeluarBenar.Font = new Font("Microsoft Sans Serif", 10F);
-            btnKeluarBenar.ForeColor = Color.FromArgb(75, 85, 99);
+            btnKeluarBenar.Font = new Font("Inter", 10F, FontStyle.Bold);
+            btnKeluarBenar.ForeColor = Color.FromArgb(220, 38, 38);
             btnKeluarBenar.Location = new Point(18, 853);
             btnKeluarBenar.Margin = new Padding(3, 4, 3, 4);
             btnKeluarBenar.Name = "btnKeluarBenar";
-            btnKeluarBenar.Padding = new Padding(18, 0, 0, 0);
+            btnKeluarBenar.Padding = new Padding(0);
             btnKeluarBenar.Size = new Size(238, 53);
             btnKeluarBenar.TabIndex = 8;
             btnKeluarBenar.Text = "Keluar";
-            btnKeluarBenar.TextAlign = ContentAlignment.MiddleLeft;
+            btnKeluarBenar.TextAlign = ContentAlignment.MiddleCenter;
             btnKeluarBenar.UseVisualStyleBackColor = false;
             btnKeluarBenar.Click += button1_Click;
             // 
@@ -238,7 +329,7 @@ namespace Sukimart
             btnRiwayat.FlatAppearance.BorderSize = 0;
             btnRiwayat.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnRiwayat.FlatStyle = FlatStyle.Flat;
-            btnRiwayat.Font = new Font("Microsoft Sans Serif", 10F);
+            btnRiwayat.Font = new Font("Inter", 10F);
             btnRiwayat.ForeColor = Color.FromArgb(31, 41, 55);
             btnRiwayat.Location = new Point(18, 341);
             btnRiwayat.Margin = new Padding(3, 4, 3, 4);
@@ -258,7 +349,7 @@ namespace Sukimart
             btnKatalog.FlatAppearance.BorderSize = 0;
             btnKatalog.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnKatalog.FlatStyle = FlatStyle.Flat;
-            btnKatalog.Font = new Font("Microsoft Sans Serif", 10F);
+            btnKatalog.Font = new Font("Inter", 10F);
             btnKatalog.ForeColor = Color.FromArgb(31, 41, 55);
             btnKatalog.Location = new Point(18, 277);
             btnKatalog.Margin = new Padding(3, 4, 3, 4);
@@ -278,7 +369,7 @@ namespace Sukimart
             btnKasir.FlatAppearance.BorderSize = 0;
             btnKasir.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnKasir.FlatStyle = FlatStyle.Flat;
-            btnKasir.Font = new Font("Microsoft Sans Serif", 10F);
+            btnKasir.Font = new Font("Inter", 10F);
             btnKasir.ForeColor = Color.FromArgb(31, 41, 55);
             btnKasir.Location = new Point(18, 213);
             btnKasir.Margin = new Padding(3, 4, 3, 4);
@@ -297,7 +388,7 @@ namespace Sukimart
             btnDashboard.FlatAppearance.BorderSize = 0;
             btnDashboard.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
             btnDashboard.FlatStyle = FlatStyle.Flat;
-            btnDashboard.Font = new Font("Microsoft Sans Serif", 10F, FontStyle.Bold);
+            btnDashboard.Font = new Font("Inter", 10F, FontStyle.Bold);
             btnDashboard.ForeColor = Color.FromArgb(31, 41, 55);
             btnDashboard.Location = new Point(18, 149);
             btnDashboard.Margin = new Padding(3, 4, 3, 4);
@@ -323,7 +414,7 @@ namespace Sukimart
             // lblNama
             // 
             lblNama.AutoSize = true;
-            lblNama.Font = new Font("Microsoft Sans Serif", 14F, FontStyle.Bold);
+            lblNama.Font = new Font("Inter", 14F, FontStyle.Bold);
             lblNama.Location = new Point(82, 53);
             lblNama.Name = "lblNama";
             lblNama.Size = new Size(144, 29);
@@ -334,15 +425,17 @@ namespace Sukimart
             // 
             pnlKanan.BackColor = Color.FromArgb(247, 247, 245);
             pnlKanan.Controls.Add(nightControlBox1);
-            pnlKanan.Controls.Add(pnlPeringatan);
-            pnlKanan.Controls.Add(pnlStok);
-            pnlKanan.Controls.Add(pnlTerjual);
-            pnlKanan.Controls.Add(pnlTransaksi);
-            pnlKanan.Controls.Add(dataGridView1);
-            pnlKanan.Controls.Add(lblTanggal);
             pnlKanan.Controls.Add(lblJudul);
-            pnlKanan.Controls.Add(lblTransaksiTerbaru);
-            pnlKanan.Controls.Add(lblPeringatan);
+            pnlKanan.Controls.Add(lblTanggal);
+            pnlKanan.Controls.Add(pnlTerjual);
+            pnlKanan.Controls.Add(pnlLaba);
+            pnlKanan.Controls.Add(pnlTransaksi);
+            pnlKanan.Controls.Add(pnlStok);
+            pnlKanan.Controls.Add(pnlGrafik);
+            pnlKanan.Controls.Add(pnlPeringatan);
+            pnlKanan.Controls.Add(pnlTransaksiTerbaru);
+            pnlKanan.Controls.Add(pnlOpname);
+            pnlKanan.Controls.Add(pnlInfoInventaris);
             pnlKanan.Dock = DockStyle.Fill;
             pnlKanan.Location = new Point(274, 0);
             pnlKanan.Margin = new Padding(3, 4, 3, 4);
@@ -373,148 +466,331 @@ namespace Sukimart
             nightControlBox1.Size = new Size(139, 31);
             nightControlBox1.TabIndex = 16;
             // 
-            // pnlPeringatan
+            // lblJudul
             // 
-            pnlPeringatan.BackColor = Color.White;
-            pnlPeringatan.Controls.Add(lstStokMenipis);
-            pnlPeringatan.Location = new Point(795, 373);
-            pnlPeringatan.Margin = new Padding(3, 4, 3, 4);
-            pnlPeringatan.Name = "pnlPeringatan";
-            pnlPeringatan.Size = new Size(347, 533);
-            pnlPeringatan.TabIndex = 15;
+            lblJudul.AutoSize = true;
+            lblJudul.Font = new Font("Inter", 20F, FontStyle.Bold);
+            lblJudul.ForeColor = Color.FromArgb(31, 41, 55);
+            lblJudul.Location = new Point(40, 28);
+            lblJudul.Name = "lblJudul";
+            lblJudul.Size = new Size(305, 39);
+            lblJudul.TabIndex = 0;
+            lblJudul.Text = "Dashboard Admin";
             // 
-            // lstStokMenipis
+            // lblTanggal
             // 
-            lstStokMenipis.BorderStyle = BorderStyle.None;
-            lstStokMenipis.Font = new Font("Microsoft Sans Serif", 10F);
-            lstStokMenipis.ForeColor = Color.FromArgb(180, 35, 24);
-            lstStokMenipis.FormattingEnabled = true;
-            lstStokMenipis.Location = new Point(27, 27);
-            lstStokMenipis.Margin = new Padding(3, 4, 3, 4);
-            lstStokMenipis.Name = "lstStokMenipis";
-            lstStokMenipis.Size = new Size(293, 460);
-            lstStokMenipis.TabIndex = 1;
-            // 
-            // pnlStok
-            // 
-            pnlStok.BackColor = Color.White;
-            pnlStok.Controls.Add(lblNilaiStok);
-            pnlStok.Controls.Add(lblStok);
-            pnlStok.Location = new Point(795, 149);
-            pnlStok.Margin = new Padding(3, 4, 3, 4);
-            pnlStok.Name = "pnlStok";
-            pnlStok.Size = new Size(347, 149);
-            pnlStok.TabIndex = 12;
-            // 
-            // lblNilaiStok
-            // 
-            lblNilaiStok.AutoSize = true;
-            lblNilaiStok.Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold);
-            lblNilaiStok.ForeColor = Color.FromArgb(180, 35, 24);
-            lblNilaiStok.Location = new Point(27, 64);
-            lblNilaiStok.Name = "lblNilaiStok";
-            lblNilaiStok.Size = new Size(37, 39);
-            lblNilaiStok.TabIndex = 17;
-            lblNilaiStok.Text = "0";
-            // 
-            // lblStok
-            // 
-            lblStok.AutoSize = true;
-            lblStok.Font = new Font("Microsoft Sans Serif", 9F);
-            lblStok.ForeColor = Color.FromArgb(107, 114, 128);
-            lblStok.Location = new Point(27, 27);
-            lblStok.Name = "lblStok";
-            lblStok.Size = new Size(94, 18);
-            lblStok.TabIndex = 15;
-            lblStok.Text = "Stok Menipis";
+            lblTanggal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblTanggal.AutoSize = true;
+            lblTanggal.Font = new Font("Inter", 9F);
+            lblTanggal.ForeColor = Color.FromArgb(107, 114, 128);
+            lblTanggal.Location = new Point(1060, 42);
+            lblTanggal.Name = "lblTanggal";
+            lblTanggal.Size = new Size(80, 18);
+            lblTanggal.TabIndex = 1;
+            lblTanggal.Text = "26/11/2026";
             // 
             // pnlTerjual
             // 
             pnlTerjual.BackColor = Color.White;
-            pnlTerjual.Controls.Add(lblNilaiPenjualan);
             pnlTerjual.Controls.Add(lblPenjualan);
-            pnlTerjual.Location = new Point(421, 149);
+            pnlTerjual.Controls.Add(lblNilaiPenjualan);
+            pnlTerjual.Location = new Point(40, 92);
             pnlTerjual.Margin = new Padding(3, 4, 3, 4);
             pnlTerjual.Name = "pnlTerjual";
-            pnlTerjual.Size = new Size(347, 149);
-            pnlTerjual.TabIndex = 11;
-            // 
-            // lblNilaiPenjualan
-            // 
-            lblNilaiPenjualan.AutoSize = true;
-            lblNilaiPenjualan.Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold);
-            lblNilaiPenjualan.ForeColor = Color.FromArgb(31, 41, 55);
-            lblNilaiPenjualan.Location = new Point(27, 64);
-            lblNilaiPenjualan.Name = "lblNilaiPenjualan";
-            lblNilaiPenjualan.Size = new Size(37, 39);
-            lblNilaiPenjualan.TabIndex = 16;
-            lblNilaiPenjualan.Text = "0";
+            pnlTerjual.Size = new Size(262, 104);
+            pnlTerjual.TabIndex = 2;
             // 
             // lblPenjualan
             // 
             lblPenjualan.AutoSize = true;
-            lblPenjualan.Font = new Font("Microsoft Sans Serif", 9F);
-            lblPenjualan.ForeColor = Color.FromArgb(107, 114, 128);
-            lblPenjualan.Location = new Point(27, 27);
+            lblPenjualan.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblPenjualan.ForeColor = Color.FromArgb(30, 41, 59);
+            lblPenjualan.Location = new Point(20, 18);
             lblPenjualan.Name = "lblPenjualan";
-            lblPenjualan.Size = new Size(121, 18);
-            lblPenjualan.TabIndex = 15;
-            lblPenjualan.Text = "Penjualan Hari Ini";
+            lblPenjualan.Size = new Size(140, 18);
+            lblPenjualan.TabIndex = 0;
+            lblPenjualan.Text = "PENJUALAN HARI INI";
+            // 
+            // lblNilaiPenjualan
+            // 
+            lblNilaiPenjualan.AutoSize = true;
+            lblNilaiPenjualan.Font = new Font("Inter", 18F, FontStyle.Bold);
+            lblNilaiPenjualan.ForeColor = Color.FromArgb(16, 149, 102);
+            lblNilaiPenjualan.Location = new Point(20, 48);
+            lblNilaiPenjualan.Name = "lblNilaiPenjualan";
+            lblNilaiPenjualan.Size = new Size(90, 36);
+            lblNilaiPenjualan.TabIndex = 1;
+            lblNilaiPenjualan.Text = "Rp 0";
+            // 
+            // pnlLaba
+            // 
+            pnlLaba.BackColor = Color.White;
+            pnlLaba.Controls.Add(lblLaba);
+            pnlLaba.Controls.Add(lblNilaiLaba);
+            pnlLaba.Location = new Point(322, 92);
+            pnlLaba.Margin = new Padding(3, 4, 3, 4);
+            pnlLaba.Name = "pnlLaba";
+            pnlLaba.Size = new Size(262, 104);
+            pnlLaba.TabIndex = 3;
+            // 
+            // lblLaba
+            // 
+            lblLaba.AutoSize = true;
+            lblLaba.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblLaba.ForeColor = Color.FromArgb(30, 41, 59);
+            lblLaba.Location = new Point(20, 18);
+            lblLaba.Name = "lblLaba";
+            lblLaba.Size = new Size(100, 18);
+            lblLaba.TabIndex = 0;
+            lblLaba.Text = "LABA HARI INI";
+            // 
+            // lblNilaiLaba
+            // 
+            lblNilaiLaba.AutoSize = true;
+            lblNilaiLaba.Font = new Font("Inter", 18F, FontStyle.Bold);
+            lblNilaiLaba.ForeColor = Color.FromArgb(16, 149, 102);
+            lblNilaiLaba.Location = new Point(20, 48);
+            lblNilaiLaba.Name = "lblNilaiLaba";
+            lblNilaiLaba.Size = new Size(90, 36);
+            lblNilaiLaba.TabIndex = 1;
+            lblNilaiLaba.Text = "Rp 0";
             // 
             // pnlTransaksi
             // 
             pnlTransaksi.BackColor = Color.White;
-            pnlTransaksi.Controls.Add(lblNilaiTransaksi);
             pnlTransaksi.Controls.Add(lblTransaksiHariIni);
-            pnlTransaksi.Location = new Point(46, 149);
+            pnlTransaksi.Controls.Add(lblNilaiTransaksi);
+            pnlTransaksi.Location = new Point(604, 92);
             pnlTransaksi.Margin = new Padding(3, 4, 3, 4);
             pnlTransaksi.Name = "pnlTransaksi";
-            pnlTransaksi.Size = new Size(347, 149);
-            pnlTransaksi.TabIndex = 10;
-            // 
-            // lblNilaiTransaksi
-            // 
-            lblNilaiTransaksi.AutoSize = true;
-            lblNilaiTransaksi.Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold);
-            lblNilaiTransaksi.ForeColor = Color.FromArgb(31, 41, 55);
-            lblNilaiTransaksi.Location = new Point(27, 64);
-            lblNilaiTransaksi.Name = "lblNilaiTransaksi";
-            lblNilaiTransaksi.Size = new Size(37, 39);
-            lblNilaiTransaksi.TabIndex = 15;
-            lblNilaiTransaksi.Text = "0";
+            pnlTransaksi.Size = new Size(262, 104);
+            pnlTransaksi.TabIndex = 4;
             // 
             // lblTransaksiHariIni
             // 
             lblTransaksiHariIni.AutoSize = true;
-            lblTransaksiHariIni.Font = new Font("Microsoft Sans Serif", 9F);
-            lblTransaksiHariIni.ForeColor = Color.FromArgb(107, 114, 128);
-            lblTransaksiHariIni.Location = new Point(27, 27);
+            lblTransaksiHariIni.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblTransaksiHariIni.ForeColor = Color.FromArgb(30, 41, 59);
+            lblTransaksiHariIni.Location = new Point(20, 18);
             lblTransaksiHariIni.Name = "lblTransaksiHariIni";
-            lblTransaksiHariIni.Size = new Size(122, 18);
-            lblTransaksiHariIni.TabIndex = 14;
-            lblTransaksiHariIni.Text = "Transaksi Hari Ini";
+            lblTransaksiHariIni.Size = new Size(136, 18);
+            lblTransaksiHariIni.TabIndex = 0;
+            lblTransaksiHariIni.Text = "TRANSAKSI HARI INI";
+            // 
+            // lblNilaiTransaksi
+            // 
+            lblNilaiTransaksi.AutoSize = true;
+            lblNilaiTransaksi.Font = new Font("Inter", 18F, FontStyle.Bold);
+            lblNilaiTransaksi.ForeColor = Color.FromArgb(31, 41, 55);
+            lblNilaiTransaksi.Location = new Point(20, 48);
+            lblNilaiTransaksi.Name = "lblNilaiTransaksi";
+            lblNilaiTransaksi.Size = new Size(37, 36);
+            lblNilaiTransaksi.TabIndex = 1;
+            lblNilaiTransaksi.Text = "0";
+            // 
+            // pnlStok
+            // 
+            pnlStok.BackColor = Color.White;
+            pnlStok.Controls.Add(lblStok);
+            pnlStok.Controls.Add(lblNilaiStok);
+            pnlStok.Location = new Point(886, 92);
+            pnlStok.Margin = new Padding(3, 4, 3, 4);
+            pnlStok.Name = "pnlStok";
+            pnlStok.Size = new Size(262, 104);
+            pnlStok.TabIndex = 5;
+            // 
+            // lblStok
+            // 
+            lblStok.AutoSize = true;
+            lblStok.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblStok.ForeColor = Color.FromArgb(30, 41, 59);
+            lblStok.Location = new Point(20, 18);
+            lblStok.Name = "lblStok";
+            lblStok.Size = new Size(160, 18);
+            lblStok.TabIndex = 0;
+            lblStok.Text = "STOK PERLU PERHATIAN";
+            // 
+            // lblNilaiStok
+            // 
+            lblNilaiStok.AutoSize = true;
+            lblNilaiStok.Font = new Font("Inter", 18F, FontStyle.Bold);
+            lblNilaiStok.ForeColor = Color.FromArgb(220, 38, 38);
+            lblNilaiStok.Location = new Point(20, 48);
+            lblNilaiStok.Name = "lblNilaiStok";
+            lblNilaiStok.Size = new Size(37, 36);
+            lblNilaiStok.TabIndex = 1;
+            lblNilaiStok.Text = "0";
+            // 
+            // pnlGrafik
+            // 
+            pnlGrafik.BackColor = Color.White;
+            pnlGrafik.Controls.Add(pnlCanvasGrafik);
+            pnlGrafik.Controls.Add(lblSubGrafik);
+            pnlGrafik.Controls.Add(lblJudulGrafik);
+            pnlGrafik.Location = new Point(40, 214);
+            pnlGrafik.Name = "pnlGrafik";
+            pnlGrafik.Size = new Size(644, 320);
+            pnlGrafik.TabIndex = 6;
+            // 
+            // lblJudulGrafik
+            // 
+            lblJudulGrafik.AutoSize = true;
+            lblJudulGrafik.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblJudulGrafik.ForeColor = Color.FromArgb(30, 41, 59);
+            lblJudulGrafik.Location = new Point(20, 16);
+            lblJudulGrafik.Name = "lblJudulGrafik";
+            lblJudulGrafik.Size = new Size(256, 19);
+            lblJudulGrafik.TabIndex = 0;
+            lblJudulGrafik.Text = "GRAFIK PENJUALAN 7 HARI TERAKHIR";
+            // 
+            // lblSubGrafik
+            // 
+            lblSubGrafik.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblSubGrafik.AutoSize = true;
+            lblSubGrafik.Font = new Font("Inter", 8.5F);
+            lblSubGrafik.ForeColor = Color.FromArgb(107, 114, 128);
+            lblSubGrafik.Location = new Point(490, 18);
+            lblSubGrafik.Name = "lblSubGrafik";
+            lblSubGrafik.Size = new Size(134, 18);
+            lblSubGrafik.TabIndex = 1;
+            lblSubGrafik.Text = "7 hari terakhir";
+            // 
+            // pnlCanvasGrafik
+            // 
+            pnlCanvasGrafik.BackColor = Color.White;
+            pnlCanvasGrafik.Location = new Point(16, 44);
+            pnlCanvasGrafik.Name = "pnlCanvasGrafik";
+            pnlCanvasGrafik.Size = new Size(612, 260);
+            pnlCanvasGrafik.TabIndex = 2;
+            // 
+            // pnlPeringatan
+            // 
+            pnlPeringatan.BackColor = Color.White;
+            pnlPeringatan.Controls.Add(lblPeringatanKosong);
+            pnlPeringatan.Controls.Add(flpPeringatan);
+            pnlPeringatan.Controls.Add(btnLihatInventaris);
+            pnlPeringatan.Controls.Add(lblPeringatan);
+            pnlPeringatan.Location = new Point(704, 214);
+            pnlPeringatan.Margin = new Padding(3, 4, 3, 4);
+            pnlPeringatan.Name = "pnlPeringatan";
+            pnlPeringatan.Size = new Size(444, 320);
+            pnlPeringatan.TabIndex = 7;
+            // 
+            // lblPeringatan
+            // 
+            lblPeringatan.AutoSize = true;
+            lblPeringatan.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblPeringatan.ForeColor = Color.FromArgb(30, 41, 59);
+            lblPeringatan.Location = new Point(20, 16);
+            lblPeringatan.Name = "lblPeringatan";
+            lblPeringatan.Size = new Size(136, 19);
+            lblPeringatan.TabIndex = 0;
+            lblPeringatan.Text = "PERINGATAN STOK";
+            // 
+            // btnLihatInventaris
+            // 
+            btnLihatInventaris.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLihatInventaris.BackColor = Color.White;
+            btnLihatInventaris.Cursor = Cursors.Hand;
+            btnLihatInventaris.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
+            btnLihatInventaris.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnLihatInventaris.FlatStyle = FlatStyle.Flat;
+            btnLihatInventaris.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            btnLihatInventaris.ForeColor = Color.FromArgb(30, 41, 59);
+            btnLihatInventaris.Location = new Point(296, 12);
+            btnLihatInventaris.Name = "btnLihatInventaris";
+            btnLihatInventaris.Size = new Size(128, 28);
+            btnLihatInventaris.TabIndex = 1;
+            btnLihatInventaris.Text = "Laporan Inventaris";
+            btnLihatInventaris.UseVisualStyleBackColor = false;
+            // 
+            // flpPeringatan
+            // 
+            flpPeringatan.AutoScroll = true;
+            flpPeringatan.BackColor = Color.White;
+            flpPeringatan.FlowDirection = FlowDirection.TopDown;
+            flpPeringatan.Location = new Point(20, 48);
+            flpPeringatan.Name = "flpPeringatan";
+            flpPeringatan.Size = new Size(404, 256);
+            flpPeringatan.TabIndex = 2;
+            flpPeringatan.WrapContents = false;
+            // 
+            // lblPeringatanKosong
+            // 
+            lblPeringatanKosong.AutoSize = true;
+            lblPeringatanKosong.Font = new Font("Inter", 9F);
+            lblPeringatanKosong.ForeColor = Color.FromArgb(16, 149, 102);
+            lblPeringatanKosong.Location = new Point(20, 56);
+            lblPeringatanKosong.Name = "lblPeringatanKosong";
+            lblPeringatanKosong.Size = new Size(260, 18);
+            lblPeringatanKosong.TabIndex = 3;
+            lblPeringatanKosong.Text = "Semua stok produk dalam kondisi aman.";
+            lblPeringatanKosong.Visible = false;
+            // 
+            // pnlTransaksiTerbaru
+            // 
+            pnlTransaksiTerbaru.BackColor = Color.White;
+            pnlTransaksiTerbaru.Controls.Add(dataGridView1);
+            pnlTransaksiTerbaru.Controls.Add(btnLihatSemuaTransaksi);
+            pnlTransaksiTerbaru.Controls.Add(lblTransaksiTerbaru);
+            pnlTransaksiTerbaru.Location = new Point(40, 552);
+            pnlTransaksiTerbaru.Name = "pnlTransaksiTerbaru";
+            pnlTransaksiTerbaru.Size = new Size(644, 388);
+            pnlTransaksiTerbaru.TabIndex = 8;
+            // 
+            // lblTransaksiTerbaru
+            // 
+            lblTransaksiTerbaru.AutoSize = true;
+            lblTransaksiTerbaru.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblTransaksiTerbaru.ForeColor = Color.FromArgb(30, 41, 59);
+            lblTransaksiTerbaru.Location = new Point(20, 16);
+            lblTransaksiTerbaru.Name = "lblTransaksiTerbaru";
+            lblTransaksiTerbaru.Size = new Size(156, 19);
+            lblTransaksiTerbaru.TabIndex = 0;
+            lblTransaksiTerbaru.Text = "TRANSAKSI TERBARU";
+            // 
+            // btnLihatSemuaTransaksi
+            // 
+            btnLihatSemuaTransaksi.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLihatSemuaTransaksi.BackColor = Color.White;
+            btnLihatSemuaTransaksi.Cursor = Cursors.Hand;
+            btnLihatSemuaTransaksi.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
+            btnLihatSemuaTransaksi.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnLihatSemuaTransaksi.FlatStyle = FlatStyle.Flat;
+            btnLihatSemuaTransaksi.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            btnLihatSemuaTransaksi.ForeColor = Color.FromArgb(30, 41, 59);
+            btnLihatSemuaTransaksi.Location = new Point(524, 12);
+            btnLihatSemuaTransaksi.Name = "btnLihatSemuaTransaksi";
+            btnLihatSemuaTransaksi.Size = new Size(100, 28);
+            btnLihatSemuaTransaksi.TabIndex = 1;
+            btnLihatSemuaTransaksi.Text = "Lihat Semua";
+            btnLihatSemuaTransaksi.UseVisualStyleBackColor = false;
             // 
             // dataGridView1
             // 
             dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.AutoGenerateColumns = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.BackgroundColor = Color.White;
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView1.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.White;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.FromArgb(107, 114, 128);
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(249, 250, 251);
+            dataGridViewCellStyle1.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.FromArgb(75, 85, 99);
             dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(255, 244, 204);
             dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(31, 41, 55);
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
             dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            dataGridView1.ColumnHeadersHeight = 40;
+            dataGridView1.ColumnHeadersHeight = 36;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { colNomor, colTanggal, colKasir, colTotal });
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 10F);
+            dataGridViewCellStyle2.Font = new Font("Inter", 9.5F);
             dataGridViewCellStyle2.ForeColor = Color.FromArgb(31, 41, 55);
             dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(255, 244, 204);
             dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(31, 41, 55);
@@ -522,62 +798,387 @@ namespace Sukimart
             dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.EnableHeadersVisualStyles = false;
             dataGridView1.GridColor = Color.FromArgb(229, 231, 235);
-            dataGridView1.Location = new Point(46, 373);
-            dataGridView1.Margin = new Padding(3, 4, 3, 4);
+            dataGridView1.Location = new Point(20, 48);
+            dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.RowTemplate.Height = 36;
-            dataGridView1.Size = new Size(722, 533);
-            dataGridView1.TabIndex = 9;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(604, 324);
+            dataGridView1.TabIndex = 2;
             // 
-            // lblTanggal
+            // colNomor
             // 
-            lblTanggal.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblTanggal.AutoSize = true;
-            lblTanggal.Font = new Font("Microsoft Sans Serif", 9F);
-            lblTanggal.ForeColor = Color.FromArgb(107, 114, 128);
-            lblTanggal.Location = new Point(1055, 88);
-            lblTanggal.Name = "lblTanggal";
-            lblTanggal.Size = new Size(60, 18);
-            lblTanggal.TabIndex = 1;
-            lblTanggal.Text = "Tanggal";
+            colNomor.DataPropertyName = "Nomor";
+            colNomor.FillWeight = 34F;
+            colNomor.HeaderText = "Nomor Faktur";
+            colNomor.MinimumWidth = 6;
+            colNomor.Name = "colNomor";
+            colNomor.ReadOnly = true;
             // 
-            // lblJudul
+            // colTanggal
             // 
-            lblJudul.AutoSize = true;
-            lblJudul.Font = new Font("Microsoft Sans Serif", 20F, FontStyle.Bold);
-            lblJudul.ForeColor = Color.FromArgb(31, 41, 55);
-            lblJudul.Location = new Point(46, 43);
-            lblJudul.Name = "lblJudul";
-            lblJudul.Size = new Size(305, 39);
-            lblJudul.TabIndex = 0;
-            lblJudul.Text = "Dashboard Admin";
+            colTanggal.DataPropertyName = "Tanggal";
+            colTanggal.FillWeight = 24F;
+            colTanggal.HeaderText = "Tanggal";
+            colTanggal.MinimumWidth = 6;
+            colTanggal.Name = "colTanggal";
+            colTanggal.ReadOnly = true;
             // 
-            // lblTransaksiTerbaru
+            // colKasir
             // 
-            lblTransaksiTerbaru.AutoSize = true;
-            lblTransaksiTerbaru.BackColor = Color.Transparent;
-            lblTransaksiTerbaru.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
-            lblTransaksiTerbaru.ForeColor = Color.FromArgb(31, 41, 55);
-            lblTransaksiTerbaru.Location = new Point(46, 331);
-            lblTransaksiTerbaru.Name = "lblTransaksiTerbaru";
-            lblTransaksiTerbaru.Size = new Size(189, 25);
-            lblTransaksiTerbaru.TabIndex = 0;
-            lblTransaksiTerbaru.Text = "Transaksi Terbaru";
+            colKasir.DataPropertyName = "Kasir";
+            colKasir.FillWeight = 18F;
+            colKasir.HeaderText = "Kasir";
+            colKasir.MinimumWidth = 6;
+            colKasir.Name = "colKasir";
+            colKasir.ReadOnly = true;
             // 
-            // lblPeringatan
+            // colTotal
             // 
-            lblPeringatan.AutoSize = true;
-            lblPeringatan.BackColor = Color.Transparent;
-            lblPeringatan.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold);
-            lblPeringatan.ForeColor = Color.FromArgb(31, 41, 55);
-            lblPeringatan.Location = new Point(795, 331);
-            lblPeringatan.Name = "lblPeringatan";
-            lblPeringatan.Size = new Size(166, 25);
-            lblPeringatan.TabIndex = 0;
-            lblPeringatan.Text = "Peringatan Stok";
+            colTotal.DataPropertyName = "Total";
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleRight;
+            colTotal.DefaultCellStyle = dataGridViewCellStyle3;
+            colTotal.FillWeight = 24F;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
+            colTotal.HeaderCell.Style = dataGridViewCellStyle4;
+            colTotal.HeaderText = "Total";
+            colTotal.MinimumWidth = 6;
+            colTotal.Name = "colTotal";
+            colTotal.ReadOnly = true;
+            // 
+            // pnlOpname
+            // 
+            pnlOpname.BackColor = Color.White;
+            pnlOpname.Controls.Add(pnlOpnameDisetujui);
+            pnlOpname.Controls.Add(pnlOpnameRevisi);
+            pnlOpname.Controls.Add(pnlOpnameMenunggu);
+            pnlOpname.Controls.Add(btnLihatPengajuan);
+            pnlOpname.Controls.Add(lblJudulOpname);
+            pnlOpname.Location = new Point(704, 552);
+            pnlOpname.Name = "pnlOpname";
+            pnlOpname.Size = new Size(444, 388);
+            pnlOpname.TabIndex = 9;
+            // 
+            // lblJudulOpname
+            // 
+            lblJudulOpname.AutoSize = true;
+            lblJudulOpname.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblJudulOpname.ForeColor = Color.FromArgb(30, 41, 59);
+            lblJudulOpname.Location = new Point(20, 16);
+            lblJudulOpname.Name = "lblJudulOpname";
+            lblJudulOpname.Size = new Size(188, 19);
+            lblJudulOpname.TabIndex = 0;
+            lblJudulOpname.Text = "RINGKASAN STOK OPNAME";
+            // 
+            // btnLihatPengajuan
+            // 
+            btnLihatPengajuan.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnLihatPengajuan.BackColor = Color.FromArgb(255, 196, 0);
+            btnLihatPengajuan.Cursor = Cursors.Hand;
+            btnLihatPengajuan.FlatAppearance.BorderSize = 0;
+            btnLihatPengajuan.FlatAppearance.MouseOverBackColor = Color.FromArgb(245, 185, 0);
+            btnLihatPengajuan.FlatStyle = FlatStyle.Flat;
+            btnLihatPengajuan.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            btnLihatPengajuan.ForeColor = Color.FromArgb(31, 41, 55);
+            btnLihatPengajuan.Location = new Point(296, 12);
+            btnLihatPengajuan.Name = "btnLihatPengajuan";
+            btnLihatPengajuan.Size = new Size(128, 28);
+            btnLihatPengajuan.TabIndex = 1;
+            btnLihatPengajuan.Text = "Lihat Pengajuan";
+            btnLihatPengajuan.UseVisualStyleBackColor = false;
+            // 
+            // pnlOpnameMenunggu
+            // 
+            pnlOpnameMenunggu.BackColor = Color.FromArgb(255, 251, 235);
+            pnlOpnameMenunggu.Controls.Add(lblOpnameMenungguNilai);
+            pnlOpnameMenunggu.Controls.Add(lblOpnameMenungguLabel);
+            pnlOpnameMenunggu.Location = new Point(20, 56);
+            pnlOpnameMenunggu.Name = "pnlOpnameMenunggu";
+            pnlOpnameMenunggu.Size = new Size(404, 52);
+            pnlOpnameMenunggu.TabIndex = 2;
+            // 
+            // lblOpnameMenungguLabel
+            // 
+            lblOpnameMenungguLabel.AutoSize = true;
+            lblOpnameMenungguLabel.Font = new Font("Inter", 9F, FontStyle.Bold);
+            lblOpnameMenungguLabel.ForeColor = Color.FromArgb(146, 64, 14);
+            lblOpnameMenungguLabel.Location = new Point(16, 17);
+            lblOpnameMenungguLabel.Name = "lblOpnameMenungguLabel";
+            lblOpnameMenungguLabel.Size = new Size(180, 18);
+            lblOpnameMenungguLabel.TabIndex = 0;
+            lblOpnameMenungguLabel.Text = "MENUNGGU PERSETUJUAN";
+            // 
+            // lblOpnameMenungguNilai
+            // 
+            lblOpnameMenungguNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblOpnameMenungguNilai.Font = new Font("Inter", 14F, FontStyle.Bold);
+            lblOpnameMenungguNilai.ForeColor = Color.FromArgb(217, 119, 6);
+            lblOpnameMenungguNilai.Location = new Point(312, 11);
+            lblOpnameMenungguNilai.Name = "lblOpnameMenungguNilai";
+            lblOpnameMenungguNilai.Size = new Size(76, 30);
+            lblOpnameMenungguNilai.TabIndex = 1;
+            lblOpnameMenungguNilai.Text = "0";
+            lblOpnameMenungguNilai.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // pnlOpnameRevisi
+            // 
+            pnlOpnameRevisi.BackColor = Color.FromArgb(254, 242, 242);
+            pnlOpnameRevisi.Controls.Add(lblOpnameRevisiNilai);
+            pnlOpnameRevisi.Controls.Add(lblOpnameRevisiLabel);
+            pnlOpnameRevisi.Location = new Point(20, 120);
+            pnlOpnameRevisi.Name = "pnlOpnameRevisi";
+            pnlOpnameRevisi.Size = new Size(404, 52);
+            pnlOpnameRevisi.TabIndex = 3;
+            // 
+            // lblOpnameRevisiLabel
+            // 
+            lblOpnameRevisiLabel.AutoSize = true;
+            lblOpnameRevisiLabel.Font = new Font("Inter", 9F, FontStyle.Bold);
+            lblOpnameRevisiLabel.ForeColor = Color.FromArgb(153, 27, 27);
+            lblOpnameRevisiLabel.Location = new Point(16, 17);
+            lblOpnameRevisiLabel.Name = "lblOpnameRevisiLabel";
+            lblOpnameRevisiLabel.Size = new Size(100, 18);
+            lblOpnameRevisiLabel.TabIndex = 0;
+            lblOpnameRevisiLabel.Text = "PERLU REVISI";
+            // 
+            // lblOpnameRevisiNilai
+            // 
+            lblOpnameRevisiNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblOpnameRevisiNilai.Font = new Font("Inter", 14F, FontStyle.Bold);
+            lblOpnameRevisiNilai.ForeColor = Color.FromArgb(220, 38, 38);
+            lblOpnameRevisiNilai.Location = new Point(312, 11);
+            lblOpnameRevisiNilai.Name = "lblOpnameRevisiNilai";
+            lblOpnameRevisiNilai.Size = new Size(76, 30);
+            lblOpnameRevisiNilai.TabIndex = 1;
+            lblOpnameRevisiNilai.Text = "0";
+            lblOpnameRevisiNilai.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // pnlOpnameDisetujui
+            // 
+            pnlOpnameDisetujui.BackColor = Color.FromArgb(236, 253, 245);
+            pnlOpnameDisetujui.Controls.Add(lblOpnameDisetujuiNilai);
+            pnlOpnameDisetujui.Controls.Add(lblOpnameDisetujuiLabel);
+            pnlOpnameDisetujui.Location = new Point(20, 184);
+            pnlOpnameDisetujui.Name = "pnlOpnameDisetujui";
+            pnlOpnameDisetujui.Size = new Size(404, 52);
+            pnlOpnameDisetujui.TabIndex = 4;
+            // 
+            // lblOpnameDisetujuiLabel
+            // 
+            lblOpnameDisetujuiLabel.AutoSize = true;
+            lblOpnameDisetujuiLabel.Font = new Font("Inter", 9F, FontStyle.Bold);
+            lblOpnameDisetujuiLabel.ForeColor = Color.FromArgb(6, 95, 70);
+            lblOpnameDisetujuiLabel.Location = new Point(16, 17);
+            lblOpnameDisetujuiLabel.Name = "lblOpnameDisetujuiLabel";
+            lblOpnameDisetujuiLabel.Size = new Size(136, 18);
+            lblOpnameDisetujuiLabel.TabIndex = 0;
+            lblOpnameDisetujuiLabel.Text = "DISETUJUI HARI INI";
+            // 
+            // lblOpnameDisetujuiNilai
+            // 
+            lblOpnameDisetujuiNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblOpnameDisetujuiNilai.Font = new Font("Inter", 14F, FontStyle.Bold);
+            lblOpnameDisetujuiNilai.ForeColor = Color.FromArgb(16, 149, 102);
+            lblOpnameDisetujuiNilai.Location = new Point(312, 11);
+            lblOpnameDisetujuiNilai.Name = "lblOpnameDisetujuiNilai";
+            lblOpnameDisetujuiNilai.Size = new Size(76, 30);
+            lblOpnameDisetujuiNilai.TabIndex = 1;
+            lblOpnameDisetujuiNilai.Text = "0";
+            lblOpnameDisetujuiNilai.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // pnlInfoInventaris
+            // 
+            pnlInfoInventaris.BackColor = Color.White;
+            pnlInfoInventaris.Controls.Add(pnlInvKeluar);
+            pnlInfoInventaris.Controls.Add(pnlInvMasuk);
+            pnlInfoInventaris.Controls.Add(pnlInvMinimum);
+            pnlInfoInventaris.Controls.Add(pnlInvKritis);
+            pnlInfoInventaris.Controls.Add(pnlInvHabis);
+            pnlInfoInventaris.Controls.Add(lblJudulInfoInventaris);
+            pnlInfoInventaris.Location = new Point(704, 552);
+            pnlInfoInventaris.Name = "pnlInfoInventaris";
+            pnlInfoInventaris.Size = new Size(444, 240);
+            pnlInfoInventaris.TabIndex = 10;
+            pnlInfoInventaris.Visible = false;
+            // 
+            // lblJudulInfoInventaris
+            // 
+            lblJudulInfoInventaris.AutoSize = true;
+            lblJudulInfoInventaris.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblJudulInfoInventaris.ForeColor = Color.FromArgb(30, 41, 59);
+            lblJudulInfoInventaris.Location = new Point(20, 16);
+            lblJudulInfoInventaris.Name = "lblJudulInfoInventaris";
+            lblJudulInfoInventaris.Size = new Size(164, 19);
+            lblJudulInfoInventaris.TabIndex = 0;
+            lblJudulInfoInventaris.Text = "INFORMASI INVENTARIS";
+            // 
+            // pnlInvHabis
+            // 
+            pnlInvHabis.BackColor = Color.FromArgb(249, 250, 251);
+            pnlInvHabis.Controls.Add(lblInvHabisNilai);
+            pnlInvHabis.Controls.Add(lblInvHabisLabel);
+            pnlInvHabis.Location = new Point(20, 48);
+            pnlInvHabis.Name = "pnlInvHabis";
+            pnlInvHabis.Size = new Size(404, 34);
+            pnlInvHabis.TabIndex = 1;
+            // 
+            // lblInvHabisLabel
+            // 
+            lblInvHabisLabel.AutoSize = true;
+            lblInvHabisLabel.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblInvHabisLabel.ForeColor = Color.FromArgb(55, 65, 81);
+            lblInvHabisLabel.Location = new Point(12, 8);
+            lblInvHabisLabel.Name = "lblInvHabisLabel";
+            lblInvHabisLabel.Size = new Size(86, 18);
+            lblInvHabisLabel.TabIndex = 0;
+            lblInvHabisLabel.Text = "STOK HABIS";
+            // 
+            // lblInvHabisNilai
+            // 
+            lblInvHabisNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblInvHabisNilai.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblInvHabisNilai.ForeColor = Color.FromArgb(220, 38, 38);
+            lblInvHabisNilai.Location = new Point(296, 6);
+            lblInvHabisNilai.Name = "lblInvHabisNilai";
+            lblInvHabisNilai.Size = new Size(96, 22);
+            lblInvHabisNilai.TabIndex = 1;
+            lblInvHabisNilai.Text = "0";
+            lblInvHabisNilai.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // pnlInvKritis
+            // 
+            pnlInvKritis.BackColor = Color.FromArgb(249, 250, 251);
+            pnlInvKritis.Controls.Add(lblInvKritisNilai);
+            pnlInvKritis.Controls.Add(lblInvKritisLabel);
+            pnlInvKritis.Location = new Point(20, 88);
+            pnlInvKritis.Name = "pnlInvKritis";
+            pnlInvKritis.Size = new Size(404, 34);
+            pnlInvKritis.TabIndex = 2;
+            // 
+            // lblInvKritisLabel
+            // 
+            lblInvKritisLabel.AutoSize = true;
+            lblInvKritisLabel.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblInvKritisLabel.ForeColor = Color.FromArgb(55, 65, 81);
+            lblInvKritisLabel.Location = new Point(12, 8);
+            lblInvKritisLabel.Name = "lblInvKritisLabel";
+            lblInvKritisLabel.Size = new Size(90, 18);
+            lblInvKritisLabel.TabIndex = 0;
+            lblInvKritisLabel.Text = "STOK KRITIS";
+            // 
+            // lblInvKritisNilai
+            // 
+            lblInvKritisNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblInvKritisNilai.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblInvKritisNilai.ForeColor = Color.FromArgb(234, 88, 12);
+            lblInvKritisNilai.Location = new Point(296, 6);
+            lblInvKritisNilai.Name = "lblInvKritisNilai";
+            lblInvKritisNilai.Size = new Size(96, 22);
+            lblInvKritisNilai.TabIndex = 1;
+            lblInvKritisNilai.Text = "0";
+            lblInvKritisNilai.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // pnlInvMinimum
+            // 
+            pnlInvMinimum.BackColor = Color.FromArgb(249, 250, 251);
+            pnlInvMinimum.Controls.Add(lblInvMinimumNilai);
+            pnlInvMinimum.Controls.Add(lblInvMinimumLabel);
+            pnlInvMinimum.Location = new Point(20, 128);
+            pnlInvMinimum.Name = "pnlInvMinimum";
+            pnlInvMinimum.Size = new Size(404, 34);
+            pnlInvMinimum.TabIndex = 3;
+            // 
+            // lblInvMinimumLabel
+            // 
+            lblInvMinimumLabel.AutoSize = true;
+            lblInvMinimumLabel.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblInvMinimumLabel.ForeColor = Color.FromArgb(55, 65, 81);
+            lblInvMinimumLabel.Location = new Point(12, 8);
+            lblInvMinimumLabel.Name = "lblInvMinimumLabel";
+            lblInvMinimumLabel.Size = new Size(104, 18);
+            lblInvMinimumLabel.TabIndex = 0;
+            lblInvMinimumLabel.Text = "STOK MINIMUM";
+            // 
+            // lblInvMinimumNilai
+            // 
+            lblInvMinimumNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblInvMinimumNilai.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblInvMinimumNilai.ForeColor = Color.FromArgb(217, 119, 6);
+            lblInvMinimumNilai.Location = new Point(296, 6);
+            lblInvMinimumNilai.Name = "lblInvMinimumNilai";
+            lblInvMinimumNilai.Size = new Size(96, 22);
+            lblInvMinimumNilai.TabIndex = 1;
+            lblInvMinimumNilai.Text = "0";
+            lblInvMinimumNilai.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // pnlInvMasuk
+            // 
+            pnlInvMasuk.BackColor = Color.FromArgb(249, 250, 251);
+            pnlInvMasuk.Controls.Add(lblInvMasukNilai);
+            pnlInvMasuk.Controls.Add(lblInvMasukLabel);
+            pnlInvMasuk.Location = new Point(20, 168);
+            pnlInvMasuk.Name = "pnlInvMasuk";
+            pnlInvMasuk.Size = new Size(404, 34);
+            pnlInvMasuk.TabIndex = 4;
+            // 
+            // lblInvMasukLabel
+            // 
+            lblInvMasukLabel.AutoSize = true;
+            lblInvMasukLabel.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblInvMasukLabel.ForeColor = Color.FromArgb(55, 65, 81);
+            lblInvMasukLabel.Location = new Point(12, 8);
+            lblInvMasukLabel.Name = "lblInvMasukLabel";
+            lblInvMasukLabel.Size = new Size(164, 18);
+            lblInvMasukLabel.TabIndex = 0;
+            lblInvMasukLabel.Text = "BARANG MASUK HARI INI";
+            // 
+            // lblInvMasukNilai
+            // 
+            lblInvMasukNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblInvMasukNilai.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblInvMasukNilai.ForeColor = Color.FromArgb(16, 149, 102);
+            lblInvMasukNilai.Location = new Point(296, 6);
+            lblInvMasukNilai.Name = "lblInvMasukNilai";
+            lblInvMasukNilai.Size = new Size(96, 22);
+            lblInvMasukNilai.TabIndex = 1;
+            lblInvMasukNilai.Text = "0 pcs";
+            lblInvMasukNilai.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // pnlInvKeluar
+            // 
+            pnlInvKeluar.BackColor = Color.FromArgb(249, 250, 251);
+            pnlInvKeluar.Controls.Add(lblInvKeluarNilai);
+            pnlInvKeluar.Controls.Add(lblInvKeluarLabel);
+            pnlInvKeluar.Location = new Point(20, 208);
+            pnlInvKeluar.Name = "pnlInvKeluar";
+            pnlInvKeluar.Size = new Size(404, 34);
+            pnlInvKeluar.TabIndex = 5;
+            // 
+            // lblInvKeluarLabel
+            // 
+            lblInvKeluarLabel.AutoSize = true;
+            lblInvKeluarLabel.Font = new Font("Inter", 8.5F, FontStyle.Bold);
+            lblInvKeluarLabel.ForeColor = Color.FromArgb(55, 65, 81);
+            lblInvKeluarLabel.Location = new Point(12, 8);
+            lblInvKeluarLabel.Name = "lblInvKeluarLabel";
+            lblInvKeluarLabel.Size = new Size(168, 18);
+            lblInvKeluarLabel.TabIndex = 0;
+            lblInvKeluarLabel.Text = "BARANG KELUAR HARI INI";
+            // 
+            // lblInvKeluarNilai
+            // 
+            lblInvKeluarNilai.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblInvKeluarNilai.Font = new Font("Inter", 9.5F, FontStyle.Bold);
+            lblInvKeluarNilai.ForeColor = Color.FromArgb(31, 41, 55);
+            lblInvKeluarNilai.Location = new Point(296, 6);
+            lblInvKeluarNilai.Name = "lblInvKeluarNilai";
+            lblInvKeluarNilai.Size = new Size(96, 22);
+            lblInvKeluarNilai.TabIndex = 1;
+            lblInvKeluarNilai.Text = "0 pcs";
+            lblInvKeluarNilai.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FormDashboardAdmin
             // 
@@ -596,14 +1197,41 @@ namespace Sukimart
             ((System.ComponentModel.ISupportInitialize)pictureLogo).EndInit();
             pnlKanan.ResumeLayout(false);
             pnlKanan.PerformLayout();
-            pnlPeringatan.ResumeLayout(false);
-            pnlStok.ResumeLayout(false);
-            pnlStok.PerformLayout();
             pnlTerjual.ResumeLayout(false);
             pnlTerjual.PerformLayout();
+            pnlLaba.ResumeLayout(false);
+            pnlLaba.PerformLayout();
             pnlTransaksi.ResumeLayout(false);
             pnlTransaksi.PerformLayout();
+            pnlStok.ResumeLayout(false);
+            pnlStok.PerformLayout();
+            pnlGrafik.ResumeLayout(false);
+            pnlGrafik.PerformLayout();
+            pnlPeringatan.ResumeLayout(false);
+            pnlPeringatan.PerformLayout();
+            pnlTransaksiTerbaru.ResumeLayout(false);
+            pnlTransaksiTerbaru.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            pnlOpname.ResumeLayout(false);
+            pnlOpname.PerformLayout();
+            pnlOpnameMenunggu.ResumeLayout(false);
+            pnlOpnameMenunggu.PerformLayout();
+            pnlOpnameRevisi.ResumeLayout(false);
+            pnlOpnameRevisi.PerformLayout();
+            pnlOpnameDisetujui.ResumeLayout(false);
+            pnlOpnameDisetujui.PerformLayout();
+            pnlInfoInventaris.ResumeLayout(false);
+            pnlInfoInventaris.PerformLayout();
+            pnlInvHabis.ResumeLayout(false);
+            pnlInvHabis.PerformLayout();
+            pnlInvKritis.ResumeLayout(false);
+            pnlInvKritis.PerformLayout();
+            pnlInvMinimum.ResumeLayout(false);
+            pnlInvMinimum.PerformLayout();
+            pnlInvMasuk.ResumeLayout(false);
+            pnlInvMasuk.PerformLayout();
+            pnlInvKeluar.ResumeLayout(false);
+            pnlInvKeluar.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -625,10 +1253,17 @@ namespace Sukimart
         private Panel pnlTerjual;
         private Label lblPenjualan;
         private Label lblNilaiPenjualan;
+        private Panel pnlLaba;
+        private Label lblLaba;
+        private Label lblNilaiLaba;
         private Panel pnlTransaksi;
         private Label lblNilaiTransaksi;
         private Label lblTransaksiHariIni;
         private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn colNomor;
+        private DataGridViewTextBoxColumn colTanggal;
+        private DataGridViewTextBoxColumn colKasir;
+        private DataGridViewTextBoxColumn colTotal;
         private Label lblTanggal;
         private Label lblJudul;
         private Button btnLaporanInventaris;
@@ -636,10 +1271,49 @@ namespace Sukimart
         private Button btnPengguna;
         private Button btnLogAktivitas;
         private Button btnGantiSandi;
+        private Label lblAkunNama;
+        private Label lblAkunRole;
         private Button btnGudang;
+        private Panel pnlGrafik;
+        private Label lblJudulGrafik;
+        private Label lblSubGrafik;
+        private Panel pnlCanvasGrafik;
         private Panel pnlPeringatan;
         private Label lblPeringatan;
-        private ListBox lstStokMenipis;
+        private Button btnLihatInventaris;
+        private FlowLayoutPanel flpPeringatan;
+        private Label lblPeringatanKosong;
+        private Panel pnlTransaksiTerbaru;
+        private Button btnLihatSemuaTransaksi;
+        private Panel pnlOpname;
+        private Label lblJudulOpname;
+        private Button btnLihatPengajuan;
+        private Panel pnlOpnameMenunggu;
+        private Label lblOpnameMenungguLabel;
+        private Label lblOpnameMenungguNilai;
+        private Panel pnlOpnameRevisi;
+        private Label lblOpnameRevisiLabel;
+        private Label lblOpnameRevisiNilai;
+        private Panel pnlOpnameDisetujui;
+        private Label lblOpnameDisetujuiLabel;
+        private Label lblOpnameDisetujuiNilai;
+        private Panel pnlInfoInventaris;
+        private Label lblJudulInfoInventaris;
+        private Panel pnlInvHabis;
+        private Label lblInvHabisLabel;
+        private Label lblInvHabisNilai;
+        private Panel pnlInvKritis;
+        private Label lblInvKritisLabel;
+        private Label lblInvKritisNilai;
+        private Panel pnlInvMinimum;
+        private Label lblInvMinimumLabel;
+        private Label lblInvMinimumNilai;
+        private Panel pnlInvMasuk;
+        private Label lblInvMasukLabel;
+        private Label lblInvMasukNilai;
+        private Panel pnlInvKeluar;
+        private Label lblInvKeluarLabel;
+        private Label lblInvKeluarNilai;
         private ReaLTaiizor.Controls.NightControlBox nightControlBox1;
     }
 }

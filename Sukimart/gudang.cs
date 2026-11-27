@@ -13,6 +13,11 @@ namespace Sukimart
         {
         }
 
+        public FormGudang(string peran, int initialSubTab) : this(peran)
+        {
+            GantiSubTab(initialSubTab);
+        }
+
         public FormGudang(string peran)
         {
             this.peran = string.IsNullOrEmpty(peran) ? "admin" : peran;
@@ -82,14 +87,20 @@ namespace Sukimart
             btnSubStokGudang.BackColor = tabIndex == 0 ? Color.FromArgb(255, 196, 0) : Color.White;
             btnSubStokGudang.ForeColor = tabIndex == 0 ? Color.FromArgb(31, 41, 55) : Color.FromArgb(75, 85, 99);
             btnSubStokGudang.Font = tabIndex == 0 ? FontInter.Buat(10, FontStyle.Bold) : FontInter.Buat(10, FontStyle.Regular);
+            btnSubStokGudang.FlatAppearance.BorderSize = tabIndex == 0 ? 0 : 1;
+            btnSubStokGudang.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
 
             btnSubStokOpname.BackColor = tabIndex == 1 ? Color.FromArgb(255, 196, 0) : Color.White;
             btnSubStokOpname.ForeColor = tabIndex == 1 ? Color.FromArgb(31, 41, 55) : Color.FromArgb(75, 85, 99);
             btnSubStokOpname.Font = tabIndex == 1 ? FontInter.Buat(10, FontStyle.Bold) : FontInter.Buat(10, FontStyle.Regular);
+            btnSubStokOpname.FlatAppearance.BorderSize = tabIndex == 1 ? 0 : 1;
+            btnSubStokOpname.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
 
             btnSubRiwayatOpname.BackColor = tabIndex == 2 ? Color.FromArgb(255, 196, 0) : Color.White;
             btnSubRiwayatOpname.ForeColor = tabIndex == 2 ? Color.FromArgb(31, 41, 55) : Color.FromArgb(75, 85, 99);
             btnSubRiwayatOpname.Font = tabIndex == 2 ? FontInter.Buat(10, FontStyle.Bold) : FontInter.Buat(10, FontStyle.Regular);
+            btnSubRiwayatOpname.FlatAppearance.BorderSize = tabIndex == 2 ? 0 : 1;
+            btnSubRiwayatOpname.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
 
             pnlSubStokGudang.Visible = (tabIndex == 0);
             pnlSubStokOpname.Visible = (tabIndex == 1);
