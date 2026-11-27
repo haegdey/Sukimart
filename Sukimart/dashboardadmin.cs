@@ -62,26 +62,18 @@ namespace Sukimart
 
         private void TerapkanGayaKartuDashboard()
         {
-            Panel[] kartu = { pnlTerjual, pnlLaba, pnlTransaksi, pnlStok, pnlGrafik, pnlPeringatan, pnlTransaksiTerbaru, pnlOpname, pnlInfoInventaris };
-            foreach (Panel p in kartu)
+            pnlKiri.BackColor = UIHelper.WarnaPutih;
+            pnlKanan.BackColor = UIHelper.WarnaLatar;
+
+            PanelKartu[] kartu = { pnlTerjual, pnlLaba, pnlTransaksi, pnlStok, pnlGrafik, pnlPeringatan, pnlTransaksiTerbaru, pnlOpname, pnlInfoInventaris };
+            foreach (PanelKartu p in kartu)
             {
-                PasangGayaKartu(p);
+                p.BackColor = UIHelper.WarnaPutih;
+                p.WarnaAksen = UIHelper.WarnaKuning;
+                p.WarnaGaris = UIHelper.WarnaGaris;
             }
 
             FontInter.Terapkan(this);
-        }
-
-        private static void PasangGayaKartu(Panel kartu)
-        {
-            kartu.BackColor = Color.White;
-            kartu.Paint += (s, e) =>
-            {
-                using var penBatas = new Pen(Color.FromArgb(229, 231, 235), 1);
-                e.Graphics.DrawRectangle(penBatas, 0, 0, kartu.Width - 1, kartu.Height - 1);
-
-                using var brushAksen = new SolidBrush(Color.FromArgb(255, 196, 0));
-                e.Graphics.FillRectangle(brushAksen, 1, 1, Math.Max(0, kartu.Width - 2), 3);
-            };
         }
 
         private void SesuaikanPeran()
@@ -124,7 +116,7 @@ namespace Sukimart
                 btnLihatPengajuan.Text = "Lihat Pengajuan";
             }
 
-            UIHelper.SusunTombolSidebar(pnlKiri);
+            UIHelper.SusunTombolSidebar(pnlKiri, btnDashboard);
         }
 
         private void AturTataLetakResponsif()
@@ -349,19 +341,19 @@ namespace Sukimart
 
             lblPenjualan.Text = "PENJUALAN HARI INI";
             lblNilaiPenjualan.Text = "Rp " + totalPenjualan.ToString("N0", BudayaIndonesia);
-            lblNilaiPenjualan.ForeColor = Color.FromArgb(16, 149, 102);
+            lblNilaiPenjualan.ForeColor = UIHelper.WarnaAman;
 
             lblLaba.Text = "LABA HARI INI";
             lblNilaiLaba.Text = "Rp " + labaHariIni.ToString("N0", BudayaIndonesia);
-            lblNilaiLaba.ForeColor = labaHariIni >= 0 ? Color.FromArgb(16, 149, 102) : Color.FromArgb(220, 38, 38);
+            lblNilaiLaba.ForeColor = labaHariIni >= 0 ? UIHelper.WarnaAman : UIHelper.WarnaHabis;
 
             lblTransaksiHariIni.Text = "TRANSAKSI HARI INI";
             lblNilaiTransaksi.Text = transaksiHariIni.Count.ToString("N0", BudayaIndonesia);
-            lblNilaiTransaksi.ForeColor = Color.FromArgb(31, 41, 55);
+            lblNilaiTransaksi.ForeColor = UIHelper.WarnaTeksUtama;
 
             lblStok.Text = "STOK PERLU PERHATIAN";
             lblNilaiStok.Text = jumlahPerhatian.ToString("N0", BudayaIndonesia);
-            lblNilaiStok.ForeColor = jumlahPerhatian > 0 ? Color.FromArgb(220, 38, 38) : Color.FromArgb(16, 149, 102);
+            lblNilaiStok.ForeColor = jumlahPerhatian > 0 ? UIHelper.WarnaHabis : UIHelper.WarnaAman;
         }
 
         private void IsiKpiGudang(List<Barang> daftarBarang, List<SesiOpname> daftarSesiOpname)
@@ -375,19 +367,19 @@ namespace Sukimart
 
             lblPenjualan.Text = "TOTAL PRODUK AKTIF";
             lblNilaiPenjualan.Text = totalProdukAktif.ToString("N0", BudayaIndonesia);
-            lblNilaiPenjualan.ForeColor = Color.FromArgb(31, 41, 55);
+            lblNilaiPenjualan.ForeColor = UIHelper.WarnaTeksUtama;
 
             lblLaba.Text = "STOK AMAN";
             lblNilaiLaba.Text = stokAman.ToString("N0", BudayaIndonesia);
-            lblNilaiLaba.ForeColor = Color.FromArgb(16, 149, 102);
+            lblNilaiLaba.ForeColor = UIHelper.WarnaAman;
 
             lblTransaksiHariIni.Text = "STOK PERLU PERHATIAN";
             lblNilaiTransaksi.Text = stokPerhatian.ToString("N0", BudayaIndonesia);
-            lblNilaiTransaksi.ForeColor = stokPerhatian > 0 ? Color.FromArgb(220, 38, 38) : Color.FromArgb(16, 149, 102);
+            lblNilaiTransaksi.ForeColor = stokPerhatian > 0 ? UIHelper.WarnaHabis : UIHelper.WarnaAman;
 
             lblStok.Text = "SESI OPNAME AKTIF";
             lblNilaiStok.Text = sesiAktif.ToString("N0", BudayaIndonesia);
-            lblNilaiStok.ForeColor = sesiAktif > 0 ? Color.FromArgb(217, 119, 6) : Color.FromArgb(31, 41, 55);
+            lblNilaiStok.ForeColor = sesiAktif > 0 ? UIHelper.WarnaMinimum : UIHelper.WarnaTeksUtama;
         }
 
         private void IsiGrafik7Hari(List<Transaksi> daftarTransaksi)
@@ -417,7 +409,7 @@ namespace Sukimart
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            g.Clear(Color.White);
+            g.Clear(UIHelper.WarnaPutih);
 
             if (!pnlCanvasGrafik.Visible || dataGrafik7Hari.Count == 0 || pnlCanvasGrafik.ClientSize.Width < 180 || pnlCanvasGrafik.ClientSize.Height < 100)
                 return;
@@ -438,10 +430,10 @@ namespace Sukimart
 
             Font fontAxis = FontInter.Buat(8F, FontStyle.Regular);
             Font fontNilai = FontInter.Buat(7.5F, FontStyle.Bold);
-            using var brushTeksAxis = new SolidBrush(Color.FromArgb(107, 114, 128));
-            using var brushTeksGelap = new SolidBrush(Color.FromArgb(30, 41, 59));
-            using var penGrid = new Pen(Color.FromArgb(243, 244, 246), 1);
-            using var penAxis = new Pen(Color.FromArgb(229, 231, 235), 1);
+            using var brushTeksAxis = new SolidBrush(UIHelper.WarnaTeksSekunder);
+            using var brushTeksGelap = new SolidBrush(UIHelper.WarnaTeksUtama);
+            using var penGrid = new Pen(UIHelper.WarnaHeaderTabel, 1);
+            using var penAxis = new Pen(UIHelper.WarnaGaris, 1);
 
             // Garis grid horizontal (4 langkah)
             int jumlahGaris = 4;
@@ -483,21 +475,21 @@ namespace Sukimart
 
                 using var brushArea = new LinearGradientBrush(
                     areaPlot,
-                    Color.FromArgb(65, 255, 196, 0),
-                    Color.FromArgb(8, 255, 196, 0),
+                    Color.FromArgb(65, UIHelper.WarnaKuning),
+                    Color.FromArgb(8, UIHelper.WarnaKuning),
                     LinearGradientMode.Vertical);
                 g.FillPath(brushArea, pathArea);
             }
 
             // Garis grafik utama (aksen kuning-amber SukiMart)
-            using (var penGaris = new Pen(Color.FromArgb(245, 158, 11), 2.5f))
+            using (var penGaris = new Pen(UIHelper.WarnaKuningHover, 2.5f))
             {
                 g.DrawLines(penGaris, titik);
             }
 
             // Titik data & label nominal untuk nilai > 0
-            using var brushTitikIsi = new SolidBrush(Color.FromArgb(255, 196, 0));
-            using var penTitikPinggir = new Pen(Color.FromArgb(30, 41, 59), 2f);
+            using var brushTitikIsi = new SolidBrush(UIHelper.WarnaKuning);
+            using var penTitikPinggir = new Pen(UIHelper.WarnaTeksUtama, 2f);
 
             for (int i = 0; i < titik.Length; i++)
             {

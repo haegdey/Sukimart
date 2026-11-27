@@ -13,9 +13,27 @@ namespace Sukimart
     /// </summary>
     public static class UIHelper
     {
-        // Warna seleksi kuning muda & teks gelap serasi dengan tema Sukimart
-        public static readonly Color WarnaSeleksiKuning = Color.FromArgb(255, 244, 204);
-        public static readonly Color WarnaTeksSeleksi = Color.FromArgb(31, 41, 55);
+        // Palet terpusat tema Sukimart (Kuning + Putih)
+        public static readonly Color WarnaKuning = Color.FromArgb(255, 196, 0);
+        public static readonly Color WarnaKuningHover = Color.FromArgb(230, 176, 0);
+        public static readonly Color WarnaKuningLembut = Color.FromArgb(255, 244, 204);
+        public static readonly Color WarnaLatar = Color.FromArgb(247, 247, 245);
+        public static readonly Color WarnaPutih = Color.White;
+        public static readonly Color WarnaTeksUtama = Color.FromArgb(31, 41, 55);
+        public static readonly Color WarnaTeksSekunder = Color.FromArgb(107, 114, 128);
+        public static readonly Color WarnaGaris = Color.FromArgb(229, 231, 235);
+        public static readonly Color WarnaHeaderTabel = Color.FromArgb(243, 244, 246);
+        public static readonly Color WarnaHabis = Color.FromArgb(220, 38, 38);
+        public static readonly Color WarnaMinimum = Color.FromArgb(217, 119, 6);
+        public static readonly Color WarnaAman = Color.FromArgb(16, 149, 102);
+
+        // Turunan status untuk tombol Keluar
+        public static readonly Color WarnaHabisBatas = Color.FromArgb(239, 68, 68);
+        public static readonly Color WarnaHabisLatar = Color.FromArgb(254, 242, 242);
+
+        // Alias kompatibilitas untuk konstanta lama
+        public static readonly Color WarnaSeleksiKuning = WarnaKuningLembut;
+        public static readonly Color WarnaTeksSeleksi = WarnaTeksUtama;
 
         // Win32 API resmi untuk memindahkan jendela tanpa title bar secara halus dan responsif
         [DllImport("user32.dll")]
@@ -81,9 +99,11 @@ namespace Sukimart
         /// Merapatkan tombol-tombol menu sidebar yang terlihat sehingga tidak ada lubang kosong
         /// ketika sebagian tombol disembunyikan berdasarkan peran pengguna (Kasir / Gudang).
         /// </summary>
-        public static void SusunTombolSidebar(Panel pnlKiri)
+        public static void SusunTombolSidebar(Panel pnlKiri, Button? tombolAktif = null)
         {
             if (pnlKiri == null) return;
+
+            pnlKiri.BackColor = WarnaPutih;
 
             if (!pnlKiri.Visible)
             {
@@ -124,13 +144,24 @@ namespace Sukimart
                     btn.Padding = padding;
                     btn.Location = new Point(x, y);
                     btn.FlatAppearance.BorderSize = 0;
-                    btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
                     btn.FlatStyle = FlatStyle.Flat;
                     btn.UseVisualStyleBackColor = false;
+                    btn.ForeColor = WarnaTeksUtama;
 
                     float ukuranTombol = btn.Font != null ? btn.Font.SizeInPoints : (acuan != null ? acuan.Font.SizeInPoints : 10F);
-                    FontStyle gayaTombol = btn.Font != null ? btn.Font.Style : FontStyle.Regular;
-                    btn.Font = FontInter.Buat(ukuranTombol, gayaTombol);
+                    if (tombolAktif != null)
+                    {
+                        bool aktif = ReferenceEquals(btn, tombolAktif);
+                        btn.BackColor = aktif ? WarnaKuning : WarnaPutih;
+                        btn.FlatAppearance.MouseOverBackColor = aktif ? WarnaKuningHover : WarnaKuningLembut;
+                        btn.Font = FontInter.Buat(ukuranTombol, aktif ? FontStyle.Bold : FontStyle.Regular);
+                    }
+                    else
+                    {
+                        btn.FlatAppearance.MouseOverBackColor = WarnaKuningLembut;
+                        FontStyle gayaTombol = btn.Font != null ? btn.Font.Style : FontStyle.Regular;
+                        btn.Font = FontInter.Buat(ukuranTombol, gayaTombol);
+                    }
 
                     y += btn.Height + jarak;
                 }
@@ -142,6 +173,7 @@ namespace Sukimart
                 float ukuranNama = lblNama.Font != null ? lblNama.Font.SizeInPoints : 14F;
                 FontStyle gayaNama = lblNama.Font != null ? lblNama.Font.Style : FontStyle.Bold;
                 lblNama.Font = FontInter.Buat(ukuranNama, gayaNama);
+                lblNama.ForeColor = WarnaTeksUtama;
             }
 
             PastikanTombolBawah(pnlKiri);
@@ -187,12 +219,12 @@ namespace Sukimart
                 btnKeluar.Size = new Size(lebar, tinggi);
                 btnKeluar.Location = new Point(x, yKeluar);
                 btnKeluar.Font = FontInter.Buat(ukuranFont, FontStyle.Bold);
-                btnKeluar.BackColor = Color.White;
-                btnKeluar.ForeColor = Color.FromArgb(220, 38, 38);
+                btnKeluar.BackColor = WarnaPutih;
+                btnKeluar.ForeColor = WarnaHabis;
                 btnKeluar.FlatStyle = FlatStyle.Flat;
                 btnKeluar.FlatAppearance.BorderSize = 1;
-                btnKeluar.FlatAppearance.BorderColor = Color.FromArgb(239, 68, 68);
-                btnKeluar.FlatAppearance.MouseOverBackColor = Color.FromArgb(254, 242, 242);
+                btnKeluar.FlatAppearance.BorderColor = WarnaHabisBatas;
+                btnKeluar.FlatAppearance.MouseOverBackColor = WarnaHabisLatar;
                 btnKeluar.Cursor = Cursors.Hand;
                 btnKeluar.TextAlign = ContentAlignment.MiddleCenter;
                 btnKeluar.Padding = new Padding(0);
@@ -243,8 +275,8 @@ namespace Sukimart
             btnGanti.ImageAlign = ContentAlignment.MiddleCenter;
             btnGanti.FlatStyle = FlatStyle.Flat;
             btnGanti.FlatAppearance.BorderSize = 0;
-            btnGanti.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
-            btnGanti.BackColor = Color.White;
+            btnGanti.FlatAppearance.MouseOverBackColor = WarnaKuningLembut;
+            btnGanti.BackColor = WarnaPutih;
             btnGanti.Cursor = Cursors.Hand;
             btnGanti.Padding = new Padding(0);
             btnGanti.Visible = true;
@@ -277,7 +309,7 @@ namespace Sukimart
             lblAkunNama.Location = new Point(x, yInfo);
             lblAkunNama.Size = new Size(lebarTeksAkun, 22);
             lblAkunNama.Font = FontInter.Buat(ukuranFont >= 10F ? 10.5F : 9.5F, FontStyle.Bold);
-            lblAkunNama.ForeColor = Color.FromArgb(31, 41, 55);
+            lblAkunNama.ForeColor = WarnaTeksUtama;
             lblAkunNama.AutoEllipsis = true;
             lblAkunNama.TextAlign = ContentAlignment.MiddleLeft;
             lblAkunNama.Text = Navigasi.DapatkanNamaTampilan();
@@ -305,7 +337,7 @@ namespace Sukimart
             lblAkunRole.Location = new Point(x, yInfo + 22);
             lblAkunRole.Size = new Size(lebarTeksAkun, 18);
             lblAkunRole.Font = FontInter.Buat(ukuranFont >= 10F ? 8.5F : 8F, FontStyle.Regular);
-            lblAkunRole.ForeColor = Color.FromArgb(107, 114, 128);
+            lblAkunRole.ForeColor = WarnaTeksSekunder;
             lblAkunRole.AutoEllipsis = true;
             lblAkunRole.TextAlign = ContentAlignment.MiddleLeft;
             lblAkunRole.Text = Navigasi.DapatkanLabelRole();
@@ -343,17 +375,17 @@ namespace Sukimart
                 btnAda.Padding = padding;
                 btnAda.Location = new Point(x, btnAda.Location.Y);
                 btnAda.FlatAppearance.BorderSize = 0;
-                btnAda.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+                btnAda.FlatAppearance.MouseOverBackColor = WarnaKuningLembut;
                 btnAda.FlatStyle = FlatStyle.Flat;
                 btnAda.UseVisualStyleBackColor = false;
                 if (formInduk is FormLogAktivitas)
                 {
-                    btnAda.BackColor = Color.FromArgb(255, 196, 0);
+                    btnAda.BackColor = WarnaKuning;
                     btnAda.Font = FontInter.Buat(ukuranFont, FontStyle.Bold);
                 }
                 else
                 {
-                    btnAda.BackColor = Color.White;
+                    btnAda.BackColor = WarnaPutih;
                     btnAda.Font = FontInter.Buat(ukuranFont, FontStyle.Regular);
                     PasangHandlerLogAktivitas(btnAda);
                 }
@@ -369,15 +401,15 @@ namespace Sukimart
                 Cursor = Cursors.Hand,
                 FlatStyle = FlatStyle.Flat,
                 Font = (formInduk is FormLogAktivitas) ? FontInter.Buat(ukuranFont, FontStyle.Bold) : FontInter.Buat(ukuranFont, FontStyle.Regular),
-                BackColor = (formInduk is FormLogAktivitas) ? Color.FromArgb(255, 196, 0) : Color.White,
-                ForeColor = Color.FromArgb(31, 41, 55),
+                BackColor = (formInduk is FormLogAktivitas) ? WarnaKuning : WarnaPutih,
+                ForeColor = WarnaTeksUtama,
                 Padding = padding,
                 TextAlign = ContentAlignment.MiddleLeft,
                 UseVisualStyleBackColor = false,
                 Visible = isAdmin
             };
             btnLog.FlatAppearance.BorderSize = 0;
-            btnLog.FlatAppearance.MouseOverBackColor = Color.FromArgb(255, 244, 204);
+            btnLog.FlatAppearance.MouseOverBackColor = WarnaKuningLembut;
 
             PasangHandlerLogAktivitas(btnLog);
 
@@ -444,8 +476,8 @@ namespace Sukimart
             grid.DefaultCellStyle.SelectionForeColor = WarnaTeksSeleksi;
 
             // Header Kolom
-            grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = grid.ColumnHeadersDefaultCellStyle.BackColor.IsEmpty ? Color.FromArgb(243, 244, 246) : grid.ColumnHeadersDefaultCellStyle.BackColor;
-            grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = grid.ColumnHeadersDefaultCellStyle.ForeColor.IsEmpty ? Color.FromArgb(55, 65, 81) : grid.ColumnHeadersDefaultCellStyle.ForeColor;
+            grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = grid.ColumnHeadersDefaultCellStyle.BackColor.IsEmpty ? WarnaHeaderTabel : grid.ColumnHeadersDefaultCellStyle.BackColor;
+            grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = grid.ColumnHeadersDefaultCellStyle.ForeColor.IsEmpty ? WarnaTeksUtama : grid.ColumnHeadersDefaultCellStyle.ForeColor;
 
             // Header Baris
             grid.RowHeadersDefaultCellStyle.SelectionBackColor = WarnaSeleksiKuning;
@@ -511,7 +543,7 @@ namespace Sukimart
             }
         }
 
-        public static readonly Color WarnaGarisTepi = Color.FromArgb(229, 231, 235);
+        public static readonly Color WarnaGarisTepi = WarnaGaris;
 
         private static readonly ConditionalWeakTable<Control, object> IndukBergaris = new ConditionalWeakTable<Control, object>();
 
@@ -589,7 +621,7 @@ namespace Sukimart
             {
                 return true;
             }
-            return ctrl is Panel && ctrl.Dock == DockStyle.None && ctrl.BackColor.ToArgb() == Color.White.ToArgb();
+            return ctrl is Panel && !(ctrl is PanelKartu) && ctrl.Dock == DockStyle.None && ctrl.BackColor.ToArgb() == WarnaPutih.ToArgb();
         }
 
         private static void PasangGarisTepi(Control induk)

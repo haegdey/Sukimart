@@ -51,26 +51,19 @@ namespace Sukimart
 
         private void TerapkanGayaKartuDashboard()
         {
-            Panel[] kartu = { pnlTransaksi, pnlPenjualan, pnlTerjual, pnlStok, pnlTransaksiTerbaru, pnlPeringatan };
-            foreach (Panel p in kartu)
+            pnlKiri.BackColor = UIHelper.WarnaPutih;
+            pnlKanan.BackColor = UIHelper.WarnaLatar;
+            UIHelper.SusunTombolSidebar(pnlKiri, btnDashboard);
+
+            PanelKartu[] kartu = { pnlTransaksi, pnlPenjualan, pnlTerjual, pnlStok, pnlTransaksiTerbaru, pnlPeringatan };
+            foreach (PanelKartu p in kartu)
             {
-                PasangGayaKartu(p);
+                p.BackColor = UIHelper.WarnaPutih;
+                p.WarnaAksen = UIHelper.WarnaKuning;
+                p.WarnaGaris = UIHelper.WarnaGaris;
             }
 
             FontInter.Terapkan(this);
-        }
-
-        private static void PasangGayaKartu(Panel kartu)
-        {
-            kartu.BackColor = Color.White;
-            kartu.Paint += (s, e) =>
-            {
-                using var penBatas = new Pen(Color.FromArgb(229, 231, 235), 1);
-                e.Graphics.DrawRectangle(penBatas, 0, 0, kartu.Width - 1, kartu.Height - 1);
-
-                using var brushAksen = new SolidBrush(Color.FromArgb(255, 196, 0));
-                e.Graphics.FillRectangle(brushAksen, 1, 1, Math.Max(0, kartu.Width - 2), 3);
-            };
         }
 
         private void AturTataLetakResponsif()
@@ -167,19 +160,19 @@ namespace Sukimart
 
                 lblTransaksiHariIni.Text = "TRANSAKSI SAYA HARI INI";
                 lblNilaiTransaksi.Text = jumlahTransaksiSaya.ToString("N0", BudayaIndonesia);
-                lblNilaiTransaksi.ForeColor = Color.FromArgb(31, 41, 55);
+                lblNilaiTransaksi.ForeColor = UIHelper.WarnaTeksUtama;
 
                 lblPenjualan.Text = "PENJUALAN SAYA HARI INI";
                 lblNilaiPenjualan.Text = "Rp " + totalPenjualanSaya.ToString("N0", BudayaIndonesia);
-                lblNilaiPenjualan.ForeColor = Color.FromArgb(16, 149, 102);
+                lblNilaiPenjualan.ForeColor = UIHelper.WarnaAman;
 
                 lblTerjual.Text = "ITEM TERJUAL HARI INI";
                 lblNilaiTerjual.Text = itemTerjualSaya.ToString("N0", BudayaIndonesia);
-                lblNilaiTerjual.ForeColor = Color.FromArgb(31, 41, 55);
+                lblNilaiTerjual.ForeColor = UIHelper.WarnaTeksUtama;
 
                 lblStok.Text = "STOK PERLU PERHATIAN";
                 lblNilaiStok.Text = stokPerhatian.ToString("N0", BudayaIndonesia);
-                lblNilaiStok.ForeColor = stokPerhatian > 0 ? Color.FromArgb(220, 38, 38) : Color.FromArgb(16, 149, 102);
+                lblNilaiStok.ForeColor = stokPerhatian > 0 ? UIHelper.WarnaHabis : UIHelper.WarnaAman;
 
                 IsiTransaksiTerbaru(transaksiSaya, daftarDetail);
                 IsiPeringatanStok(daftarBarang);
