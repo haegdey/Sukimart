@@ -14,7 +14,7 @@ namespace Sukimart
             UIHelper.InisialisasiForm(this);
 
             lblJudul.Text = $"Riwayat Revisi & Status • {sesi.Id}";
-            lblSubJudul.Text = $"Pembuat: {sesi.DibuatOleh} · Dibuat: {sesi.TanggalDibuat:dd/MM/yyyy HH:mm} · Status: {sesi.Status}";
+            lblSubJudul.Text = $"Pembuat: {sesi.DibuatOleh} · Dibuat: {sesi.TanggalDibuat.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)} · Status: {sesi.Status}";
 
             UIHelper.RatakanTengah(colRevFisikLama, colRevFisikBaru, colTimeStatus);
 
@@ -32,13 +32,13 @@ namespace Sukimart
                 foreach (var r in sesi.RiwayatRevisi)
                 {
                     gridRevisi.Rows.Add(
-                        r.Tanggal.ToString("dd/MM/yyyy HH:mm", BudayaIndonesia),
+                        r.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                         r.DimintaOleh,
                         $"{r.KodeBarang} - {r.NamaBarang}",
                         r.StokFisikLama,
                         r.AlasanRevisi,
                         r.StokFisikBaru.HasValue ? r.StokFisikBaru.Value.ToString() : "(Belum diperbaiki)",
-                        r.TanggalDiperbaiki.HasValue ? $"{r.TanggalDiperbaiki.Value:dd/MM/yyyy HH:mm} ({r.DiperbaikiOleh})" : "-"
+                        r.TanggalDiperbaiki.HasValue ? $"{r.TanggalDiperbaiki.Value.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)} ({r.DiperbaikiOleh})" : "-"
                     );
                 }
             }
@@ -50,7 +50,7 @@ namespace Sukimart
                 foreach (var t in sesi.RiwayatStatus)
                 {
                     gridTimeline.Rows.Add(
-                        t.Waktu.ToString("dd/MM/yyyy HH:mm:ss", BudayaIndonesia),
+                        t.Waktu.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                         t.Status,
                         t.Oleh,
                         t.Catatan

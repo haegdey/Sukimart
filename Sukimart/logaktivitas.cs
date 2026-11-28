@@ -123,10 +123,9 @@ namespace Sukimart
             }
 
             lblJudul.Location = new Point(margin, 28);
-            lblInfo.Location = new Point(margin, lblJudul.Bottom + 6);
 
-            // Panel filter tepat di bawah header (judul + info)
-            pnlFilter.Location = new Point(margin, lblInfo.Bottom + 12);
+            // Panel filter tepat di bawah judul
+            pnlFilter.Location = new Point(margin, lblJudul.Bottom + 16);
             pnlFilter.Size = new Size(lebarTersedia, 56);
 
             // Grid di bawah panel filter dengan margin 12px
@@ -190,7 +189,7 @@ namespace Sukimart
                         bool cocokUser = (a.NamaPengguna ?? "").ToLowerInvariant().Contains(keyword);
                         bool cocokJenis = (a.JenisAktivitas ?? "").ToLowerInvariant().Contains(keyword);
                         bool cocokAksi = (a.Aksi ?? "").ToLowerInvariant().Contains(keyword);
-                        bool cocokWaktu = a.Tanggal.ToString("dd/MM/yyyy HH:mm:ss").Contains(keyword);
+                        bool cocokWaktu = a.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture).Contains(keyword);
 
                         if (!cocokUser && !cocokJenis && !cocokAksi && !cocokWaktu)
                         {
@@ -212,7 +211,7 @@ namespace Sukimart
                 return new
                 {
                     No = nomor++,
-                    Waktu = a.Tanggal.ToString("dd/MM/yyyy HH:mm:ss", BudayaIndonesia),
+                    Waktu = a.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                     Pengguna = string.IsNullOrEmpty(a.NamaPengguna) ? "sistem" : a.NamaPengguna,
                     Jenis = string.IsNullOrEmpty(a.JenisAktivitas) ? PenyimpananData.TentukanJenisAktivitas(a.Aksi) : a.JenisAktivitas,
                     Aksi = aksiBersih,

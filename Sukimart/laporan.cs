@@ -71,9 +71,9 @@ namespace Sukimart
         private void SiapkanFilterLaporan()
         {
             dtpMulai.Format = DateTimePickerFormat.Custom;
-            dtpMulai.CustomFormat = "dd/MM/yyyy";
+            dtpMulai.CustomFormat = "dd-MM-yyyy";
             dtpSelesai.Format = DateTimePickerFormat.Custom;
-            dtpSelesai.CustomFormat = "dd/MM/yyyy";
+            dtpSelesai.CustomFormat = "dd-MM-yyyy";
 
             dtpMulai.Value = DateTime.Today.AddDays(-30);
             dtpSelesai.Value = DateTime.Today;
@@ -112,12 +112,13 @@ namespace Sukimart
             lblKasirKosong.Font = FontInter.Buat(9F);
             lblKasirKosong.ForeColor = Color.FromArgb(107, 114, 128);
 
-            PasangGayaKartu(pnlCard1);
-            PasangGayaKartu(pnlCard2);
-            PasangGayaKartu(pnlCard3);
-            PasangGayaKartu(pnlCard4);
-            PasangGayaKartu(pnlCardTerlaris);
-            PasangGayaKartu(pnlCardKasir);
+            PanelKartu[] kartuLaporan = { pnlCard1, pnlCard2, pnlCard3, pnlCard4, pnlCardTerlaris, pnlCardKasir };
+            foreach (PanelKartu kartu in kartuLaporan)
+            {
+                kartu.BackColor = UIHelper.WarnaPutih;
+                kartu.WarnaAksen = UIHelper.WarnaKuning;
+                kartu.WarnaGaris = UIHelper.WarnaGaris;
+            }
 
             lblInfoHitung.Font = FontInter.Buat(8.5F);
             lblInfoHitung.ForeColor = Color.FromArgb(107, 114, 128);
@@ -155,19 +156,6 @@ namespace Sukimart
             {
                 using var pen = new Pen(Color.FromArgb(229, 231, 235), 1);
                 e.Graphics.DrawLine(pen, 0, 0, pnlTotalLaba.Width, 0);
-            };
-        }
-
-        private static void PasangGayaKartu(Panel kartu)
-        {
-            kartu.BackColor = Color.White;
-            kartu.Paint += (s, e) =>
-            {
-                using var penBatas = new Pen(Color.FromArgb(229, 231, 235), 1);
-                e.Graphics.DrawRectangle(penBatas, 0, 0, kartu.Width - 1, kartu.Height - 1);
-
-                using var brushAksen = new SolidBrush(Color.FromArgb(255, 196, 0));
-                e.Graphics.FillRectangle(brushAksen, 1, 1, Math.Max(0, kartu.Width - 2), 3);
             };
         }
 
@@ -221,19 +209,25 @@ namespace Sukimart
 
             bool isLaba = subJenisPenjualan == "laba";
 
-            // 2b. 2 Analytics Cards (hanya tampil pada mode Transaksi)
-            pnlCardTerlaris.Visible = !isLaba;
-            pnlCardKasir.Visible = !isLaba;
+            int ySub = yCards + tinggiKartu + 8;
+            int tinggiSub = Math.Max(300, pnlKanan.ClientSize.Height - ySub);
+            pnlSubTransaksi.Location = new Point(0, ySub);
+            pnlSubTransaksi.Size = new Size(pnlKanan.ClientSize.Width, tinggiSub);
+            pnlSubLaba.Location = new Point(0, ySub);
+            pnlSubLaba.Size = new Size(pnlKanan.ClientSize.Width, tinggiSub);
+
+            pnlSubTransaksi.Visible = !isLaba;
+            pnlSubLaba.Visible = isLaba;
 
             int yFilter;
+            int tinggiAnalytics = 216;
             if (isLaba)
             {
-                yFilter = 232;
+                yFilter = ySub + 8;
             }
             else
             {
-                int yAnalytics = yCards + tinggiKartu + 16;
-                int tinggiAnalytics = 216;
+                int yAnalytics = 8;
                 int lebarAnalyticsKiri = (lebarTersedia - jarak) / 2;
                 int lebarAnalyticsKanan = lebarTersedia - jarak - lebarAnalyticsKiri;
 
@@ -255,7 +249,7 @@ namespace Sukimart
                 lblKasirKosong.Location = new Point(20, 50);
                 SesuaikanLebarItemFlow(flpKasir);
 
-                yFilter = yAnalytics + tinggiAnalytics + 16;
+                yFilter = ySub + yAnalytics + tinggiAnalytics + 16;
             }
 
             // 3. Filter Tanggal (di bawah 2 Analytics Card pada mode Transaksi, atau di bawah 4 KPI Card pada mode Laba)
@@ -267,37 +261,38 @@ namespace Sukimart
             dtpSelesai.Size = new Size(130, 27);
             btnTerapkanTanggal.Location = new Point(margin + 312, yFilter);
             btnTerapkanTanggal.Size = new Size(96, 32);
+            dtpMulai.BringToFront();
+            lblSampai.BringToFront();
+            dtpSelesai.BringToFront();
+            btnTerapkanTanggal.BringToFront();
 
-            // 4. Keterangan Perhitungan & Judul Tabel
-            int yInfo = yFilter + 44;
-            lblInfoHitung.Visible = isLaba;
-            lblJudulTabel.Visible = isLaba;
+            // 4. Keterangan Perhitungan & Judul Tabel (di dalam pnlSubLaba)
+            int yInfo = 50;
+            lblInfoHitung.Visible = true;
+            lblJudulTabel.Visible = true;
             lblRingkasan.Visible = false;
-
-            if (isLaba)
-            {
-                lblInfoHitung.Location = new Point(margin, yInfo);
-                lblJudulTabel.Location = new Point(margin, yInfo + 22);
-            }
+            lblInfoHitung.Location = new Point(margin, yInfo);
+            lblJudulTabel.Location = new Point(margin, yInfo + 22);
 
             // 5. DataGridView
-            int yGrid = isLaba ? (yFilter + 96) : (yFilter + 48);
+            int yGridTransaksi = 8 + tinggiAnalytics + 56;
+            int tinggiGridTransaksi = Math.Max(180, pnlSubTransaksi.ClientSize.Height - yGridTransaksi - 20);
+            gridLaporan.Location = new Point(margin, yGridTransaksi);
+            gridLaporan.Size = new Size(lebarTersedia, tinggiGridTransaksi);
+            gridLaporan.Visible = true;
+
+            int yGridLaba = 100;
             int tinggiTotal = 46;
-            int tinggiGrid = Math.Max(180, pnlKanan.ClientSize.Height - yGrid - (isLaba ? (tinggiTotal + 24) : 20));
-
-            gridLaporan.Location = new Point(margin, yGrid);
-            gridLaporan.Size = new Size(lebarTersedia, tinggiGrid);
-            gridLaba.Location = new Point(margin, yGrid);
-            gridLaba.Size = new Size(lebarTersedia, tinggiGrid);
-
-            gridLaba.Visible = isLaba;
-            gridLaporan.Visible = !isLaba;
+            int tinggiGridLaba = Math.Max(180, pnlSubLaba.ClientSize.Height - yGridLaba - (tinggiTotal + 24));
+            gridLaba.Location = new Point(margin, yGridLaba);
+            gridLaba.Size = new Size(lebarTersedia, tinggiGridLaba);
+            gridLaba.Visible = true;
 
             // 6. Area Ringkasan Total di Bawah DataGridView
-            pnlTotalLaba.Visible = isLaba;
+            pnlTotalLaba.Visible = true;
             if (isLaba)
             {
-                int yTotal = yGrid + tinggiGrid + 6;
+                int yTotal = yGridLaba + tinggiGridLaba + 6;
                 pnlTotalLaba.Location = new Point(margin, yTotal);
                 pnlTotalLaba.Size = new Size(lebarTersedia, tinggiTotal);
 
@@ -480,7 +475,7 @@ namespace Sukimart
             PerbaruiKartuPenjualanKasir(transaksi);
 
             AturKolomLaporan();
-            gridLaporan.DataSource = transaksi.OrderByDescending(data => data.Tanggal).Select(data => new { Faktur = data.Id, Waktu = data.Tanggal.ToString("dd/MM/yyyy HH:mm"), data.Kasir, Item = detail.Where(rincian => rincian.IdTransaksi == data.Id).Sum(rincian => rincian.Jumlah), Total = "Rp " + data.Total.ToString("N0", BudayaIndonesia) }).ToList();
+            gridLaporan.DataSource = transaksi.OrderByDescending(data => data.Tanggal).Select(data => new { Faktur = data.Id, Waktu = data.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture), data.Kasir, Item = detail.Where(rincian => rincian.IdTransaksi == data.Id).Sum(rincian => rincian.Jumlah), Total = "Rp " + data.Total.ToString("N0", BudayaIndonesia) }).ToList();
         }
 
         private void PerbaruiKartuBarangTerlaris(List<DetailTransaksi> detail)

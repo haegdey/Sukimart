@@ -86,7 +86,7 @@ namespace Sukimart
         {
             lblJudul.Text = $"Sesi Stok Opname • {sesi.Id}";
             lblNomorOpname.Text = $"Nomor: {sesi.Id}";
-            lblTanggal.Text = $"Dibuat: {sesi.TanggalDibuat:dd/MM/yyyy HH:mm}";
+            lblTanggal.Text = $"Dibuat: {sesi.TanggalDibuat.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)}";
             lblPembuat.Text = $"Oleh: {sesi.DibuatOleh}";
             lblStatusBadge.Text = sesi.Status.ToUpper();
 
@@ -112,12 +112,12 @@ namespace Sukimart
                 case "Disetujui":
                     lblStatusBadge.BackColor = Color.FromArgb(209, 250, 229);
                     lblStatusBadge.ForeColor = Color.FromArgb(6, 95, 70);
-                    lblBannerText.Text = $"Status Disetujui: Disetujui oleh {sesi.DisetujuiOleh} pada {sesi.TanggalDisetujui:dd/MM/yyyy HH:mm}. Seluruh penyesuaian stok telah diterapkan ke inventaris.";
+                    lblBannerText.Text = $"Status Disetujui: Disetujui oleh {sesi.DisetujuiOleh} pada {sesi.TanggalDisetujui?.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)}. Seluruh penyesuaian stok telah diterapkan ke inventaris.";
                     break;
                 case "Dibatalkan":
                     lblStatusBadge.BackColor = Color.FromArgb(254, 202, 202);
                     lblStatusBadge.ForeColor = Color.FromArgb(153, 27, 27);
-                    lblBannerText.Text = $"Status Dibatalkan: Dibatalkan oleh {sesi.DibatalkanOleh} pada {sesi.TanggalDibatalkan:dd/MM/yyyy HH:mm}. Alasan: {sesi.AlasanPembatalan}";
+                    lblBannerText.Text = $"Status Dibatalkan: Dibatalkan oleh {sesi.DibatalkanOleh} pada {sesi.TanggalDibatalkan?.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)}. Alasan: {sesi.AlasanPembatalan}";
                     break;
             }
         }

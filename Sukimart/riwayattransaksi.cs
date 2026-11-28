@@ -149,7 +149,7 @@ namespace Sukimart
             gridTransaksi.DataSource = hasil.Select(t => new
             {
                 t.Id,
-                TanggalFormat = t.Tanggal.ToString("dd/MM/yyyy HH:mm"),
+                TanggalFormat = t.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                 t.Kasir,
                 TotalFormat = "Rp " + t.Total.ToString("N0", BudayaIndonesia),
                 BayarFormat = "Rp " + t.Bayar.ToString("N0", BudayaIndonesia),

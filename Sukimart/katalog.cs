@@ -20,6 +20,7 @@ namespace Sukimart
             UIHelper.InisialisasiForm(this);
             MaximizeBox = true;
             UIHelper.RatakanTengah(colStok, colStokMin);
+            UIHelper.PasangBadgeStatusStok(gridBarang, colStatus);
             gridBarang.AllowUserToResizeRows = false;
             SesuaikanPeran();
             PasangEventHandlers();
@@ -207,7 +208,8 @@ namespace Sukimart
                 HargaFormat = "Rp " + b.Harga.ToString("N0", BudayaIndonesia),
                 b.Harga,
                 b.Stok,
-                b.StokMinimum
+                b.StokMinimum,
+                StatusStok = b.Stok == 0 ? "HABIS" : b.Stok <= b.StokMinimum ? "MINIMUM" : "AMAN"
             }).ToList();
             gridBarang.ClearSelection();
         }

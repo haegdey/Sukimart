@@ -53,6 +53,11 @@ namespace Sukimart
         {
             pnlKiri.BackColor = UIHelper.WarnaPutih;
             pnlKanan.BackColor = UIHelper.WarnaLatar;
+            btnGudang.Visible = false;
+            btnLaporan.Visible = false;
+            btnLaporanInventaris.Visible = false;
+            btnPengguna.Visible = false;
+            btnLogAktivitas.Visible = false;
             UIHelper.SusunTombolSidebar(pnlKiri, btnDashboard);
 
             PanelKartu[] kartu = { pnlTransaksi, pnlPenjualan, pnlTerjual, pnlStok, pnlTransaksiTerbaru, pnlPeringatan };
@@ -125,7 +130,7 @@ namespace Sukimart
 
         private void IsiDashboard()
         {
-            lblTanggal.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            lblTanggal.Text = DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             AturTataLetakResponsif();
 
             try
@@ -225,7 +230,7 @@ namespace Sukimart
                 .Select(transaksi => new
                 {
                     Nomor = transaksi.Id,
-                    Waktu = transaksi.Tanggal.ToString("dd/MM/yyyy HH:mm"),
+                    Waktu = transaksi.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                     Item = jumlahItemPerTransaksi.TryGetValue(transaksi.Id, out int qty) ? qty : 0,
                     Total = "Rp " + transaksi.Total.ToString("N0", BudayaIndonesia)
                 })

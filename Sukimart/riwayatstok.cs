@@ -166,7 +166,7 @@ namespace Sukimart
 
                     return new
                     {
-                        Tanggal = r.Tanggal.ToString("dd/MM/yyyy HH:mm", BudayaIndonesia),
+                        Tanggal = r.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                         r.Jenis,
                         StokAwal = r.StokSebelum,
                         JumlahFormat = tandaJumlah + r.Jumlah.ToString("N0", BudayaIndonesia),

@@ -66,9 +66,9 @@ namespace Sukimart
         private void InisialisasiKomponenKustom()
         {
             dtpMulai.Format = DateTimePickerFormat.Custom;
-            dtpMulai.CustomFormat = "dd/MM/yyyy";
+            dtpMulai.CustomFormat = "dd-MM-yyyy";
             dtpSelesai.Format = DateTimePickerFormat.Custom;
-            dtpSelesai.CustomFormat = "dd/MM/yyyy";
+            dtpSelesai.CustomFormat = "dd-MM-yyyy";
 
             dtpMulai.Value = DateTime.Today.AddDays(-30);
             dtpSelesai.Value = DateTime.Today;
@@ -76,12 +76,25 @@ namespace Sukimart
             cmbFilterStatus.SelectedIndex = 0;
             cmbJenisPergerakan.SelectedIndex = 0;
 
-            btnLaporanInventaris.BackColor = Color.FromArgb(255, 196, 0);
-            btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
+            pnlKiri.BackColor = UIHelper.WarnaPutih;
+            pnlKanan.BackColor = UIHelper.WarnaLatar;
+            pnlSubJumlahStok.BackColor = UIHelper.WarnaLatar;
+            pnlSubRiwayatStok.BackColor = UIHelper.WarnaLatar;
+
+            PanelKartu[] kartuKpi = { pnlCard1, pnlCard2, pnlCard3, pnlCard4 };
+            foreach (PanelKartu kartu in kartuKpi)
+            {
+                kartu.BackColor = UIHelper.WarnaPutih;
+                kartu.WarnaAksen = UIHelper.WarnaKuning;
+                kartu.WarnaGaris = UIHelper.WarnaGaris;
+            }
+
+            btnLaporanInventaris.BackColor = UIHelper.WarnaKuning;
+            btnLaporanInventaris.ForeColor = UIHelper.WarnaTeksUtama;
             btnLaporanInventaris.Font = FontInter.Buat(10F, FontStyle.Bold);
 
-            btnLaporan.BackColor = Color.White;
-            btnLaporan.ForeColor = Color.FromArgb(31, 41, 55);
+            btnLaporan.BackColor = UIHelper.WarnaPutih;
+            btnLaporan.ForeColor = UIHelper.WarnaTeksUtama;
             btnLaporan.Font = FontInter.Buat(10F, FontStyle.Regular);
 
             AturTombolSub(btnSubJumlahStok, "Jumlah Stok", true);
@@ -145,13 +158,13 @@ namespace Sukimart
 
         private static void AturTombolSub(Button tombol, string teks, bool aktif, int lebar = 130)
         {
-            tombol.BackColor = aktif ? Color.FromArgb(255, 196, 0) : Color.White;
+            tombol.BackColor = aktif ? UIHelper.WarnaKuning : UIHelper.WarnaPutih;
             tombol.Cursor = Cursors.Hand;
-            tombol.FlatAppearance.BorderColor = Color.FromArgb(209, 213, 219);
+            tombol.FlatAppearance.BorderColor = UIHelper.WarnaGaris;
             tombol.FlatAppearance.BorderSize = aktif ? 0 : 1;
             tombol.FlatStyle = FlatStyle.Flat;
             tombol.Font = FontInter.Buat(9.5F, aktif ? FontStyle.Bold : FontStyle.Regular);
-            tombol.ForeColor = aktif ? Color.FromArgb(31, 41, 55) : Color.FromArgb(75, 85, 99);
+            tombol.ForeColor = aktif ? UIHelper.WarnaTeksUtama : UIHelper.WarnaTeksSekunder;
             tombol.Size = new Size(lebar, 32);
             tombol.Text = teks;
         }
@@ -231,21 +244,23 @@ namespace Sukimart
             try
             {
                 bool isJumlah = sub == "jumlah";
+                pnlSubJumlahStok.Visible = isJumlah;
+                pnlSubRiwayatStok.Visible = !isJumlah;
 
                 // Kontrol Jumlah Stok
-                txtCariJumlah.Visible = isJumlah;
-                cmbFilterStatus.Visible = isJumlah;
-                gridJumlahStok.Visible = isJumlah;
-                lblInfoPetunjuk.Visible = isJumlah;
+                txtCariJumlah.Visible = true;
+                cmbFilterStatus.Visible = true;
+                gridJumlahStok.Visible = true;
+                lblInfoPetunjuk.Visible = true;
 
                 // Kontrol Riwayat Stok
-                dtpMulai.Visible = !isJumlah;
-                lblSampai.Visible = !isJumlah;
-                dtpSelesai.Visible = !isJumlah;
-                btnTerapkanRiwayat.Visible = !isJumlah;
-                txtCariRiwayat.Visible = !isJumlah;
-                cmbJenisPergerakan.Visible = !isJumlah;
-                gridRiwayatStok.Visible = !isJumlah;
+                dtpMulai.Visible = true;
+                lblSampai.Visible = true;
+                dtpSelesai.Visible = true;
+                btnTerapkanRiwayat.Visible = true;
+                txtCariRiwayat.Visible = true;
+                cmbJenisPergerakan.Visible = true;
+                gridRiwayatStok.Visible = true;
 
                 AturTataLetakResponsif();
 
@@ -291,8 +306,15 @@ namespace Sukimart
             pnlCard4.Location = new Point(margin + 3 * (lebarKartu + jarak), yCards);
             pnlCard4.Size = new Size(lebarKartu, tinggiKartu);
 
-            // 3. Filter Section
-            int yFilter = 232;
+            // 3. Subhalaman & Filter Section
+            int ySub = yCards + tinggiKartu + 8;
+            int tinggiSub = Math.Max(300, pnlKanan.ClientSize.Height - ySub);
+            pnlSubJumlahStok.Location = new Point(0, ySub);
+            pnlSubJumlahStok.Size = new Size(pnlKanan.ClientSize.Width, tinggiSub);
+            pnlSubRiwayatStok.Location = new Point(0, ySub);
+            pnlSubRiwayatStok.Size = new Size(pnlKanan.ClientSize.Width, tinggiSub);
+
+            int yFilter = 8;
             if (subHalamanAktif == "jumlah")
             {
                 txtCariJumlah.Location = new Point(margin, yFilter);
@@ -323,8 +345,8 @@ namespace Sukimart
             }
 
             // 4. DataGridView
-            int yGrid = 280;
-            int tinggiGrid = Math.Max(180, pnlKanan.ClientSize.Height - yGrid - 48);
+            int yGrid = 56;
+            int tinggiGrid = Math.Max(180, tinggiSub - yGrid - 48);
 
             gridJumlahStok.Location = new Point(margin, yGrid);
             gridJumlahStok.Size = new Size(lebarTersedia, tinggiGrid);
@@ -379,19 +401,19 @@ namespace Sukimart
 
             lblCard1Judul.Text = "TOTAL JENIS BARANG";
             lblCard1Nilai.Text = totalJenis.ToString("N0", BudayaIndonesia);
-            lblCard1Nilai.ForeColor = Color.FromArgb(31, 41, 55);
+            lblCard1Nilai.ForeColor = UIHelper.WarnaTeksUtama;
 
             lblCard2Judul.Text = "STOK AMAN";
             lblCard2Nilai.Text = totalAman.ToString("N0", BudayaIndonesia);
-            lblCard2Nilai.ForeColor = Color.FromArgb(16, 149, 102);
+            lblCard2Nilai.ForeColor = UIHelper.WarnaAman;
 
             lblCard3Judul.Text = "STOK MINIMUM";
             lblCard3Nilai.Text = totalMinimum.ToString("N0", BudayaIndonesia);
-            lblCard3Nilai.ForeColor = Color.FromArgb(217, 119, 6);
+            lblCard3Nilai.ForeColor = UIHelper.WarnaMinimum;
 
             lblCard4Judul.Text = "STOK HABIS";
             lblCard4Nilai.Text = totalHabis.ToString("N0", BudayaIndonesia);
-            lblCard4Nilai.ForeColor = Color.FromArgb(220, 38, 38);
+            lblCard4Nilai.ForeColor = UIHelper.WarnaHabis;
 
             // Filter Tabel
             string cari = txtCariJumlah.Text.Trim().ToLower();
@@ -671,19 +693,19 @@ namespace Sukimart
 
             lblCard1Judul.Text = "TOTAL UNIT MASUK";
             lblCard1Nilai.Text = unitMasuk.ToString("N0", BudayaIndonesia);
-            lblCard1Nilai.ForeColor = Color.FromArgb(16, 149, 102);
+            lblCard1Nilai.ForeColor = UIHelper.WarnaAman;
 
             lblCard2Judul.Text = "TOTAL UNIT KELUAR";
             lblCard2Nilai.Text = unitKeluar.ToString("N0", BudayaIndonesia);
-            lblCard2Nilai.ForeColor = Color.FromArgb(220, 38, 38);
+            lblCard2Nilai.ForeColor = UIHelper.WarnaHabis;
 
             lblCard3Judul.Text = "TRANSAKSI MASUK";
             lblCard3Nilai.Text = trxMasuk.ToString("N0", BudayaIndonesia);
-            lblCard3Nilai.ForeColor = Color.FromArgb(31, 41, 55);
+            lblCard3Nilai.ForeColor = UIHelper.WarnaTeksUtama;
 
             lblCard4Judul.Text = "TRANSAKSI KELUAR";
             lblCard4Nilai.Text = trxKeluar.ToString("N0", BudayaIndonesia);
-            lblCard4Nilai.ForeColor = Color.FromArgb(31, 41, 55);
+            lblCard4Nilai.ForeColor = UIHelper.WarnaTeksUtama;
 
             gridRiwayatStok.DataSource = null;
             gridRiwayatStok.DataSource = hasil;
@@ -742,7 +764,7 @@ namespace Sukimart
                 string jumlahTeks = $"{tanda}{item.Jumlah.ToString("N0", BudayaIndonesia)}";
 
                 string pesan = $"DETAIL RIWAYAT STOK\n\n" +
-                               $"Tanggal: {item.Tanggal:dd/MM/yyyy HH:mm}\n" +
+                               $"Tanggal: {item.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture)}\n" +
                                $"Kode Barang: {item.KodeBarang}\n" +
                                $"Nama Barang: {item.NamaBarang}\n" +
                                $"Jenis: {item.Jenis}\n" +
@@ -786,7 +808,7 @@ namespace Sukimart
         private static readonly CultureInfo BudayaIndonesia = new CultureInfo("id-ID");
 
         public DateTime Tanggal { get; set; }
-        public string TanggalFormat => Tanggal.ToString("dd/MM/yyyy HH:mm", BudayaIndonesia);
+        public string TanggalFormat => Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
         public string KodeBarang { get; set; } = "";
         public string NamaBarang { get; set; } = "";
         public string Jenis { get; set; } = "";

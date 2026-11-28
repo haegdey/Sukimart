@@ -98,11 +98,13 @@ namespace Sukimart
             btnKelolaKategori.FlatStyle = FlatStyle.Flat;
             btnKelolaKategori.Font = new Font("Inter", 10F);
             btnKelolaKategori.ForeColor = Color.FromArgb(55, 65, 81);
-            btnKelolaKategori.Location = new Point(328, 211);
+            btnKelolaKategori.Location = new Point(328, 210);
             btnKelolaKategori.Name = "btnKelolaKategori";
-            btnKelolaKategori.Size = new Size(128, 27);
+            btnKelolaKategori.Padding = new Padding(0);
+            btnKelolaKategori.Size = new Size(134, 28);
             btnKelolaKategori.TabIndex = 7;
             btnKelolaKategori.Text = "Kelola Kategori";
+            btnKelolaKategori.TextAlign = ContentAlignment.MiddleCenter;
             btnKelolaKategori.UseVisualStyleBackColor = false;
             // 
             // lblHargaBeli

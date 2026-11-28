@@ -167,7 +167,7 @@ namespace Sukimart
             btnPengguna.FlatStyle = FlatStyle.Flat;
             btnPengguna.Font = new Font("Inter", 10F);
             btnPengguna.ForeColor = Color.FromArgb(31, 41, 55);
-            btnPengguna.Location = new Point(18, 533);
+            btnPengguna.Location = new Point(18, 597);
             btnPengguna.Margin = new Padding(3, 4, 3, 4);
             btnPengguna.Name = "btnPengguna";
             btnPengguna.Padding = new Padding(18, 0, 0, 0);
@@ -186,7 +186,7 @@ namespace Sukimart
             btnLogAktivitas.FlatStyle = FlatStyle.Flat;
             btnLogAktivitas.Font = new Font("Inter", 10F);
             btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLogAktivitas.Location = new Point(18, 597);
+            btnLogAktivitas.Location = new Point(18, 661);
             btnLogAktivitas.Margin = new Padding(3, 4, 3, 4);
             btnLogAktivitas.Name = "btnLogAktivitas";
             btnLogAktivitas.Padding = new Padding(18, 0, 0, 0);
@@ -271,7 +271,7 @@ namespace Sukimart
             btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
             btnLaporanInventaris.Font = new Font("Inter", 10F);
             btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLaporanInventaris.Location = new Point(18, 528);
+            btnLaporanInventaris.Location = new Point(18, 533);
             btnLaporanInventaris.Margin = new Padding(3, 4, 3, 4);
             btnLaporanInventaris.Name = "btnLaporanInventaris";
             btnLaporanInventaris.Padding = new Padding(18, 0, 0, 0);
@@ -487,7 +487,7 @@ namespace Sukimart
             lblTanggal.Name = "lblTanggal";
             lblTanggal.Size = new Size(80, 18);
             lblTanggal.TabIndex = 1;
-            lblTanggal.Text = "26/11/2026";
+            lblTanggal.Text = "26-11-2026";
             // 
             // pnlTerjual
             // 
@@ -697,11 +697,13 @@ namespace Sukimart
             btnLihatInventaris.FlatStyle = FlatStyle.Flat;
             btnLihatInventaris.Font = new Font("Inter", 8.5F, FontStyle.Bold);
             btnLihatInventaris.ForeColor = Color.FromArgb(30, 41, 59);
-            btnLihatInventaris.Location = new Point(296, 12);
+            btnLihatInventaris.Location = new Point(286, 12);
             btnLihatInventaris.Name = "btnLihatInventaris";
-            btnLihatInventaris.Size = new Size(128, 28);
+            btnLihatInventaris.Padding = new Padding(0);
+            btnLihatInventaris.Size = new Size(138, 28);
             btnLihatInventaris.TabIndex = 1;
             btnLihatInventaris.Text = "Laporan Inventaris";
+            btnLihatInventaris.TextAlign = ContentAlignment.MiddleCenter;
             btnLihatInventaris.UseVisualStyleBackColor = false;
             // 
             // flpPeringatan
@@ -759,11 +761,13 @@ namespace Sukimart
             btnLihatSemuaTransaksi.FlatStyle = FlatStyle.Flat;
             btnLihatSemuaTransaksi.Font = new Font("Inter", 8.5F, FontStyle.Bold);
             btnLihatSemuaTransaksi.ForeColor = Color.FromArgb(30, 41, 59);
-            btnLihatSemuaTransaksi.Location = new Point(524, 12);
+            btnLihatSemuaTransaksi.Location = new Point(516, 12);
             btnLihatSemuaTransaksi.Name = "btnLihatSemuaTransaksi";
-            btnLihatSemuaTransaksi.Size = new Size(100, 28);
+            btnLihatSemuaTransaksi.Padding = new Padding(0);
+            btnLihatSemuaTransaksi.Size = new Size(108, 28);
             btnLihatSemuaTransaksi.TabIndex = 1;
             btnLihatSemuaTransaksi.Text = "Lihat Semua";
+            btnLihatSemuaTransaksi.TextAlign = ContentAlignment.MiddleCenter;
             btnLihatSemuaTransaksi.UseVisualStyleBackColor = false;
             // 
             // dataGridView1
@@ -883,11 +887,13 @@ namespace Sukimart
             btnLihatPengajuan.FlatStyle = FlatStyle.Flat;
             btnLihatPengajuan.Font = new Font("Inter", 8.5F, FontStyle.Bold);
             btnLihatPengajuan.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLihatPengajuan.Location = new Point(296, 12);
+            btnLihatPengajuan.Location = new Point(292, 12);
             btnLihatPengajuan.Name = "btnLihatPengajuan";
-            btnLihatPengajuan.Size = new Size(128, 28);
+            btnLihatPengajuan.Padding = new Padding(0);
+            btnLihatPengajuan.Size = new Size(132, 28);
             btnLihatPengajuan.TabIndex = 1;
             btnLihatPengajuan.Text = "Lihat Pengajuan";
+            btnLihatPengajuan.TextAlign = ContentAlignment.MiddleCenter;
             btnLihatPengajuan.UseVisualStyleBackColor = false;
             // 
             // pnlOpnameMenunggu
@@ -1000,7 +1006,7 @@ namespace Sukimart
             pnlInfoInventaris.Controls.Add(lblJudulInfoInventaris);
             pnlInfoInventaris.Location = new Point(704, 552);
             pnlInfoInventaris.Name = "pnlInfoInventaris";
-            pnlInfoInventaris.Size = new Size(444, 240);
+            pnlInfoInventaris.Size = new Size(444, 256);
             pnlInfoInventaris.TabIndex = 10;
             pnlInfoInventaris.Visible = false;
             // 

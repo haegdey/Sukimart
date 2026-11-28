@@ -61,6 +61,7 @@ namespace Sukimart
             colHarga = new DataGridViewTextBoxColumn();
             colStok = new DataGridViewTextBoxColumn();
             colStokMin = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewTextBoxColumn();
             btnTambahItem = new Button();
             btnEditProduk = new Button();
             btnHapusBarang = new Button();
@@ -172,7 +173,7 @@ namespace Sukimart
             btnPengguna.FlatStyle = FlatStyle.Flat;
             btnPengguna.Font = new Font("Inter", 10F);
             btnPengguna.ForeColor = Color.FromArgb(31, 41, 55);
-            btnPengguna.Location = new Point(18, 533);
+            btnPengguna.Location = new Point(18, 597);
             btnPengguna.Margin = new Padding(3, 4, 3, 4);
             btnPengguna.Name = "btnPengguna";
             btnPengguna.Padding = new Padding(18, 0, 0, 0);
@@ -191,7 +192,7 @@ namespace Sukimart
             btnLogAktivitas.FlatStyle = FlatStyle.Flat;
             btnLogAktivitas.Font = new Font("Inter", 10F);
             btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLogAktivitas.Location = new Point(18, 597);
+            btnLogAktivitas.Location = new Point(18, 661);
             btnLogAktivitas.Margin = new Padding(3, 4, 3, 4);
             btnLogAktivitas.Name = "btnLogAktivitas";
             btnLogAktivitas.Padding = new Padding(18, 0, 0, 0);
@@ -229,7 +230,7 @@ namespace Sukimart
             btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
             btnLaporanInventaris.Font = new Font("Inter", 10F);
             btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLaporanInventaris.Location = new Point(18, 528);
+            btnLaporanInventaris.Location = new Point(18, 533);
             btnLaporanInventaris.Margin = new Padding(3, 4, 3, 4);
             btnLaporanInventaris.Name = "btnLaporanInventaris";
             btnLaporanInventaris.Padding = new Padding(18, 0, 0, 0);
@@ -492,7 +493,7 @@ namespace Sukimart
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
             gridBarang.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             gridBarang.ColumnHeadersHeight = 40;
-            gridBarang.Columns.AddRange(new DataGridViewColumn[] { colKode, colNama, colKategori, colHargaBeli, colHarga, colStok, colStokMin });
+            gridBarang.Columns.AddRange(new DataGridViewColumn[] { colKode, colNama, colKategori, colHargaBeli, colHarga, colStok, colStokMin, colStatus });
             dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = SystemColors.Window;
             dataGridViewCellStyle4.Font = new Font("Inter", 10F);
@@ -576,6 +577,15 @@ namespace Sukimart
             colStokMin.MinimumWidth = 6;
             colStokMin.Name = "colStokMin";
             colStokMin.ReadOnly = true;
+            // 
+            // colStatus
+            // 
+            colStatus.DataPropertyName = "StatusStok";
+            colStatus.FillWeight = 85F;
+            colStatus.HeaderText = "Status";
+            colStatus.MinimumWidth = 80;
+            colStatus.Name = "colStatus";
+            colStatus.ReadOnly = true;
             // 
             // btnTambahItem
             // 
@@ -680,6 +690,7 @@ namespace Sukimart
         private DataGridViewTextBoxColumn colHarga;
         private DataGridViewTextBoxColumn colStok;
         private DataGridViewTextBoxColumn colStokMin;
+        private DataGridViewTextBoxColumn colStatus;
         private Button btnTambahItem;
         private Button btnEditProduk;
         private Button btnHapusBarang;

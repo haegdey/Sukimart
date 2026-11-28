@@ -25,7 +25,7 @@ namespace Sukimart
             UIHelper.InisialisasiForm(this);
             MaximizeBox = true;
             AturGridKeranjang();
-            lblInfoKasir.Text = $"Kasir: {Navigasi.PenggunaAktif} · {DateTime.Now.ToString("dd/MM/yyyy", BudayaIndonesia)}";
+            lblInfoKasir.Text = $"Kasir: {Navigasi.PenggunaAktif} · {DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)}";
             SesuaikanPeran();
             PasangEventHandlers();
             MuatDataBarang();

@@ -271,7 +271,7 @@ namespace Sukimart
 
         private void IsiDashboard()
         {
-            lblTanggal.Text = DateTime.Now.ToString("dd/MM/yyyy");
+            lblTanggal.Text = DateTime.Now.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
             AturTataLetakResponsif();
 
             try
@@ -460,7 +460,7 @@ namespace Sukimart
                 titik[i] = new PointF(x, y);
 
                 // Label tanggal sumbu X
-                string teksX = dataGrafik7Hari[i].Tanggal.ToString("dd/MM");
+                string teksX = dataGrafik7Hari[i].Tanggal.ToString("dd-MM", CultureInfo.InvariantCulture);
                 SizeF ukuranX = g.MeasureString(teksX, fontAxis);
                 g.DrawString(teksX, fontAxis, brushTeksAxis, x - ukuranX.Width / 2, areaPlot.Bottom + 6);
             }
@@ -600,7 +600,7 @@ namespace Sukimart
                 .Select(transaksi => new
                 {
                     Nomor = transaksi.Id,
-                    Tanggal = transaksi.Tanggal.ToString("dd/MM/yyyy HH:mm"),
+                    Tanggal = transaksi.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                     Kasir = transaksi.Kasir,
                     Total = "Rp " + transaksi.Total.ToString("N0", BudayaIndonesia)
                 })

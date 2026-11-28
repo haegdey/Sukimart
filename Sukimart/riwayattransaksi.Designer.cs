@@ -52,7 +52,7 @@ namespace Sukimart
             btnLihatStruk = new Button();
             nightControlBox1 = new ReaLTaiizor.Controls.NightControlBox();
             lblJudul = new Label();
-            pnlFilter = new Panel();
+            pnlFilter = new PanelKartu();
             txtCari = new TextBox();
             lblDari = new Label();
             dtpMulai = new DateTimePicker();
@@ -60,7 +60,7 @@ namespace Sukimart
             dtpSelesai = new DateTimePicker();
             btnFilter = new Button();
             btnReset = new Button();
-            pnlRingkasan = new Panel();
+            pnlRingkasan = new PanelKartu();
             lblStatTransaksi = new Label();
             lblValTransaksi = new Label();
             lblStatOmzet = new Label();
@@ -162,7 +162,7 @@ namespace Sukimart
             btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
             btnLaporanInventaris.Font = new Font("Inter", 10F);
             btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLaporanInventaris.Location = new Point(16, 396);
+            btnLaporanInventaris.Location = new Point(16, 400);
             btnLaporanInventaris.Name = "btnLaporanInventaris";
             btnLaporanInventaris.Padding = new Padding(16, 0, 0, 0);
             btnLaporanInventaris.Size = new Size(208, 40);
@@ -177,7 +177,7 @@ namespace Sukimart
             btnPengguna.FlatStyle = FlatStyle.Flat;
             btnPengguna.Font = new Font("Inter", 10F);
             btnPengguna.ForeColor = Color.FromArgb(31, 41, 55);
-            btnPengguna.Location = new Point(16, 400);
+            btnPengguna.Location = new Point(16, 448);
             btnPengguna.Name = "btnPengguna";
             btnPengguna.Padding = new Padding(16, 0, 0, 0);
             btnPengguna.Size = new Size(208, 40);
@@ -195,7 +195,7 @@ namespace Sukimart
             btnLogAktivitas.FlatStyle = FlatStyle.Flat;
             btnLogAktivitas.Font = new Font("Inter", 10F);
             btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLogAktivitas.Location = new Point(16, 448);
+            btnLogAktivitas.Location = new Point(16, 496);
             btnLogAktivitas.Name = "btnLogAktivitas";
             btnLogAktivitas.Padding = new Padding(16, 0, 0, 0);
             btnLogAktivitas.Size = new Size(208, 40);
@@ -451,8 +451,9 @@ namespace Sukimart
             // 
             // dtpMulai
             // 
+            dtpMulai.CustomFormat = "dd-MM-yyyy";
             dtpMulai.Font = new Font("Inter", 10F);
-            dtpMulai.Format = DateTimePickerFormat.Short;
+            dtpMulai.Format = DateTimePickerFormat.Custom;
             dtpMulai.Location = new Point(352, 16);
             dtpMulai.Name = "dtpMulai";
             dtpMulai.Size = new Size(140, 22);
@@ -471,8 +472,9 @@ namespace Sukimart
             // 
             // dtpSelesai
             // 
+            dtpSelesai.CustomFormat = "dd-MM-yyyy";
             dtpSelesai.Font = new Font("Inter", 10F);
-            dtpSelesai.Format = DateTimePickerFormat.Short;
+            dtpSelesai.Format = DateTimePickerFormat.Custom;
             dtpSelesai.Location = new Point(568, 16);
             dtpSelesai.Name = "dtpSelesai";
             dtpSelesai.Size = new Size(140, 22);
@@ -836,7 +838,7 @@ namespace Sukimart
         private Button btnLihatStruk;
         private ReaLTaiizor.Controls.NightControlBox nightControlBox1;
         private Label lblJudul;
-        private Panel pnlFilter;
+        private PanelKartu pnlFilter;
         private TextBox txtCari;
         private Label lblDari;
         private DateTimePicker dtpMulai;
@@ -844,7 +846,7 @@ namespace Sukimart
         private DateTimePicker dtpSelesai;
         private Button btnFilter;
         private Button btnReset;
-        private Panel pnlRingkasan;
+        private PanelKartu pnlRingkasan;
         private Label lblStatTransaksi;
         private Label lblValTransaksi;
         private Label lblStatOmzet;

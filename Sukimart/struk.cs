@@ -48,7 +48,7 @@ namespace Sukimart
         private void IsiStruk()
         {
             lblFaktur.Text = transaksi.Id;
-            lblTanggal.Text = transaksi.Tanggal.ToString("dd/MM/yyyy HH:mm", BudayaIndonesia);
+            lblTanggal.Text = transaksi.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
             lblKasir.Text = transaksi.Kasir;
             lblTotal.Text = "Rp " + transaksi.Total.ToString("N0", BudayaIndonesia);
             lblTunai.Text = "Rp " + transaksi.Bayar.ToString("N0", BudayaIndonesia);
@@ -180,7 +180,7 @@ namespace Sukimart
             Garis();
 
             Baris("No. Faktur", transaksi.Id, fontKecil, redup);
-            Baris("Tanggal", transaksi.Tanggal.ToString("dd/MM/yyyy HH:mm", BudayaIndonesia), fontKecil, redup);
+            Baris("Tanggal", transaksi.Tanggal.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture), fontKecil, redup);
             Baris("Kasir", transaksi.Kasir, fontKecil, redup, 0);
             Garis();
 

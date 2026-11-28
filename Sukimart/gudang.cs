@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace Sukimart
 {
     public partial class FormGudang : Form
@@ -26,6 +28,7 @@ namespace Sukimart
             MaximizeBox = true;
             SiapkanFormPergerakanStok();
             UIHelper.RatakanTengah(colStok, colMinStok);
+            UIHelper.PasangBadgeStatusStok(gridGudang, colStatus);
             gridGudang.AllowUserToResizeRows = false;
             cmbJenisStok.SelectedIndex = 0;
 
@@ -327,7 +330,7 @@ namespace Sukimart
 
                 int rowIndex = gridSesiOpname.Rows.Add(
                     s.Id,
-                    s.TanggalDibuat.ToString("dd/MM/yyyy HH:mm"),
+                    s.TanggalDibuat.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                     s.DibuatOleh,
                     totalProduk,
                     (totalSelisih > 0 ? "+" : "") + totalSelisih,
@@ -378,12 +381,12 @@ namespace Sukimart
             {
                 int totalProduk = s.Items.Count;
                 int totalSelisih = s.Items.Sum(i => i.Selisih);
-                string waktuSelesaiStr = s.TanggalSelesai.HasValue ? s.TanggalSelesai.Value.ToString("dd/MM/yyyy HH:mm") : "-";
+                string waktuSelesaiStr = s.TanggalSelesai.HasValue ? s.TanggalSelesai.Value.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture) : "-";
                 string penyetujuStr = s.Status == "Disetujui" ? (s.DisetujuiOleh ?? "-") : (s.DibatalkanOleh ?? "-");
 
                 int rowIndex = gridRiwayatOpname.Rows.Add(
                     s.Id,
-                    s.TanggalDibuat.ToString("dd/MM/yyyy HH:mm"),
+                    s.TanggalDibuat.ToString("dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                     s.DibuatOleh,
                     penyetujuStr,
                     totalProduk,

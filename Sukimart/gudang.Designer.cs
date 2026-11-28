@@ -68,7 +68,7 @@ namespace Sukimart
             colStok = new DataGridViewTextBoxColumn();
             colMinStok = new DataGridViewTextBoxColumn();
             colStatus = new DataGridViewTextBoxColumn();
-            pnlRestock = new Panel();
+            pnlRestock = new PanelKartu();
             lblPilihBarangRestock = new Label();
             txtBarangTerpilih = new TextBox();
             lblJumlahMasuk = new Label();
@@ -198,7 +198,7 @@ namespace Sukimart
             btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
             btnLaporanInventaris.Font = new Font("Inter", 10F);
             btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLaporanInventaris.Location = new Point(16, 396);
+            btnLaporanInventaris.Location = new Point(16, 400);
             btnLaporanInventaris.Name = "btnLaporanInventaris";
             btnLaporanInventaris.Padding = new Padding(16, 0, 0, 0);
             btnLaporanInventaris.Size = new Size(208, 40);
@@ -213,7 +213,7 @@ namespace Sukimart
             btnPengguna.FlatStyle = FlatStyle.Flat;
             btnPengguna.Font = new Font("Inter", 10F);
             btnPengguna.ForeColor = Color.FromArgb(31, 41, 55);
-            btnPengguna.Location = new Point(16, 400);
+            btnPengguna.Location = new Point(16, 448);
             btnPengguna.Name = "btnPengguna";
             btnPengguna.Padding = new Padding(16, 0, 0, 0);
             btnPengguna.Size = new Size(208, 40);
@@ -231,7 +231,7 @@ namespace Sukimart
             btnLogAktivitas.FlatStyle = FlatStyle.Flat;
             btnLogAktivitas.Font = new Font("Inter", 10F);
             btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLogAktivitas.Location = new Point(16, 448);
+            btnLogAktivitas.Location = new Point(16, 496);
             btnLogAktivitas.Name = "btnLogAktivitas";
             btnLogAktivitas.Padding = new Padding(16, 0, 0, 0);
             btnLogAktivitas.Size = new Size(208, 40);
@@ -497,6 +497,7 @@ namespace Sukimart
             // pnlSubStokGudang
             // 
             pnlSubStokGudang.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlSubStokGudang.BackColor = Color.FromArgb(247, 247, 245);
             pnlSubStokGudang.Controls.Add(txtCariGudang);
             pnlSubStokGudang.Controls.Add(btnRiwayatStok);
             pnlSubStokGudang.Controls.Add(btnFilterMenipis);
@@ -531,7 +532,7 @@ namespace Sukimart
             btnFilterMenipis.Name = "btnFilterMenipis";
             btnFilterMenipis.Size = new Size(136, 32);
             btnFilterMenipis.TabIndex = 4;
-            btnFilterMenipis.Text = "Stok Menipis";
+            btnFilterMenipis.Text = "Stok Minimum";
             btnFilterMenipis.UseVisualStyleBackColor = false;
             // 
             // btnSemuaStok
@@ -710,7 +711,7 @@ namespace Sukimart
             lblJumlahMasuk.ForeColor = Color.FromArgb(75, 85, 99);
             lblJumlahMasuk.Location = new Point(488, 24);
             lblJumlahMasuk.Name = "lblJumlahMasuk";
-            lblJumlahMasuk.Size = new Size(150, 15);
+            lblJumlahMasuk.Size = new Size(104, 15);
             lblJumlahMasuk.TabIndex = 5;
             lblJumlahMasuk.Text = "Jumlah";
             // 
@@ -835,6 +836,7 @@ namespace Sukimart
             pnlSubStokOpname.Controls.Add(btnSegarkanOpname);
             pnlSubStokOpname.Controls.Add(txtCariSesi);
             pnlSubStokOpname.Controls.Add(gridSesiOpname);
+            pnlSubStokOpname.BackColor = Color.FromArgb(247, 247, 245);
             pnlSubStokOpname.Location = new Point(0, 115);
             pnlSubStokOpname.Name = "pnlSubStokOpname";
             pnlSubStokOpname.Size = new Size(1040, 605);
@@ -1022,6 +1024,7 @@ namespace Sukimart
             pnlSubRiwayatOpname.Controls.Add(btnTerapkanFilterRiwayat);
             pnlSubRiwayatOpname.Controls.Add(btnBukaDetailRiwayat);
             pnlSubRiwayatOpname.Controls.Add(gridRiwayatOpname);
+            pnlSubRiwayatOpname.BackColor = Color.FromArgb(247, 247, 245);
             pnlSubRiwayatOpname.Location = new Point(0, 115);
             pnlSubRiwayatOpname.Name = "pnlSubRiwayatOpname";
             pnlSubRiwayatOpname.Size = new Size(1040, 605);
@@ -1030,8 +1033,9 @@ namespace Sukimart
             // 
             // dtpOpnameMulai
             // 
+            dtpOpnameMulai.CustomFormat = "dd-MM-yyyy";
             dtpOpnameMulai.Font = new Font("Inter", 10F);
-            dtpOpnameMulai.Format = DateTimePickerFormat.Short;
+            dtpOpnameMulai.Format = DateTimePickerFormat.Custom;
             dtpOpnameMulai.Location = new Point(40, 9);
             dtpOpnameMulai.Name = "dtpOpnameMulai";
             dtpOpnameMulai.Size = new Size(130, 23);
@@ -1049,8 +1053,9 @@ namespace Sukimart
             // 
             // dtpOpnameSelesai
             // 
+            dtpOpnameSelesai.CustomFormat = "dd-MM-yyyy";
             dtpOpnameSelesai.Font = new Font("Inter", 10F);
-            dtpOpnameSelesai.Format = DateTimePickerFormat.Short;
+            dtpOpnameSelesai.Format = DateTimePickerFormat.Custom;
             dtpOpnameSelesai.Location = new Point(208, 9);
             dtpOpnameSelesai.Name = "dtpOpnameSelesai";
             dtpOpnameSelesai.Size = new Size(130, 23);
@@ -1277,7 +1282,7 @@ namespace Sukimart
         private DataGridViewTextBoxColumn colStok;
         private DataGridViewTextBoxColumn colMinStok;
         private DataGridViewTextBoxColumn colStatus;
-        private Panel pnlRestock;
+        private PanelKartu pnlRestock;
         private Label lblPilihBarangRestock;
         private TextBox txtBarangTerpilih;
         private Label lblJumlahMasuk;

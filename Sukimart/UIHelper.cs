@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -453,6 +454,78 @@ namespace Sukimart
                 kolom.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 kolom.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
+        }
+
+        public static void PasangBadgeStatusStok(DataGridView grid, DataGridViewColumn colStatus)
+        {
+            if (grid == null || colStatus == null) return;
+            RatakanTengah(colStatus);
+
+            grid.CellPainting += (s, e) =>
+            {
+                if (e.RowIndex < 0 || e.ColumnIndex != colStatus.Index || e.Graphics == null) return;
+
+                string status = (e.FormattedValue?.ToString() ?? "").Trim().ToUpperInvariant();
+                if (string.IsNullOrEmpty(status)) return;
+
+                e.PaintBackground(e.CellBounds, (e.State & DataGridViewElementStates.Selected) != 0);
+                e.Paint(e.CellBounds, DataGridViewPaintParts.Border);
+
+                Color warnaLatar;
+                Color warnaTeks;
+                switch (status)
+                {
+                    case "HABIS":
+                        warnaLatar = WarnaHabisLatar;
+                        warnaTeks = WarnaHabis;
+                        break;
+                    case "MINIMUM":
+                    case "KRITIS":
+                        warnaLatar = WarnaKuningLembut;
+                        warnaTeks = WarnaMinimum;
+                        break;
+                    default:
+                        warnaLatar = Color.FromArgb(209, 250, 229);
+                        warnaTeks = WarnaAman;
+                        break;
+                }
+
+                Rectangle area = e.CellBounds;
+                int lebarBadge = Math.Min(Math.Max(68, area.Width - 16), 92);
+                int tinggiBadge = Math.Min(Math.Max(20, area.Height - 10), 24);
+                Rectangle rect = new Rectangle(
+                    area.X + (area.Width - lebarBadge) / 2,
+                    area.Y + (area.Height - tinggiBadge) / 2,
+                    lebarBadge,
+                    tinggiBadge);
+
+                SmoothingMode prevMode = e.Graphics.SmoothingMode;
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                int radius = 8;
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
+                    path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
+                    path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
+                    path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
+                    path.CloseFigure();
+
+                    using SolidBrush brushLatar = new SolidBrush(warnaLatar);
+                    e.Graphics.FillPath(brushLatar, path);
+                }
+                e.Graphics.SmoothingMode = prevMode;
+
+                using Font fontBadge = FontInter.Buat(8F, FontStyle.Bold);
+                TextRenderer.DrawText(
+                    e.Graphics,
+                    status,
+                    fontBadge,
+                    rect,
+                    warnaTeks,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+
+                e.Handled = true;
+            };
         }
 
         private static void SusunSaatTampil(object? sender, EventArgs e)

@@ -38,7 +38,7 @@ namespace Sukimart
             lblJudul = new Label();
             lblInfo = new Label();
             gridPengguna = new DataGridView();
-            pnlForm = new Panel();
+            pnlForm = new PanelKartu();
             lblJudulForm = new Label();
             lblNamaPengguna = new Label();
             txtNamaPengguna = new TextBox();
@@ -113,7 +113,7 @@ namespace Sukimart
             btnPengguna.FlatStyle = FlatStyle.Flat;
             btnPengguna.Font = new Font("Inter", 10F, FontStyle.Bold);
             btnPengguna.ForeColor = Color.FromArgb(31, 41, 55);
-            btnPengguna.Location = new Point(16, 400);
+            btnPengguna.Location = new Point(16, 448);
             btnPengguna.Padding = new Padding(16, 0, 0, 0);
             btnPengguna.Size = new Size(208, 40);
             btnPengguna.Text = "Pengguna";
@@ -131,7 +131,7 @@ namespace Sukimart
             btnLogAktivitas.FlatStyle = FlatStyle.Flat;
             btnLogAktivitas.Font = new Font("Inter", 10F);
             btnLogAktivitas.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLogAktivitas.Location = new Point(16, 448);
+            btnLogAktivitas.Location = new Point(16, 496);
             btnLogAktivitas.Name = "btnLogAktivitas";
             btnLogAktivitas.Padding = new Padding(16, 0, 0, 0);
             btnLogAktivitas.Size = new Size(208, 40);
@@ -210,7 +210,7 @@ namespace Sukimart
             btnLaporanInventaris.FlatStyle = FlatStyle.Flat;
             btnLaporanInventaris.Font = new Font("Inter", 10F);
             btnLaporanInventaris.ForeColor = Color.FromArgb(31, 41, 55);
-            btnLaporanInventaris.Location = new Point(16, 396);
+            btnLaporanInventaris.Location = new Point(16, 400);
             btnLaporanInventaris.Padding = new Padding(16, 0, 0, 0);
             btnLaporanInventaris.Size = new Size(208, 40);
             btnLaporanInventaris.Text = "Laporan Inventaris";
@@ -644,7 +644,7 @@ namespace Sukimart
         private Label lblJudul;
         private Label lblInfo;
         private DataGridView gridPengguna;
-        private Panel pnlForm;
+        private PanelKartu pnlForm;
         private Label lblJudulForm;
         private Label lblNamaPengguna;
         private TextBox txtNamaPengguna;
